@@ -2,6 +2,7 @@ package main.java.view;
 
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
@@ -30,22 +31,25 @@ public class Grid extends Pane {
     return IntStream
         .range(1, nofLines)
         .mapToObj(n -> new Line(n * gap, start, n * gap, end))
-        .map(l -> new Group(
-            new Text(l.getStartX() + 5 , l.getStartY() + 15, "" + (int) l.getStartX()),
-            l)
-        )
+        .map(l -> {
+          l.setStroke(Color.GREY);
+          return l;
+        })
+        .map(l -> new Group(new Text(l.getStartX() + 5 , l.getStartY() + 15, "" + (int) l.getStartX()), l))
         .toList();
   }
+
   private List<Group> getHorizontalLines(Dimension dimension, int gap){
     double start = 0, end = dimension.width;
     int nofLines = dimension.height / gap;
     return IntStream
         .range(1, nofLines)
         .mapToObj(n -> new Line(start, n * gap, end, n * gap))
-        .map(l -> new Group(
-            new Text(l.getStartX() + 5 , l.getStartY() - 5, "" + (int) l.getStartY()),
-            l)
-        )
+        .map(l -> {
+          l.setStroke(Color.GREY);
+          return l;
+        })
+        .map(l -> new Group(new Text(l.getStartX() + 5 , l.getStartY() - 5, "" + (int) l.getStartY()), l))
         .toList();
   }
 
