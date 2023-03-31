@@ -11,9 +11,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.java.model.ActorPlacement;
+import main.java.model.ServoPlacement;
 import main.java.model.BrickPlacement;
-import main.java.model.SensorPlacement;
+import main.java.model.DistancePlacement;
 
 import java.awt.*;
 import java.util.List;
@@ -35,7 +35,7 @@ public class PresentationModel {
   private ObjectProperty<Dimension> windowSize;
   private SimpleStringProperty      windowTitle;
 
-  private ObservableList<BrickPlacement> sensorPlacement;
+  private ObservableList<DistancePlacement> sensorPlacement;
   private ObservableList<BrickPlacement> actorPlacement;
 
   private PresentationModel(){
@@ -47,9 +47,20 @@ public class PresentationModel {
     ProxyGroup proxies = new ProxyGroup();
     sensorPlacement = FXCollections.observableArrayList(initializeSensors(proxies));
     actorPlacement  = FXCollections.observableArrayList(initializeActors(proxies));
+
+    new Thread(() -> update(proxies)).start();
   }
 
-  private List<SensorPlacement> initializeSensors(ProxyGroup group) {
+  private void update(ProxyGroup proxies) {
+    while(true) {
+      sensorPlacement.forEach(sensor ->
+          sensor.setLabel("" + sensor.getBrick().getBatteryVoltage())
+      );
+      proxies.waitForUpdate();
+    }
+  }
+
+  private List<DistancePlacement> initializeSensors(ProxyGroup group) {
     Proxy sensorProxy  = MockProxy.fromConfig(BASE_URL);
     group.addProxy(sensorProxy);
 
@@ -60,7 +71,7 @@ public class PresentationModel {
 
     return sensors.stream()
         .map(brick ->
-            new SensorPlacement(
+            new DistancePlacement(
                 brick,
                 getRandomNumber(10, 790),
                 getRandomNumber(10, 790),
@@ -70,7 +81,7 @@ public class PresentationModel {
         .toList();
   }
 
-  private List<ActorPlacement> initializeActors(ProxyGroup group) {
+  private List<ServoPlacement> initializeActors(ProxyGroup group) {
     Proxy actorProxy  = MockProxy.fromConfig(BASE_URL);
     group.addProxy(actorProxy);
 
@@ -82,7 +93,7 @@ public class PresentationModel {
 
     return actors.stream()
         .map(brick ->
-            new ActorPlacement(
+            new ServoPlacement(
                 brick,
                 getRandomNumber(10, 790),
                 getRandomNumber(10, 790),
@@ -113,7 +124,7 @@ public class PresentationModel {
     return windowSize.get();
   }
 
-  public ObservableList<BrickPlacement> getSensorPlacement() {
+  public ObservableList<DistancePlacement> getSensorPlacement() {
     return sensorPlacement;
   }
 

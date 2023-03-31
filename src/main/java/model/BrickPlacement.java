@@ -1,5 +1,6 @@
 package main.java.model;
 
+import ch.fhnw.imvs.bricks.core.Brick;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -12,12 +13,17 @@ public abstract class BrickPlacement extends Group {
 
   private Line faceAngle;
   private Circle body;
+  protected double x, y;
 
   public BrickPlacement(double x, double y, double angle, Color color) {
     super();
+    this.x = x;
+    this.y = y;
     initializeControls(x, y, angle, color);
     layoutControls();
   }
+
+  public abstract Brick getBrick();
 
   private void initializeControls(double x, double y, double angle, Color color) {
     body      = new Circle(x, y, 5);

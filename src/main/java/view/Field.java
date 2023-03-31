@@ -4,6 +4,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import main.java.model.BrickPlacement;
+import main.java.model.DistancePlacement;
 import main.java.presentation.PresentationModel;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public class Field extends Pane {
 
   private List<BrickPlacement> actorBricks;
-  private List<BrickPlacement> sensorBricks;
+  private List<DistancePlacement> sensorBricks;
   private Button btn;
 
   public Field() {
@@ -43,7 +44,7 @@ public class Field extends Pane {
     );
 
     pm.getSensorPlacement().addListener(
-        (ListChangeListener<BrickPlacement>) change -> {
+        (ListChangeListener<DistancePlacement>) change -> {
           sensorBricks = pm.getSensorPlacement();
           updateControls();
         }

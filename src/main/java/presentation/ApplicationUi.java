@@ -14,7 +14,6 @@ import main.java.view.Grid;
 
 public class ApplicationUi extends Pane {
 
-  private Circle circle;
   private Grid grid;
   private Field field;
 
@@ -33,13 +32,9 @@ public class ApplicationUi extends Pane {
 
     grid   = new Grid(PresentationModel.getInstance());
     field  = new Field();
-    circle = new Circle(10);
-    circle.relocate(100, 100);
-    circle.setFill(Color.RED);
   }
 
   private void layoutControls() {
-    this.getChildren().add(circle);
     this.getChildren().add(grid);
     this.getChildren().add(field);
   }
