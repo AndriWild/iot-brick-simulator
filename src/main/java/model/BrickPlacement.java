@@ -6,23 +6,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-public class Brick extends Group {
+public abstract class BrickPlacement extends Group {
 
   private final double ARROW_LENGTH = 20;
 
   private Line faceAngle;
   private Circle body;
-  private double activity;
 
-  public Brick(double x, double y, double angle, double activity) {
+  public BrickPlacement(double x, double y, double angle, Color color) {
     super();
-    this.activity = activity;
-
-    initializeControls(x, y, angle);
+    initializeControls(x, y, angle, color);
     layoutControls();
   }
 
-  private void initializeControls(double x, double y, double angle) {
+  private void initializeControls(double x, double y, double angle, Color color) {
     body      = new Circle(x, y, 5);
     faceAngle = new Line();
 
@@ -32,8 +29,8 @@ public class Brick extends Group {
     faceAngle.setEndX(endPoint.getX());
     faceAngle.setEndY(endPoint.getY());
 
-    body     .setFill(Color.BLUE);
-    faceAngle.setFill(Color.BLUE);
+    body     .setFill(color);
+    faceAngle.setFill(color);
   }
 
   private void layoutControls() {
