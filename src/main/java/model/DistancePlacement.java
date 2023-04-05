@@ -1,23 +1,32 @@
 package main.java.model;
 
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class DistancePlacement extends BrickPlacement {
 
-  private DistanceBrick brick;
-  private Text label;
+  private final DistanceBrick brick;
+  private       Group         distanceShape;
+  private       Text          label;
 
   public DistancePlacement(DistanceBrick brick, double x, double y, double angle) {
-    super(x, y, angle, Color.RED);
+    super(x, y, angle);
     this.brick = brick;
     initializeControls();
     layoutControls();
   }
 
   private void initializeControls() {
-    label = new Text(this.x + 5, this.y + 5, "test");
+    label = new Text();
+    BrickShape brickIcon = new BrickShape(Color.RED);
+
+    distanceShape = new Group(brickIcon);
+    distanceShape.setLayoutX(x);
+    distanceShape.setLayoutY(y);
+    distanceShape.setRotate(faceAngle);
+    label.relocate(this.x + BrickShape.WIDTH, this.y);
   }
 
   public void setLabel(String text) {
@@ -25,7 +34,7 @@ public class DistancePlacement extends BrickPlacement {
   }
 
   private void layoutControls() {
-    super.getChildren().add(label);
+    super.getChildren().addAll(distanceShape, label);
   }
 
   @Override

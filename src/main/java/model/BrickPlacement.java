@@ -3,44 +3,32 @@ package main.java.model;
 import ch.fhnw.imvs.bricks.core.Brick;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 
 public abstract class BrickPlacement extends Group {
 
   private final double ARROW_LENGTH = 20;
 
-  private Line faceAngle;
-  private Circle body;
-  protected double x, y;
+  protected double x, y, faceAngle;
 
-  public BrickPlacement(double x, double y, double angle, Color color) {
+  public BrickPlacement(double x, double y, double faceAngle) {
     super();
     this.x = x;
     this.y = y;
-    initializeControls(x, y, angle, color);
-    layoutControls();
+    this.faceAngle = faceAngle;
   }
 
   public abstract Brick getBrick();
 
-  private void initializeControls(double x, double y, double angle, Color color) {
-    body      = new Circle(x, y, 5);
-    faceAngle = new Line();
-
-    Point2D endPoint = calcGlanceDirectionFromAngle(x, y, Math.toRadians(angle));
-    faceAngle.setStartX(x);
-    faceAngle.setStartY(y);
-    faceAngle.setEndX(endPoint.getX());
-    faceAngle.setEndY(endPoint.getY());
-
-    body     .setFill(color);
-    faceAngle.setFill(color);
+  public double getX() {
+    return x;
   }
 
-  private void layoutControls() {
-    this.getChildren().addAll(faceAngle, body);
+  public double getY() {
+    return y;
+  }
+
+  public double getFaceAngle() {
+    return faceAngle;
   }
 
   private Point2D calcGlanceDirectionFromAngle(double x0, double y0, double angle){
