@@ -53,14 +53,14 @@ public class Field extends Pane {
 
 
     servoPlacements = List.of(
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_0_ID), 350, 100, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_1_ID), 480, 215, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_2_ID), 600, 350, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_3_ID), 480, 485, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_4_ID), 350, 600, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_5_ID), 215, 485, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_6_ID), 100, 350, 0),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_7_ID), 215, 215, 0)
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_0_ID), 350, 100, 30),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_1_ID), 480, 215, 90),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_2_ID), 600, 350, 20),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_3_ID), 480, 485, 180),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_4_ID), 350, 600, 300),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_5_ID), 215, 485, 320),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_6_ID), 100, 350, 2300),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_7_ID), 215, 215, 190)
     );
 
     distancePlacements = List.of(
@@ -88,7 +88,7 @@ public class Field extends Pane {
   }
 
   private int calculatePositionFromAngle(ServoPlacement servo, double angle) {
-    double result = (angle - servo.getFaceAngle()) - 90.0;
+    double result = angle - servo.getFaceAngle();
     if (result < 0) { result += 360.0; }
     return (int) result;
   }
@@ -115,8 +115,7 @@ public class Field extends Pane {
         double angle = Util.calcAngle(dLat, dLong);
         int pos      = calculatePositionFromAngle(servo, angle);
 
-        pos = Math.max(0, Math.min(pos, 180));
-        servo.setArrowAngle(angle);
+        servo.setMostActiveSensorAngle(pos);
         servo.setLabel(
             "faceAngle: " + servo.getFaceAngle() +
                 "\nangle: "   + Math.floor(angle) +

@@ -1,8 +1,13 @@
 package main.java.model;
 
+import ch.fhnw.imvs.bricks.core.Brick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
 
@@ -23,7 +28,19 @@ public class DistancePlacement extends BrickPlacement {
     int windowHeight = PresentationModel.getInstance().getWindowSize().height;
     label = new Text();
     BrickShape brickIcon = new BrickShape(Color.RED);
-    distanceShape = new Group(brickIcon);
+
+    Arc viewPort = new Arc(
+        BrickShape.CENTER_X,
+        5,
+        30.0,
+        30.0,
+        45.0,
+        90
+    );
+    viewPort.setType(ArcType.ROUND);
+    viewPort.setFill(Color.grayRgb(100, 0.5));
+
+    distanceShape = new Group(viewPort, brickIcon);
     distanceShape.setLayoutX(longitude);
     distanceShape.setLayoutY(windowHeight - latitude);
     distanceShape.setRotate(faceAngle);

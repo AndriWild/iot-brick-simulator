@@ -12,7 +12,7 @@ public final class PresentationModel {
 
   private static final int WINDOW_HEIGHT = 800;
   private static final int WINDOW_WIDTH  = 800;
-  private final String WINDOW_TITLE  = "IoT - Brick Simulator";
+  private final String WINDOW_TITLE      = "IoT - Brick Simulator";
 
   private static final PresentationModel INSTANCE = new PresentationModel();
 
