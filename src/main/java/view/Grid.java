@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
-import main.java.util.Util;
 
 import java.awt.*;
 import java.util.List;

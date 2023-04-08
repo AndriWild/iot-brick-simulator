@@ -64,7 +64,7 @@ public class Field extends Pane {
     );
 
     distancePlacements = List.of(
-//        new DistancePlacement(DistanceBrick.connect(sensorProxy, DISTANCE_BRICK_0_ID), 260, 380, 0),
+        new DistancePlacement(DistanceBrick.connect(sensorProxy, DISTANCE_BRICK_0_ID), 260, 380, 0),
         new DistancePlacement(DistanceBrick.connect(sensorProxy, DISTANCE_BRICK_1_ID), 470, 330, 0)
     );
 
@@ -72,7 +72,6 @@ public class Field extends Pane {
 
     new Thread(() -> update(proxies)).start();
   }
-
 
   private void layoutControls() {
     this.getChildren().addAll(servoPlacements);
@@ -98,9 +97,9 @@ public class Field extends Pane {
     distancePlacements.forEach(sensor ->
         sensor.setLabel(
             "id: "    + sensor.getBrick().getID() +
-                "\nval: " + sensor.getBrick().getDistance() +
-                "\nlat: " + sensor.getLatitude() +
-                "\nlon: " + sensor.getLongitude()
+            "\nval: " + sensor.getBrick().getDistance() +
+            "\nlat: " + sensor.getLatitude() +
+            "\nlon: " + sensor.getLongitude()
         )
     );
   }

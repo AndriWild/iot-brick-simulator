@@ -9,8 +9,6 @@ public class PositionTest {
 
   private static final double PRECISION = 0.005;
 
-
-
   @Test
   public void testTypicalPointsInEachQuadrant() {
 

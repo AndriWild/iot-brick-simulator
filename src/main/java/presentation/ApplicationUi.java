@@ -1,15 +1,11 @@
 package main.java.presentation;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.transform.Rotate;
 import main.java.view.Field;
 import main.java.view.Grid;
 
@@ -38,10 +34,5 @@ public class ApplicationUi extends Pane {
   private void layoutControls() {
     this.getChildren().add(grid);
     this.getChildren().add(field);
-    Circle c = new Circle(100,100,8);
-    c.setFill(Color.GREEN);
-    c.setRotationAxis(Rotate.Z_AXIS);
-    c.setRotate(180.0);
-    this.getChildren().add(c);
   }
 }

@@ -1,12 +1,12 @@
 package main.java.model;
 
 import ch.fhnw.imvs.bricks.core.Brick;
-import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 
-public abstract class BrickPlacement extends Group {
+import java.util.concurrent.atomic.AtomicReference;
 
-  private final double ARROW_LENGTH = 20;
+public abstract class BrickPlacement extends Group {
 
   protected double latitude, longitude, faceAngle;
 
@@ -15,6 +15,31 @@ public abstract class BrickPlacement extends Group {
     this.latitude  = latitude;
     this.longitude = longitude;
     this.faceAngle = faceAngle;
+    this.setCursor(Cursor.HAND);
+
+    AtomicReference<Double> orgSceneX = new AtomicReference<>((double) 0);
+    AtomicReference<Double> orgSceneY = new AtomicReference<>((double) 0);
+
+    this.setOnMousePressed((t) -> {
+
+      orgSceneX.set(t.getSceneX());
+      orgSceneY.set(t.getSceneY());
+
+      BrickPlacement bp = (BrickPlacement) (t.getSource());
+      bp.toFront();
+    });
+    this.setOnMouseDragged((t) -> {
+
+      double offsetX = t.getSceneX() - orgSceneX.get();
+      double offsetY = t.getSceneY() - orgSceneY.get();
+      BrickPlacement bp = (BrickPlacement) (t.getSource());
+      bp.setLayoutX(bp.getLayoutX() + offsetX);
+      bp.setLayoutY(bp.getLayoutY() + offsetY);
+      orgSceneX.set(t.getSceneX());
+      orgSceneY.set(t.getSceneY());
+      this.longitude = this.longitude + offsetX;
+      this.latitude = this.latitude - offsetY;
+    });
   }
 
   public abstract Brick getBrick();
@@ -29,11 +54,5 @@ public abstract class BrickPlacement extends Group {
 
   public double getFaceAngle() {
     return faceAngle;
-  }
-
-  private Point2D calcGlanceDirectionFromAngle(double x0, double y0, double angle){
-    double x = ARROW_LENGTH * Math.cos(angle) + x0;
-    double y = ARROW_LENGTH * Math.sin(angle) + y0;
-    return new Point2D(x, y);
   }
 }
