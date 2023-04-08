@@ -4,6 +4,7 @@ import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import main.java.presentation.PresentationModel;
 
 public class DistancePlacement extends BrickPlacement {
 
@@ -11,22 +12,22 @@ public class DistancePlacement extends BrickPlacement {
   private       Group         distanceShape;
   private       Text          label;
 
-  public DistancePlacement(DistanceBrick brick, double x, double y, double angle) {
-    super(x, y, angle);
+  public DistancePlacement(DistanceBrick brick, double longitude, double latitude, double angle) {
+    super(longitude, latitude, angle);
     this.brick = brick;
     initializeControls();
     layoutControls();
   }
 
   private void initializeControls() {
+    int windowHeight = PresentationModel.getInstance().getWindowSize().height;
     label = new Text();
     BrickShape brickIcon = new BrickShape(Color.RED);
-
     distanceShape = new Group(brickIcon);
-    distanceShape.setLayoutX(x);
-    distanceShape.setLayoutY(y);
+    distanceShape.setLayoutX(longitude);
+    distanceShape.setLayoutY(windowHeight - latitude);
     distanceShape.setRotate(faceAngle);
-    label.relocate(this.x + BrickShape.WIDTH, this.y);
+    label.relocate(this.longitude, windowHeight - this.latitude + BrickShape.WIDTH);
   }
 
   public void setLabel(String text) {

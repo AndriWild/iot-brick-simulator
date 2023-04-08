@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
+import main.java.util.Util;
 
 import java.awt.*;
 import java.util.List;
@@ -17,15 +18,16 @@ public class Grid extends Pane {
 
   public Grid (PresentationModel pm){
 
-    var linesH = getHorizontalLines(pm.getWindowSize(), GAP);
-    var linesV = getVerticalLines(pm.getWindowSize(),   GAP);
+    int windowHeight = PresentationModel.getInstance().getWindowSize().height;
+    var linesH = getHorizontalLines(pm.getWindowSize(), GAP, windowHeight);
+    var linesV = getVerticalLines(pm.getWindowSize(),   GAP, windowHeight);
     var g = new Group();
     g.getChildren().addAll(linesH);
     g.getChildren().addAll(linesV);
     this.getChildren().addAll(g);
   }
 
-  private List<Group> getVerticalLines(Dimension dimension, int gap){
+  private List<Group> getVerticalLines(Dimension dimension, int gap, int windowHeight){
     double start = 0, end = dimension.height;
     int nofLines = (dimension.width / gap);
     return IntStream
@@ -35,11 +37,11 @@ public class Grid extends Pane {
           l.setStroke(Color.GREY);
           return l;
         })
-        .map(l -> new Group(new Text(l.getStartX() + 5 , l.getStartY() + 15, "" + (int) l.getStartX()), l))
+        .map(l -> new Group(new Text(l.getStartX() + 5 , windowHeight - 10, String.valueOf((int) l.getStartX())), l))
         .toList();
   }
 
-  private List<Group> getHorizontalLines(Dimension dimension, int gap){
+  private List<Group> getHorizontalLines(Dimension dimension, int gap, int windowHeight){
     double start = 0, end = dimension.width;
     int nofLines = dimension.height / gap;
     return IntStream
@@ -49,7 +51,7 @@ public class Grid extends Pane {
           l.setStroke(Color.GREY);
           return l;
         })
-        .map(l -> new Group(new Text(l.getStartX() + 5 , l.getStartY() - 5, "" + (int) l.getStartY()), l))
+        .map(l -> new Group(new Text(l.getStartX() + 5 , l.getStartY() - 5, String.valueOf(windowHeight- (int) l.getStartY())), l))
         .toList();
   }
 

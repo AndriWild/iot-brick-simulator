@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
+import main.java.presentation.PresentationModel;
 
 public class ServoPlacement extends BrickPlacement {
 
@@ -13,8 +14,8 @@ public class ServoPlacement extends BrickPlacement {
   private       Group      servoShape;
   private       Text       label;
 
-  public ServoPlacement(RelayBrick brick, double x, double y, double faceAngle) {
-    super(x, y, faceAngle);
+  public ServoPlacement(RelayBrick brick, double longitude, double latitude, double faceAngle) {
+    super(longitude, latitude, faceAngle);
     this.brick = brick;
 
     initializeControls();
@@ -22,6 +23,7 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   private void initializeControls() {
+    int windowHeight = PresentationModel.getInstance().getWindowSize().height;
     arrow = new Polygon();
     arrow.setFill(Color.WHITE);
     double delta = BrickShape.WIDTH / 3;
@@ -32,13 +34,12 @@ public class ServoPlacement extends BrickPlacement {
 
     BrickShape brickIcon = new BrickShape(Color.BLUE);
     servoShape = new Group(brickIcon, arrow);
-    servoShape.setLayoutX(x);
-    servoShape.setLayoutY(y);
+    servoShape.setLayoutX(longitude);
+    servoShape.setLayoutY(windowHeight - latitude);
     servoShape.setRotate(faceAngle);
 
-
     label = new Text();
-    label.relocate(this.x + BrickShape.WIDTH, this.y - 15);
+    label.relocate(this.longitude - 15, windowHeight - this.latitude + BrickShape.WIDTH);
   }
 
   public void setArrowAngle(double angle) {

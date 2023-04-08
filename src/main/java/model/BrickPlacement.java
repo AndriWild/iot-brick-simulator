@@ -8,23 +8,23 @@ public abstract class BrickPlacement extends Group {
 
   private final double ARROW_LENGTH = 20;
 
-  protected double x, y, faceAngle;
+  protected double latitude, longitude, faceAngle;
 
-  public BrickPlacement(double x, double y, double faceAngle) {
+  public BrickPlacement(double longitude, double latitude, double faceAngle) {
     super();
-    this.x = x;
-    this.y = y;
+    this.latitude  = latitude;
+    this.longitude = longitude;
     this.faceAngle = faceAngle;
   }
 
   public abstract Brick getBrick();
 
-  public double getX() {
-    return x;
+  public double getLatitude() {
+    return latitude;
   }
 
-  public double getY() {
-    return y;
+  public double getLongitude() {
+    return longitude;
   }
 
   public double getFaceAngle() {

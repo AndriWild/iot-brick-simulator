@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 public class Starter extends Application {
   @Override
   public void start(Stage stage) {
-    Pane pane = new ApplicationUi();
     PresentationModel pm = PresentationModel.getInstance();
+    Pane pane = new ApplicationUi();
 
     Scene scene = new Scene(pane, pm.getWindowSize().getWidth(), pm.getWindowSize().getHeight());
     stage.titleProperty().bind(pm.windowTitleProperty());
