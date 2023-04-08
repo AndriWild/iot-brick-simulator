@@ -55,6 +55,18 @@ public class ServoPlacement extends BrickPlacement {
     servoShape.setLayoutY(windowHeight - latitude);
     servoShape.setRotate(faceAngle);
 
+    this.setOnScroll( e -> {
+
+      if(e.getDeltaY() > 0){
+        this.faceAngle += 2;
+      }
+      if(e.getDeltaY() < 0) {
+
+        this.faceAngle -= 2;
+      }
+      servoShape.setRotate(faceAngle);
+    });
+
     label = new Text();
     label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
   }

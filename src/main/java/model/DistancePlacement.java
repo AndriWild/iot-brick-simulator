@@ -41,6 +41,18 @@ public class DistancePlacement extends BrickPlacement {
     distanceShape.setLayoutX(longitude);
     distanceShape.setLayoutY(windowHeight - latitude);
     distanceShape.setRotate(faceAngle);
+
+    this.setOnScroll( e -> {
+
+      if(e.getDeltaY() > 0){
+        this.faceAngle += 2;
+      }
+      if(e.getDeltaY() < 0) {
+
+        this.faceAngle -= 2;
+      }
+      distanceShape.setRotate(faceAngle);
+    });
     label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
   }
 

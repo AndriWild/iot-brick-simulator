@@ -59,7 +59,7 @@ public class Field extends Pane {
         new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_3_ID), 480, 485, 180),
         new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_4_ID), 350, 600, 300),
         new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_5_ID), 215, 485, 320),
-        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_6_ID), 100, 350, 2300),
+        new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_6_ID), 100, 350, 230),
         new ServoPlacement(RelayBrick.connect(actorProxy, SERVO_BRICK_7_ID), 215, 215, 190)
     );
 

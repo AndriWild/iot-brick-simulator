@@ -20,23 +20,23 @@ public abstract class BrickPlacement extends Group {
     AtomicReference<Double> orgSceneX = new AtomicReference<>((double) 0);
     AtomicReference<Double> orgSceneY = new AtomicReference<>((double) 0);
 
-    this.setOnMousePressed((t) -> {
+    this.setOnMousePressed(event -> {
 
-      orgSceneX.set(t.getSceneX());
-      orgSceneY.set(t.getSceneY());
+      orgSceneX.set(event.getSceneX());
+      orgSceneY.set(event.getSceneY());
 
-      BrickPlacement bp = (BrickPlacement) (t.getSource());
+      BrickPlacement bp = (BrickPlacement) (event.getSource());
       bp.toFront();
     });
-    this.setOnMouseDragged((t) -> {
+    this.setOnMouseDragged(event -> {
 
-      double offsetX = t.getSceneX() - orgSceneX.get();
-      double offsetY = t.getSceneY() - orgSceneY.get();
-      BrickPlacement bp = (BrickPlacement) (t.getSource());
+      double offsetX = event.getSceneX() - orgSceneX.get();
+      double offsetY = event.getSceneY() - orgSceneY.get();
+      BrickPlacement bp = (BrickPlacement) (event.getSource());
       bp.setLayoutX(bp.getLayoutX() + offsetX);
       bp.setLayoutY(bp.getLayoutY() + offsetY);
-      orgSceneX.set(t.getSceneX());
-      orgSceneY.set(t.getSceneY());
+      orgSceneX.set(event.getSceneX());
+      orgSceneY.set(event.getSceneY());
       this.longitude = this.longitude + offsetX;
       this.latitude = this.latitude - offsetY;
     });
