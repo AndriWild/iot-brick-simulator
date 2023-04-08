@@ -64,7 +64,7 @@ public class Field extends Pane {
     );
 
     distancePlacements = List.of(
-        new DistancePlacement(DistanceBrick.connect(sensorProxy, DISTANCE_BRICK_0_ID), 260, 380, 0),
+//        new DistancePlacement(DistanceBrick.connect(sensorProxy, DISTANCE_BRICK_0_ID), 260, 380, 0),
         new DistancePlacement(DistanceBrick.connect(sensorProxy, DISTANCE_BRICK_1_ID), 470, 330, 0)
     );
 
@@ -87,11 +87,12 @@ public class Field extends Pane {
         .get(0);
   }
 
-  private int calculatePositionFromAngle(ServoPlacement servo, double angle) {
-    double result = angle - servo.getFaceAngle();
+  private int calculateServoPositionFromAngle(ServoPlacement servo, double angle) {
+    double result = angle - servo.getFaceAngle() + 90;
     if (result < 0) { result += 360.0; }
     return (int) result;
   }
+
 
   private void showSensorValues() {
     distancePlacements.forEach(sensor ->
@@ -113,15 +114,16 @@ public class Field extends Pane {
         double dLat  = mostActiveSensor.getLatitude() - servo.getLatitude();
         double dLong =  mostActiveSensor.getLongitude() - servo.getLongitude();
         double angle = Util.calcAngle(dLat, dLong);
-        int pos      = calculatePositionFromAngle(servo, angle);
+        int pos      = calculateServoPositionFromAngle(servo, angle);
 
-        servo.setMostActiveSensorAngle(pos);
+        servo.setMostActiveSensorAngle(angle - servo.getFaceAngle());
+        servo.setFrontViewAngle(180 + angle - 2 * servo.getFaceAngle());
         servo.setLabel(
             "faceAngle: " + servo.getFaceAngle() +
-                "\nangle: "   + Math.floor(angle) +
-                "\npos:"      + pos +
-                "\nlat:"      + servo.getLatitude() +
-                "\nlon:"      + servo.getLongitude());
+            "\nangle: "   + Math.floor(angle) +
+            "\npos:"      + pos +
+            "\nlat:"      + servo.getLatitude() +
+             "\nlon:"     + servo.getLongitude());
       }
 
 //      try {

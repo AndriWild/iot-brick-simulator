@@ -1,13 +1,10 @@
 package main.java.model;
 
-import ch.fhnw.imvs.bricks.core.Brick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
 
@@ -44,7 +41,7 @@ public class DistancePlacement extends BrickPlacement {
     distanceShape.setLayoutX(longitude);
     distanceShape.setLayoutY(windowHeight - latitude);
     distanceShape.setRotate(faceAngle);
-    label.relocate(this.longitude, windowHeight - this.latitude + BrickShape.WIDTH);
+    label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
   }
 
   public void setLabel(String text) {
@@ -52,7 +49,9 @@ public class DistancePlacement extends BrickPlacement {
   }
 
   private void layoutControls() {
-    super.getChildren().addAll(distanceShape, label);
+    this.setOnMouseEntered(event -> super.getChildren().add(label));
+    this.setOnMouseExited(event -> super.getChildren().remove(label));
+    super.getChildren().addAll(distanceShape);
   }
 
   @Override

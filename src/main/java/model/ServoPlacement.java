@@ -56,7 +56,7 @@ public class ServoPlacement extends BrickPlacement {
     servoShape.setRotate(faceAngle);
 
     label = new Text();
-    label.relocate(this.longitude - 15, windowHeight - this.latitude + BrickShape.WIDTH);
+    label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
   }
 
   public void setMostActiveSensorAngle(double angle) {
@@ -68,7 +68,9 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   private void layoutControls() {
-    super.getChildren().addAll(servoShape, label);
+    this.setOnMouseEntered(event -> super.getChildren().add(label));
+    this.setOnMouseExited(event -> super.getChildren().remove(label));
+    super.getChildren().addAll(servoShape);
   }
 
   public void setLabel(String label) {
