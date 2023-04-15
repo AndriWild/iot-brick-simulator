@@ -6,13 +6,15 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import main.java.view.Controls;
 import main.java.view.Field;
 import main.java.view.Grid;
 
 public class ApplicationUi extends Pane {
 
-  private Grid grid;
-  private Field field;
+  private Grid     grid;
+  private Field    field;
+  private Controls controls;
 
   public ApplicationUi() {
     initializeControls();
@@ -27,12 +29,14 @@ public class ApplicationUi extends Pane {
             new Insets(0))
     ));
 
-    grid   = new Grid(PresentationModel.getInstance());
-    field  = new Field();
+    grid     = new Grid(PresentationModel.getInstance());
+    field    = new Field();
+    controls = new Controls();
   }
 
   private void layoutControls() {
     this.getChildren().add(grid);
     this.getChildren().add(field);
+    this.getChildren().add(controls);
   }
 }
