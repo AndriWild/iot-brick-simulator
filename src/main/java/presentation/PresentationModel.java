@@ -1,14 +1,15 @@
 package main.java.presentation;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import ch.fhnw.imvs.bricks.actuators.ServoBrick;
+import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import main.java.model.FieldModel;
 
 import java.awt.*;
 
 public final class PresentationModel {
-
 
   private static final int WINDOW_HEIGHT   = 800;
   private static final int WINDOW_WIDTH    = 800;
@@ -18,15 +19,38 @@ public final class PresentationModel {
 
   private ObjectProperty<Dimension> windowSize;
   private SimpleStringProperty      windowTitle;
+  private BooleanProperty refresh;
+  private FieldModel field;
+  private ObservableList<DistanceBrick> distanceBricks;
+  private ObservableList<ServoBrick>    servoBricks;
+  private ObjectProperty<DistanceBrick> mostActiveSensor;
 
   private PresentationModel(){
     initializeProperties();
+    startUpdateLoop();
+  }
+
+  private void startUpdateLoop() {
+    new Thread(() -> {
+      while(true){
+        refresh.set(!refresh.get());
+        DistanceBrick mostActive = field.getMostActive();
+        mostActiveSensor.set(mostActive);
+      }
+    }).start();
   }
 
   public static PresentationModel getInstance () {
     return INSTANCE;
   }
 
+  public ObservableList<ServoBrick> getActors() {
+    return servoBricks;
+  }
+
+  public ObservableList<DistanceBrick> getSensors() {
+    return distanceBricks;
+  }
   public StringProperty windowTitleProperty() {
     return windowTitle;
   }
@@ -35,12 +59,32 @@ public final class PresentationModel {
     return windowSize.get();
   }
 
+  public void addSensor() {
+    DistanceBrick newBrick = field.addSensor();
+    distanceBricks.add(newBrick);
+  }
+
+  public void addActor() {
+    ServoBrick sb = field.addActor();
+    servoBricks.add(sb);
+  }
+
+  public BooleanProperty getRefreshFlag() {
+    return refresh;
+  }
+
+  public ObjectProperty<DistanceBrick> getMostActiveSensor() {
+    return mostActiveSensor;
+  }
+
   private void initializeProperties(){
     windowSize  = new SimpleObjectProperty<>(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
     windowTitle = new SimpleStringProperty(WINDOW_TITLE);
+    field = new FieldModel();
+    servoBricks    = FXCollections.observableArrayList(field.getActors());
+    distanceBricks = FXCollections.observableArrayList(field.getSensors());
+    refresh = new SimpleBooleanProperty(false);
+    mostActiveSensor = new SimpleObjectProperty<>();
   }
 
-  public int getRandomNumber(int min, int max) {
-    return (int) ((Math.random() * (max - min)) + min);
-  }
 }

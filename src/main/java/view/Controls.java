@@ -6,21 +6,25 @@ import main.java.presentation.PresentationModel;
 
 public class Controls extends Pane {
 
-  private Button addButton;
+  private Button addActorButton;
+  private Button addSensorButton;
 
   public Controls(){
-
     initializeControls();
     layoutControls();
-
   }
 
   private void layoutControls() {
-    this.getChildren().add(addButton);
+    addSensorButton.relocate(0, 30);
+    this.getChildren().addAll(addActorButton, addSensorButton);
   }
 
   private void initializeControls() {
-    addButton = new Button("Add Actor");
+    PresentationModel pm = PresentationModel.getInstance();
+    addActorButton= new Button("Add Actor");
+    addActorButton.setOnAction(e -> pm.addActor());
+    addSensorButton= new Button("Add Sensor");
+    addSensorButton.setOnAction(e -> pm.addSensor());
   }
 
 

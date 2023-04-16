@@ -1,5 +1,7 @@
 package main.java.util;
 
+import main.java.view.BrickPlacement;
+
 public class Util {
 
 
@@ -56,5 +58,15 @@ public class Util {
     }
 
     throw new IllegalArgumentException("Angle could not be calculated");
+  }
+
+  public static int calculateServoPositionFromAngle(BrickPlacement brick, double angle) {
+    double result = angle - brick.getFaceAngle() + 90;
+    if (result < 0) { result += 360.0; }
+    return (int) result;
+  }
+
+  public static int getRandomNumber(int min, int max) {
+    return (int) ((Math.random() * (max - min)) + min);
   }
 }

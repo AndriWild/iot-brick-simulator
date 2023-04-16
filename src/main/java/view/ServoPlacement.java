@@ -1,6 +1,6 @@
-package main.java.model;
+package main.java.view;
 
-import ch.fhnw.imvs.bricks.actuators.RelayBrick;
+import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -8,16 +8,18 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import main.java.presentation.PresentationModel;
+import main.java.view.BrickPlacement;
+import main.java.view.BrickShape;
 
 public class ServoPlacement extends BrickPlacement {
 
-  private final RelayBrick brick;
+  private final ServoBrick brick;
   private Group  servoShape;
   private Text   label;
   private Rotate mostActiveSensorAngle;
   private Rotate frontViewAngle;
 
-  public ServoPlacement(RelayBrick brick, double longitude, double latitude, double faceAngle) {
+  public ServoPlacement(ServoBrick brick, double longitude, double latitude, double faceAngle) {
     super(longitude, latitude, faceAngle);
     this.brick = brick;
 
@@ -75,6 +77,14 @@ public class ServoPlacement extends BrickPlacement {
     mostActiveSensorAngle.setAngle(angle);
   }
 
+  public double getMostActiveSensorAngle() {
+    return mostActiveSensorAngle.getAngle();
+  }
+
+  public void adjustServoPosition(int newPosition){
+   this.brick.setPosition(newPosition);
+  }
+
   public void setFrontViewAngle(double angle) {
     frontViewAngle.setAngle(angle);
   }
@@ -90,7 +100,7 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   @Override
-  public RelayBrick getBrick() {
+  public ServoBrick getBrick() {
     return brick;
   }
 }
