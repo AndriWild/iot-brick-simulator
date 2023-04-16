@@ -1,6 +1,6 @@
 package main.java.util;
 
-import main.java.view.BrickPlacement;
+import main.java.view.brick.BrickPlacement;
 
 public class Util {
 

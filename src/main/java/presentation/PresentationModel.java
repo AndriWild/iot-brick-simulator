@@ -11,16 +11,16 @@ import java.awt.*;
 
 public final class PresentationModel {
 
-  private static final int WINDOW_HEIGHT   = 800;
-  private static final int WINDOW_WIDTH    = 800;
-  private static final String WINDOW_TITLE = "IoT - Brick Simulator";
-
   private static final PresentationModel INSTANCE = new PresentationModel();
 
-  private ObjectProperty<Dimension> windowSize;
-  private SimpleStringProperty      windowTitle;
-  private BooleanProperty refresh;
-  private FieldModel field;
+  private static final int    WINDOW_HEIGHT = 800;
+  private static final int    WINDOW_WIDTH  = 800;
+  private static final String WINDOW_TITLE  = "IoT - Brick Simulator";
+
+  private ObjectProperty<Dimension>     windowSize;
+  private SimpleStringProperty          windowTitle;
+  private BooleanProperty               refresh;
+  private FieldModel                    field;
   private ObservableList<DistanceBrick> distanceBricks;
   private ObservableList<ServoBrick>    servoBricks;
   private ObjectProperty<DistanceBrick> mostActiveSensor;
@@ -78,13 +78,12 @@ public final class PresentationModel {
   }
 
   private void initializeProperties(){
-    windowSize  = new SimpleObjectProperty<>(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-    windowTitle = new SimpleStringProperty(WINDOW_TITLE);
-    field = new FieldModel();
-    servoBricks    = FXCollections.observableArrayList(field.getActors());
-    distanceBricks = FXCollections.observableArrayList(field.getSensors());
-    refresh = new SimpleBooleanProperty(false);
+    windowSize       = new SimpleObjectProperty<>(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+    windowTitle      = new SimpleStringProperty(WINDOW_TITLE);
+    field            = new FieldModel();
+    refresh          = new SimpleBooleanProperty(false);
     mostActiveSensor = new SimpleObjectProperty<>();
+    servoBricks      = FXCollections.observableArrayList(field.getActors());
+    distanceBricks   = FXCollections.observableArrayList(field.getSensors());
   }
-
 }

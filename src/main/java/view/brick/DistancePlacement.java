@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.view.brick;
 
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import javafx.scene.Group;

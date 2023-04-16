@@ -15,6 +15,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
 import main.java.util.Util;
+import main.java.view.brick.BrickShape;
+import main.java.view.brick.DistancePlacement;
+import main.java.view.brick.ServoPlacement;
 
 import java.util.ArrayList;
 import java.util.List;
