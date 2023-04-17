@@ -20,6 +20,7 @@ public final class PresentationModel {
   private ObjectProperty<Dimension>     windowSize;
   private SimpleStringProperty          windowTitle;
   private BooleanProperty               refresh;
+  private BooleanProperty               printSnapshotData;
   private FieldModel                    field;
   private ObservableList<DistanceBrick> distanceBricks;
   private ObservableList<ServoBrick>    servoBricks;
@@ -69,6 +70,14 @@ public final class PresentationModel {
     servoBricks.add(sb);
   }
 
+  public BooleanProperty printSnapshotDataProperty() {
+    return printSnapshotData;
+  }
+
+  public void printSnapshot() {
+    printSnapshotData.set(!printSnapshotData.get());
+  }
+
   public BooleanProperty getRefreshFlag() {
     return refresh;
   }
@@ -78,12 +87,15 @@ public final class PresentationModel {
   }
 
   private void initializeProperties(){
-    windowSize       = new SimpleObjectProperty<>(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-    windowTitle      = new SimpleStringProperty(WINDOW_TITLE);
-    field            = new FieldModel();
-    refresh          = new SimpleBooleanProperty(false);
-    mostActiveSensor = new SimpleObjectProperty<>();
-    servoBricks      = FXCollections.observableArrayList(field.getActors());
-    distanceBricks   = FXCollections.observableArrayList(field.getSensors());
+    windowSize        = new SimpleObjectProperty<>(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+    windowTitle       = new SimpleStringProperty(WINDOW_TITLE);
+    field             = new FieldModel();
+    refresh           = new SimpleBooleanProperty(false);
+    printSnapshotData = new SimpleBooleanProperty(false);
+    mostActiveSensor  = new SimpleObjectProperty<>();
+    servoBricks       = FXCollections.observableArrayList(field.getActors());
+    distanceBricks    = FXCollections.observableArrayList(field.getSensors());
   }
+
+
 }

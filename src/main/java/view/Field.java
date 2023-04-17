@@ -15,11 +15,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import main.java.presentation.PresentationModel;
 import main.java.util.Util;
+import main.java.view.brick.BrickPlacement;
 import main.java.view.brick.BrickShape;
 import main.java.view.brick.DistancePlacement;
 import main.java.view.brick.ServoPlacement;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +34,7 @@ public class Field extends Pane {
   private DistancePlacement             mostActivePlacement;
   private Group                         legend;
   private BooleanProperty               refresh;
+  private BooleanProperty               printBrickPlacementData;
   private ObjectProperty<DistanceBrick> mostActiveSensor;
 
   public Field() {
@@ -44,16 +49,41 @@ public class Field extends Pane {
     refresh.bind(pm.getRefreshFlag());
     refresh.addListener( (_1, _2, _3 ) -> updateUi());
 
+    printBrickPlacementData = new SimpleBooleanProperty();
+    printBrickPlacementData.bind(pm.printSnapshotDataProperty());
+    printBrickPlacementData.addListener( (_1, _2, _3 ) -> printBrickPlacementData());
+
     mostActiveSensor = new SimpleObjectProperty<>();
     mostActiveSensor.bind(pm.getMostActiveSensor());
     mostActiveSensor.addListener((obj, oldValue, newValue) -> updateMostActiveSensor(newValue));
 
-    servoPlacements    = new ArrayList<>();
-    distancePlacements = new ArrayList<>();
+    servoPlacements     = new ArrayList<>();
+    distancePlacements  = new ArrayList<>();
     mostActivePlacement = null;
 
     initializeListeners(pm);
-    drawLegend(pm);
+    //drawLegend(pm);
+  }
+
+  private void printBrickPlacementData() {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    LocalDateTime now = LocalDateTime.now();
+    System.out.println("Data Snapshot from: " + dtf.format(now));
+    System.out.println("Sensors:");
+    printDataFromList(distancePlacements);
+    System.out.println("Actors:");
+    printDataFromList(servoPlacements);
+  }
+
+  private void printDataFromList(List<? extends BrickPlacement> placements) {
+    placements.forEach(placement -> {
+      System.out.print("id: " + placement.getBrick().getID());
+      System.out.print(", long: " + placement.getLongitude());
+      System.out.print(", lat: " + placement.getLatitude());
+      System.out.print(", angle: " + placement.getFaceAngle());
+      System.out.println();
+    });
+    System.out.println();
   }
 
   private void initializeListeners(PresentationModel pm) {
@@ -87,24 +117,28 @@ public class Field extends Pane {
             .filter(placement -> placement.getBrick().getID().equals(obj.getID()))
             .findFirst();
 
-    optionallyMostActive.ifPresent(distancePlacement -> mostActivePlacement = distancePlacement);
+    optionallyMostActive.ifPresent(distancePlacement -> {
+      if(mostActivePlacement != null) mostActivePlacement.setHighlighted(false);
+      mostActivePlacement = distancePlacement;
+      mostActivePlacement.setHighlighted(true);
+    });
   }
 
   private void updateUi() {
-    distancePlacements.forEach(this::showSensorValues);
+    distancePlacements.forEach(this::updateSensorValues);
     if(mostActivePlacement != null) {
-      servoPlacements   .forEach(servo -> updateServoAngles(servo, mostActivePlacement));
+      servoPlacements.forEach(servo -> updateServoAngles(servo, mostActivePlacement));
     }
-    servoPlacements   .forEach(this::showActorValues);
+    servoPlacements.forEach(this::showActorValues);
   }
 
   private void layoutControls() {
     this.getChildren().addAll(servoPlacements);
     this.getChildren().addAll(distancePlacements);
-    this.getChildren().add(legend);
+    //this.getChildren().add(legend);
   }
 
-  private void showSensorValues(DistancePlacement sensor) {
+  private void updateSensorValues(DistancePlacement sensor) {
     sensor.setLabel(
         "Sensor ID: " + sensor.getBrick().getID() +
             "\nval: " + sensor.getBrick().getDistance() +
@@ -115,7 +149,7 @@ public class Field extends Pane {
 
   private void showActorValues(ServoPlacement actor) {
     actor.setLabel(
-        "Actor ID: "    +  actor.getBrick().getID() +
+        "Actor ID: "    + actor.getBrick().getID() +
         "\nfaceAngle: " + actor.getFaceAngle() +
         "\npos: "       + Math.floor(actor.getMostActiveSensorAngle()) +
 //      "\npos:"        + pos +

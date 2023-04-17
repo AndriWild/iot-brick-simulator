@@ -9,8 +9,8 @@ public class BrickShape extends Group {
 
   public static final double CENTER_X = BrickShape.WIDTH / 2;
   public static final double CENTER_Y = BrickShape.HEIGHT / 2;
-  public static final double HEIGHT   = 30;
-  public static final double WIDTH    = 48;
+  public static final double HEIGHT   = 22;
+  public static final double WIDTH    = 34;
 
   private final Color     color;
   private       Line      frontIndicator;
@@ -22,6 +22,10 @@ public class BrickShape extends Group {
     layoutControls();
   }
 
+  public Rectangle getBody() {
+    return body;
+  }
+
   private void layoutControls() {
     this.getChildren().addAll(body, frontIndicator);
   }
@@ -31,9 +35,11 @@ public class BrickShape extends Group {
         CENTER_X,
         0,
         CENTER_X,
-        - BrickShape.HEIGHT / 2
+        -BrickShape.HEIGHT / 2
     );
     body = new Rectangle(WIDTH, HEIGHT);
+    body.setArcHeight(5.0);
+    body.setArcWidth (5.0);
 
     frontIndicator.setFill(Color.BLACK);
     body          .setFill(color);

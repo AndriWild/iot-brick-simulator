@@ -42,8 +42,8 @@ public class ServoPlacement extends BrickPlacement {
     frontViewIndicator.getTransforms().addAll(frontViewAngle);
     frontViewIndicator.setStrokeWidth(2);
 
-    Circle outerCircle = new Circle(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X - 3);
-    Circle innerCircle = new Circle(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X - 12);
+    Circle outerCircle = new Circle(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X - 2);
+    Circle innerCircle = new Circle(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X - 10);
     innerCircle.setFill(Color.LIGHTGRAY);
     innerCircle.setStroke(Color.BLACK);
     outerCircle.setFill(Color.GREY);
