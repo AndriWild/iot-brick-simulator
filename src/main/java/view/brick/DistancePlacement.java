@@ -23,7 +23,6 @@ public class DistancePlacement extends BrickPlacement {
 
   private void initializeControls() {
     int windowHeight = PresentationModel.getInstance().getWindowSize().height;
-    label = new Text();
     BrickShape brickIcon = new BrickShape(Color.RED);
 
     Arc viewPort = new Arc(
@@ -53,6 +52,8 @@ public class DistancePlacement extends BrickPlacement {
       }
       distanceShape.setRotate(faceAngle);
     });
+
+    label = new Text();
     label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
   }
 

@@ -61,7 +61,6 @@ public class ServoPlacement extends BrickPlacement {
         this.faceAngle += 2;
       }
       if(e.getDeltaY() < 0) {
-
         this.faceAngle -= 2;
       }
       servoShape.setRotate(faceAngle);

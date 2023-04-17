@@ -13,8 +13,8 @@ public final class PresentationModel {
 
   private static final PresentationModel INSTANCE = new PresentationModel();
 
-  private static final int    WINDOW_HEIGHT = 800;
-  private static final int    WINDOW_WIDTH  = 800;
+  private static final int    WINDOW_HEIGHT = 3 * 256;
+  private static final int    WINDOW_WIDTH  = 3 * 256;
   private static final String WINDOW_TITLE  = "IoT - Brick Simulator";
 
   private ObjectProperty<Dimension>     windowSize;
