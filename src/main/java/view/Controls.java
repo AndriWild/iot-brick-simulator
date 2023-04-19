@@ -10,7 +10,7 @@ public class Controls extends Pane {
   private Button addSensorButton;
   private Button printSnapshot;
 
-  public Controls(){
+  public Controls() {
     initializeControls();
     layoutControls();
   }
@@ -23,13 +23,11 @@ public class Controls extends Pane {
 
   private void initializeControls() {
     PresentationModel pm = PresentationModel.getInstance();
-    addActorButton  = new Button("Add Actor");
+    addActorButton = new Button("Add Actor");
     addSensorButton = new Button("Add Sensor");
-    printSnapshot   = new Button("Print Brick Data");
-    addActorButton .setOnAction(e -> pm.addActor());
+    printSnapshot = new Button("Print Brick Data");
+    addActorButton.setOnAction(e -> pm.addActor());
     addSensorButton.setOnAction(e -> pm.addSensor());
-    printSnapshot  .setOnAction(e -> pm.printSnapshot());
+    printSnapshot.setOnAction(e -> pm.printSnapshot());
   }
-
-
 }

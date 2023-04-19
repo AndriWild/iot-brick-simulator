@@ -23,7 +23,6 @@ import main.java.view.brick.ServoPlacement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +65,7 @@ public class Field extends Pane {
   }
 
   private void printBrickPlacementData() {
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     LocalDateTime now = LocalDateTime.now();
     System.out.println("Data Snapshot from: " + dtf.format(now));
     System.out.println("Sensors:");
@@ -76,14 +75,15 @@ public class Field extends Pane {
   }
 
   private void printDataFromList(List<? extends BrickPlacement> placements) {
+    StringBuilder sb = new StringBuilder();
     placements.forEach(placement -> {
-      System.out.print("id: " + placement.getBrick().getID());
-      System.out.print(", long: " + placement.getLongitude());
-      System.out.print(", lat: " + placement.getLatitude());
-      System.out.print(", angle: " + placement.getFaceAngle());
-      System.out.println();
+      sb.append("id: ")      .append(placement.getBrick().getID());
+      sb.append(",\tlong: ") .append(placement.getLongitude());
+      sb.append(",\tlat: ")  .append(placement.getLatitude());
+      sb.append(",\tangle: ").append(placement.getFaceAngle());
+      sb.append("\n");
     });
-    System.out.println();
+    System.out.println(sb);
   }
 
   private void initializeListeners(PresentationModel pm) {

@@ -11,6 +11,7 @@ import java.awt.*;
 public class Grid extends Pane {
 
   public static final int GAP = 50;
+
   private static final double COORDINATE_RANGE = 0.001765;
 
   public Grid (PresentationModel pm){

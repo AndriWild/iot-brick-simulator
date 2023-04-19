@@ -16,8 +16,6 @@ import java.util.stream.IntStream;
 
 public class ApplicationUi extends Pane {
 
-  private final int MAP_PIECE_SIZE = 256;
-  
   private Grid     grid;
   private Field    field;
   private Controls controls;
@@ -64,12 +62,13 @@ public class ApplicationUi extends Pane {
 
     for (int left = 0; left < 3; left++) {
       for (int right = 0; right < 3; right++) {
+        final int PIXEL_PER_PIECE = 256;
         positions.add(new BackgroundPosition(
             null,
-            MAP_PIECE_SIZE * right,
+            PIXEL_PER_PIECE * right,
             false,
             null,
-            MAP_PIECE_SIZE * left,
+            PIXEL_PER_PIECE * left,
             false
         ));
       }
