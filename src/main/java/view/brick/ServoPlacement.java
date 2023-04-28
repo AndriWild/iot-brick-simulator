@@ -51,8 +51,8 @@ public class ServoPlacement extends BrickPlacement {
 
     BrickShape brickIcon = new BrickShape(Color.BLUE);
     servoShape = new Group(brickIcon, outerCircle, mostActiveSensorIndicator, innerCircle, frontViewIndicator);
-    servoShape.setLayoutX(longitude);
-    servoShape.setLayoutY(windowHeight - latitude);
+    servoShape.setLayoutX(xPos);
+    servoShape.setLayoutY(windowHeight - yPos);
     servoShape.setRotate(faceAngle);
 
     this.setOnScroll( e -> {
@@ -67,7 +67,7 @@ public class ServoPlacement extends BrickPlacement {
     });
 
     label = new Text();
-    label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
+    label.relocate(this.xPos + BrickShape.WIDTH + 10, windowHeight - this.yPos - BrickShape.HEIGHT);
   }
 
   public void setMostActiveSensorAngle(double angle) {

@@ -8,12 +8,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class BrickPlacement extends Group {
 
-  protected double latitude, longitude, faceAngle;
+  protected double yPos, xPos, faceAngle;
 
-  public BrickPlacement(double longitude, double latitude, double faceAngle) {
+  public BrickPlacement(double xPos, double yPos, double faceAngle) {
     super();
-    this.latitude  = latitude;
-    this.longitude = longitude;
+    this.xPos = xPos;
+    this.yPos = yPos;
     this.faceAngle = faceAngle;
     this.setCursor(Cursor.HAND);
 
@@ -37,19 +37,19 @@ public abstract class BrickPlacement extends Group {
       bp.setLayoutY(bp.getLayoutY() + offsetY);
       orgSceneX.set(event.getSceneX());
       orgSceneY.set(event.getSceneY());
-      this.longitude = this.longitude + offsetX;
-      this.latitude = this.latitude - offsetY;
+      this.xPos = this.xPos + offsetX;
+      this.yPos = this.yPos - offsetY;
     });
   }
 
   public abstract Brick getBrick();
 
-  public double getLatitude() {
-    return latitude;
+  public double getXPos() {
+    return xPos;
   }
 
-  public double getLongitude() {
-    return longitude;
+  public double getYPos() {
+    return yPos;
   }
 
   public double getFaceAngle() {

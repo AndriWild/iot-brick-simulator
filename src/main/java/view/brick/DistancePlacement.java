@@ -46,8 +46,8 @@ public class DistancePlacement extends BrickPlacement {
     viewPort.setFill(Color.grayRgb(100, 0.7));
 
     distanceShape = new Group(viewPort, brickIcon);
-    distanceShape.setLayoutX(longitude);
-    distanceShape.setLayoutY(windowHeight - latitude);
+    distanceShape.setLayoutX(xPos);
+    distanceShape.setLayoutY(windowHeight - yPos);
     distanceShape.setRotate(faceAngle);
 
     this.setOnScroll( e -> {
@@ -63,7 +63,7 @@ public class DistancePlacement extends BrickPlacement {
     });
 
     label = new Text();
-    label.relocate(this.longitude + BrickShape.WIDTH + 10, windowHeight - this.latitude - BrickShape.HEIGHT);
+    label.relocate(this.xPos + BrickShape.WIDTH + 10, windowHeight - this.yPos - BrickShape.HEIGHT);
   }
 
   public void setLabel(String text) {

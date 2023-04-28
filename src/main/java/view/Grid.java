@@ -8,11 +8,14 @@ import main.java.presentation.PresentationModel;
 
 import java.awt.*;
 
+import static main.java.model.Constants.*;
+
 public class Grid extends Pane {
 
   public static final int GAP = 50;
 
-  private static final double COORDINATE_RANGE = 0.001765;
+
+  private static final double DECIMALS_FACTOR  =  10e4;
 
   public Grid (PresentationModel pm){
     int windowHeight = PresentationModel.getInstance().getWindowSize().height;
@@ -22,7 +25,9 @@ public class Grid extends Pane {
   private void drawGrid(Dimension dimension, int windowHeight){
     double start = 0, end = dimension.width;
     int nofLines = windowHeight / GAP;
-    double coordinateCap = COORDINATE_RANGE / nofLines;
+    double coordinateCapLon = (RIGHT_LONG - LEFT_LONG) / nofLines;
+    double coordinateCapLat = (TOP_LAT - BOTTOM_LAT)   / nofLines;
+
 
     for (int i = 1; i <= nofLines; i++) {
       Line horizontalLine = new Line(start, windowHeight - (i * GAP), end, windowHeight - (i * GAP));
@@ -30,8 +35,8 @@ public class Grid extends Pane {
       horizontalLine.setStrokeWidth(0.2);
       verticalLine  .setStrokeWidth(0.2);
 
-      drawVerticalLine(windowHeight, coordinateCap, i, verticalLine);
-      drawHorizontalLine(coordinateCap, i, horizontalLine);
+      drawVerticalLine(windowHeight, coordinateCapLon, i, verticalLine);
+      drawHorizontalLine(coordinateCapLat, i, horizontalLine);
     }
   }
 
@@ -41,7 +46,7 @@ public class Grid extends Pane {
             new Text(
                 horizontalLine.getStartX() + 5,
                 horizontalLine.getStartY() - 5,
-                String.valueOf(Math.round((47.50467 + coordinateCap * i) * 10000.0) / 10000.0)
+                String.valueOf(Math.round((BOTTOM_LAT + coordinateCap * i) * DECIMALS_FACTOR) / DECIMALS_FACTOR)
             ),
             horizontalLine
         )
@@ -50,9 +55,9 @@ public class Grid extends Pane {
 
   private void drawVerticalLine(int windowHeight, double coordinateCap, int i, Line verticalLine) {
     Text label = new Text(
-        verticalLine.getStartX() + 5,
+        verticalLine.getStartX() - 15,
         windowHeight - 20,
-        String.valueOf(Math.round((7.60555 + coordinateCap * i) * 10000.0) / 10000.0)
+        String.valueOf(Math.round((LEFT_LONG + coordinateCap * i) * DECIMALS_FACTOR) / DECIMALS_FACTOR)
     );
     label.setRotate(-90);
     this.getChildren().add(

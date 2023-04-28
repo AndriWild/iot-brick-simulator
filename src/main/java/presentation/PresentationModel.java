@@ -9,12 +9,14 @@ import main.java.model.FieldModel;
 
 import java.awt.*;
 
+import static main.java.model.Constants.WINDOW_HEIGHT;
+import static main.java.model.Constants.WINDOW_WIDTH;
+
 public final class PresentationModel {
 
   private static final PresentationModel INSTANCE = new PresentationModel();
 
-  private static final int    WINDOW_HEIGHT = 3 * 256;
-  private static final int    WINDOW_WIDTH  = 3 * 256;
+
   private static final String WINDOW_TITLE  = "IoT - Brick Simulator";
 
   private ObjectProperty<Dimension>     windowSize;

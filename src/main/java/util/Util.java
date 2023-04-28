@@ -1,6 +1,9 @@
 package main.java.util;
 
+import main.java.model.Location;
 import main.java.view.brick.BrickPlacement;
+
+import static main.java.model.Constants.*;
 
 public class Util {
 
@@ -64,6 +67,12 @@ public class Util {
     double result = angle - brick.getFaceAngle() + 90;
     if (result < 0) { result += 360.0; }
     return (int) result;
+  }
+
+  public static Location convertPixelToLocation(double x, double y) {
+    double lon = (LEFT_LONG + ((RIGHT_LONG - LEFT_LONG) / WINDOW_WIDTH) * x);
+    double lat = (BOTTOM_LAT + ((TOP_LAT - BOTTOM_LAT) / WINDOW_HEIGHT) * y);
+    return new Location(lat, lon);
   }
 
   public static int getRandomNumber(int min, int max) {

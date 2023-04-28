@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import main.java.model.Location;
 import main.java.presentation.PresentationModel;
 import main.java.util.Util;
 import main.java.view.brick.BrickPlacement;
@@ -78,8 +79,8 @@ public class Field extends Pane {
     StringBuilder sb = new StringBuilder();
     placements.forEach(placement -> {
       sb.append("id: ")      .append(placement.getBrick().getID());
-      sb.append(",\tlong: ") .append(placement.getLongitude());
-      sb.append(",\tlat: ")  .append(placement.getLatitude());
+      sb.append(",\tlong: ") .append(placement.getYPos());
+      sb.append(",\tlat: ")  .append(placement.getXPos());
       sb.append(",\tangle: ").append(placement.getFaceAngle());
       sb.append("\n");
     });
@@ -142,25 +143,28 @@ public class Field extends Pane {
     sensor.setLabel(
         "Sensor ID: " + sensor.getBrick().getID() +
             "\nval: " + sensor.getBrick().getDistance() +
-            "\nlat: " + sensor.getLatitude() +
-            "\nlon: " + sensor.getLongitude()
+            "\nlat: " + sensor.getXPos() +
+            "\nlon: " + sensor.getYPos()
     );
   }
 
   private void showActorValues(ServoPlacement actor) {
+    Location actorLocation = Util.convertPixelToLocation(actor.getXPos(), actor.getYPos());
     actor.setLabel(
         "Actor ID: "    + actor.getBrick().getID() +
         "\nfaceAngle: " + actor.getFaceAngle() +
         "\npos: "       + Math.floor(actor.getMostActiveSensorAngle()) +
 //      "\npos:"        + pos +
-        "\nlat:"        + actor.getLatitude() +
-        "\nlon:"        + actor.getLongitude()
+            "\nlat:"        + actorLocation.lat() +
+            "\nlon:"        + actorLocation.lon() +
+            "\nx:"        + actor.getXPos() +
+            "\ny:"        + actor.getYPos()
     );
   }
 
   private void updateServoAngles(ServoPlacement servo, DistancePlacement mostActivePlacement) {
-        double dLat  = mostActivePlacement.getLatitude() - servo.getLatitude();
-        double dLong = mostActivePlacement.getLongitude() - servo.getLongitude();
+        double dLat  = mostActivePlacement.getXPos() - servo.getXPos();
+        double dLong = mostActivePlacement.getYPos() - servo.getYPos();
         double angle = Util.calcAngle(dLat, dLong);
         int pos      = Util.calculateServoPositionFromAngle(servo, angle);
 //        servo.adjustServoPosition(pos);

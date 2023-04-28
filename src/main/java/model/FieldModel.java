@@ -11,27 +11,28 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static main.java.model.Constants.BASE_URL;
+
 public class FieldModel {
 
-  private static final String BASE_URL = "brick.li/";
   private static int actorId  = 0;
   private static int sensorId = 0;
 
-  private final List<ServoBrick> actors;
+  private final List<ServoBrick>    actors;
   private final List<DistanceBrick> sensors;
 
   private final ProxyGroup proxies;
-  private final Proxy actorProxy;
-  private final Proxy sensorProxy;
+  private final Proxy mockProxy;
+  private final Proxy proxy;
 
   public FieldModel() {
 
     proxies = new ProxyGroup();
-    actorProxy   = MockProxy.fromConfig(BASE_URL);
-    sensorProxy  = MockProxy.fromConfig(BASE_URL);
+    mockProxy = MockProxy.fromConfig(BASE_URL);
+    proxy = MockProxy.fromConfig(BASE_URL);
 
-    proxies.addProxy(sensorProxy);
-    proxies.addProxy(actorProxy);
+    proxies.addProxy(proxy);
+    proxies.addProxy(mockProxy);
 
     actors  = new ArrayList<>();
     sensors = new ArrayList<>();
@@ -49,7 +50,6 @@ public class FieldModel {
     proxies.waitForUpdate();
     if(!sensors.isEmpty()) {
       mostActiveSensor = getMostActiveSensor(sensors);
-      proxies.waitForUpdate();
     }
     return mostActiveSensor;
   }
@@ -63,13 +63,13 @@ public class FieldModel {
   }
 
   public ServoBrick addActor() {
-    ServoBrick newBrick = ServoBrick.connect(actorProxy, String.valueOf(actorId++));
+    ServoBrick newBrick = ServoBrick.connect(mockProxy, String.valueOf(actorId++));
     actors.add(newBrick);
     return newBrick;
   }
 
   public DistanceBrick addSensor() {
-    DistanceBrick newBrick = DistanceBrick.connect(sensorProxy, String.valueOf(sensorId++));
+    DistanceBrick newBrick = DistanceBrick.connect(mockProxy, String.valueOf(sensorId++));
     sensors.add(newBrick);
     return newBrick;
   }
