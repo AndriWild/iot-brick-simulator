@@ -104,6 +104,6 @@ public class ApplicationUi extends Pane {
                 BackgroundSize.DEFAULT
             )).toList();
 
-    //this.setBackground(new Background(bgImages.toArray(new BackgroundImage[0])));
+    this.setBackground(new Background(bgImages.toArray(new BackgroundImage[0])));
   }
 }

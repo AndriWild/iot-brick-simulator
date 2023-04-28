@@ -18,7 +18,7 @@ public class Util {
    * @param dLong longitude (Längengrad)
    * @return degree
    */
-  public static double calcAngle(double dLat, double dLong){
+  public static double calcAngle(double dLong, double dLat){
     double degrees = Math.toDegrees(Math.atan(dLat / dLong));
 
     // on x-axis
