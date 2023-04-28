@@ -28,6 +28,7 @@ public class ServoPlacement extends BrickPlacement {
   private void initializeControls() {
     int windowHeight = PresentationModel.getInstance().getWindowSize().height;
 
+    System.out.println("ServoPlacement.initializeControls " + Thread.currentThread());
     Line mostActiveSensorIndicator = new Line(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X, -5);
     mostActiveSensorAngle = new Rotate();
     mostActiveSensorAngle.setPivotX(BrickShape.CENTER_X);

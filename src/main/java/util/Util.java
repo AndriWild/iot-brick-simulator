@@ -69,7 +69,7 @@ public class Util {
     return (int) result;
   }
 
-  public static Location convertPixelToLocation(double x, double y) {
+  public static Location toCoordinates(double x, double y) {
     double lon = (LEFT_LONG + ((RIGHT_LONG - LEFT_LONG) / WINDOW_WIDTH) * x);
     double lat = (BOTTOM_LAT + ((TOP_LAT - BOTTOM_LAT) / WINDOW_HEIGHT) * y);
 

@@ -27,7 +27,7 @@ public class Modal extends Pane {
       Stage dialog     = new Stage();
       Scene popUpScene = new Scene(new Controls(dialog::close), 350, 450);
       dialog.setScene(popUpScene);
-      dialog.initOwner(stage);
+//      dialog.initOwner(stage);
       dialog.showAndWait();
     });
   }

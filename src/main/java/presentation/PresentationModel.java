@@ -2,6 +2,7 @@ package main.java.presentation;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +16,7 @@ import static main.java.model.Constants.WINDOW_WIDTH;
 public final class PresentationModel {
 
   private static final PresentationModel INSTANCE = new PresentationModel();
-  private static final String WINDOW_TITLE  = "IoT - Brick Simulator";
+  private static final String WINDOW_TITLE        = "IoT - Brick Simulator";
 
   private ObjectProperty<Dimension>     windowSize;
   private SimpleStringProperty          windowTitle;
@@ -35,11 +36,14 @@ public final class PresentationModel {
   }
 
   private void startUpdateLoop() {
+    System.out.println("PresentationModel.startUpdateLoop");
     new Thread(() -> {
       while(true){
         refresh.set(!refresh.get());
+
         DistanceBrick mostActive = field.getMostActive();
         mostActiveSensor.set(mostActive);
+        System.out.println("loop: "+ Thread.currentThread());
       }
     }).start();
   }
@@ -55,6 +59,7 @@ public final class PresentationModel {
   public ObservableList<DistanceBrick> getSensors() {
     return distanceBricks;
   }
+
   public StringProperty windowTitleProperty() {
     return windowTitle;
   }

@@ -3,6 +3,7 @@ package main.java.view;
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.Brick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -29,13 +30,9 @@ import java.util.Optional;
 
 public class Field extends Pane {
 
-  private List<ServoPlacement>          servoPlacements;
-  private List<DistancePlacement>       distancePlacements;
-  private DistancePlacement             mostActivePlacement;
-  private Group                         legend;
-  private BooleanProperty               refresh;
-  private BooleanProperty               printBrickPlacementData;
-  private ObjectProperty<DistanceBrick> mostActiveSensor;
+  private List<ServoPlacement>    servoPlacements;
+  private List<DistancePlacement> distancePlacements;
+  private DistancePlacement       mostActivePlacement;
 
   public Field() {
     initializeControls();
@@ -45,15 +42,18 @@ public class Field extends Pane {
   private void initializeControls() {
     PresentationModel pm = PresentationModel.getInstance();
 
-    refresh = new SimpleBooleanProperty();
-    refresh.bind(pm.getRefreshFlag());
-    refresh.addListener( (_1, _2, _3 ) -> updateUi());
+    System.out.println("Field.initializeControls - pm: " + pm.toString());
+    BooleanProperty refresh = new SimpleBooleanProperty();
+    refresh.bindBidirectional(pm.getRefreshFlag());
+    refresh.addListener( (_1, _2, _3 ) -> {
+      updateUi();
+    });
 
-    printBrickPlacementData = new SimpleBooleanProperty();
+    BooleanProperty printBrickPlacementData = new SimpleBooleanProperty();
     printBrickPlacementData.bind(pm.printSnapshotDataProperty());
-    printBrickPlacementData.addListener( (_1, _2, _3 ) -> printBrickPlacementData());
+//    printBrickPlacementData.addListener( (_1, _2, _3) -> System.out.println("prinBrick has changed"));
 
-    mostActiveSensor = new SimpleObjectProperty<>();
+    ObjectProperty<DistanceBrick> mostActiveSensor = new SimpleObjectProperty<>();
     mostActiveSensor.bind(pm.getMostActiveSensor());
     mostActiveSensor.addListener((obj, oldValue, newValue) -> updateMostActiveSensor(newValue));
 
@@ -65,27 +65,35 @@ public class Field extends Pane {
     //drawLegend(pm);
   }
 
-  private void printBrickPlacementData() {
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-    LocalDateTime now = LocalDateTime.now();
-    System.out.println("Data Snapshot from: " + dtf.format(now));
-    System.out.println("Sensors:");
-    printDataFromList(distancePlacements);
-    System.out.println("Actors:");
-    printDataFromList(servoPlacements);
-  }
-
-  private void printDataFromList(List<? extends BrickPlacement> placements) {
-    StringBuilder sb = new StringBuilder();
-    placements.forEach(placement -> {
-      sb.append("id: ")      .append(placement.getBrick().getID());
-      sb.append(",\tlong: ") .append(placement.getYPos());
-      sb.append(",\tlat: ")  .append(placement.getXPos());
-      sb.append(",\tangle: ").append(placement.getFaceAngle());
-      sb.append("\n");
-    });
-    System.out.println(sb);
-  }
+//  private String collectBrickPlacementData() {
+//    StringBuilder sb      = new StringBuilder();
+//    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+//    LocalDateTime now     = LocalDateTime.now();
+//
+//    sb.append("Data Snapshot from:").append(dtf.format(now)).append("\n");
+//    if(!distancePlacements.isEmpty()){
+//      sb.append("Sensors:\n")
+//        .append(placementDataToString(distancePlacements));
+//    }
+//    if(!servoPlacements.isEmpty()){
+//      sb.append("Actors:\n")
+//        .append(placementDataToString(servoPlacements));
+//    }
+//    return sb.toString();
+//  }
+//
+//  private String placementDataToString(List<? extends BrickPlacement> placements) {
+//    StringBuilder sb = new StringBuilder();
+//    placements.forEach(placement -> {
+//      Location brickLocation = Util.toCoordinates(placement.getXPos(), placement.getYPos());
+//      sb.append("id: ")      .append(placement.getBrick().getID());
+//      sb.append(",\tlat: ")  .append(brickLocation.lat());
+//      sb.append(",\tlong: ") .append(brickLocation.lon());
+//      sb.append(",\tangle: ").append(placement.getFaceAngle());
+//      sb.append("\n");
+//    });
+//    return sb.toString();
+//  }
 
   private void initializeListeners(PresentationModel pm) {
     pm.getActors().addListener((ListChangeListener<Brick>) c -> {
@@ -112,6 +120,7 @@ public class Field extends Pane {
   }
 
   private void updateMostActiveSensor(DistanceBrick obj) {
+    System.out.println("Field.updateMostActiveSensor");
     Optional<DistancePlacement> optionallyMostActive =
         distancePlacements
             .stream()
@@ -126,6 +135,7 @@ public class Field extends Pane {
   }
 
   private void updateUi() {
+    System.out.println("Field.updateUi " + Thread.currentThread());
     distancePlacements.forEach(this::updateSensorValues);
     if(mostActivePlacement != null) {
       servoPlacements.forEach(servo -> updateServoAngles(servo, mostActivePlacement));
@@ -140,17 +150,20 @@ public class Field extends Pane {
   }
 
   private void updateSensorValues(DistancePlacement sensor) {
-    Location sensorLocation = Util.convertPixelToLocation(sensor.getXPos(), sensor.getYPos());
-    sensor.setLabel(
-        "Sensor ID: " + sensor.getBrick().getID() +
-            "\nval: " + sensor.getBrick().getDistance() +
-            "\nlat:"  + sensorLocation.lat() +
-            "\nlon:"  + sensorLocation.lon()
-    );
+    Platform.runLater(() -> {
+      Location sensorLocation = Util.toCoordinates(sensor.getXPos(), sensor.getYPos());
+      sensor.setLabel(
+          "Sensor ID: " + sensor.getBrick().getID() +
+              "\nval: " + sensor.getBrick().getDistance() +
+              "\nlat:"  + sensorLocation.lat() +
+              "\nlon:"  + sensorLocation.lon()
+      );
+    });
   }
 
   private void showActorValues(ServoPlacement actor) {
-    Location actorLocation = Util.convertPixelToLocation(actor.getXPos(), actor.getYPos());
+    Platform.runLater(() -> {
+    Location actorLocation = Util.toCoordinates(actor.getXPos(), actor.getYPos());
     actor.setLabel(
         "Actor ID: "    + actor.getBrick().getID() +
         "\nfaceAngle: " + actor.getFaceAngle() +
@@ -159,16 +172,17 @@ public class Field extends Pane {
         "\nlat:"        + actorLocation.lat() +
         "\nlon:"        + actorLocation.lon()
     );
+    });
   }
 
   private void updateServoAngles(ServoPlacement servo, DistancePlacement mostActivePlacement) {
-        double dLat  = mostActivePlacement.getXPos() - servo.getXPos();
-        double dLong = mostActivePlacement.getYPos() - servo.getYPos();
-        double angle = Util.calcAngle(dLat, dLong);
-        int pos      = Util.calculateServoPositionFromAngle(servo, angle);
+    double dLat  = mostActivePlacement.getXPos() - servo.getXPos();
+    double dLong = mostActivePlacement.getYPos() - servo.getYPos();
+    double angle = Util.calcAngle(dLat, dLong);
+    int pos      = Util.calculateServoPositionFromAngle(servo, angle);
 //        servo.adjustServoPosition(pos);
-        servo.setMostActiveSensorAngle(angle - servo.getFaceAngle());
-        servo.setFrontViewAngle(180 + angle - 2 * servo.getFaceAngle());
+    servo.setMostActiveSensorAngle(angle - servo.getFaceAngle());
+    servo.setFrontViewAngle(180 + angle - 2 * servo.getFaceAngle());
   }
 
   private void drawLegend(PresentationModel pm) {
@@ -188,7 +202,7 @@ public class Field extends Pane {
     Text labelServo    = new Text(gap + BrickShape.WIDTH + gap + 10,gap + 45, "Actor");
     Text frontLabel    = new Text(gap + BrickShape.WIDTH - 5,       gap - 5,  "Front");
 
-    legend = new Group(legendBorder, dummyDistance, dummyServo, labelDistance, labelServo, frontLabel);
+    Group legend = new Group(legendBorder, dummyDistance, dummyServo, labelDistance, labelServo, frontLabel);
     legend.setLayoutX(windowWidth - legendWidth);
     legend.setLayoutY(0);
   }
