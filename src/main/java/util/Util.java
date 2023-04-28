@@ -72,7 +72,12 @@ public class Util {
   public static Location convertPixelToLocation(double x, double y) {
     double lon = (LEFT_LONG + ((RIGHT_LONG - LEFT_LONG) / WINDOW_WIDTH) * x);
     double lat = (BOTTOM_LAT + ((TOP_LAT - BOTTOM_LAT) / WINDOW_HEIGHT) * y);
-    return new Location(lat, lon);
+
+    double decimalFactor = 10e4;
+    double roundedLat = Math.round(lat * decimalFactor) / decimalFactor;
+    double roundedLon = Math.round(lon * decimalFactor) / decimalFactor;
+
+    return new Location(roundedLat, roundedLon);
   }
 
   public static int getRandomNumber(int min, int max) {

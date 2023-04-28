@@ -140,11 +140,12 @@ public class Field extends Pane {
   }
 
   private void updateSensorValues(DistancePlacement sensor) {
+    Location sensorLocation = Util.convertPixelToLocation(sensor.getXPos(), sensor.getYPos());
     sensor.setLabel(
         "Sensor ID: " + sensor.getBrick().getID() +
             "\nval: " + sensor.getBrick().getDistance() +
-            "\nlat: " + sensor.getXPos() +
-            "\nlon: " + sensor.getYPos()
+            "\nlat:"  + sensorLocation.lat() +
+            "\nlon:"  + sensorLocation.lon()
     );
   }
 
@@ -155,10 +156,8 @@ public class Field extends Pane {
         "\nfaceAngle: " + actor.getFaceAngle() +
         "\npos: "       + Math.floor(actor.getMostActiveSensorAngle()) +
 //      "\npos:"        + pos +
-            "\nlat:"        + actorLocation.lat() +
-            "\nlon:"        + actorLocation.lon() +
-            "\nx:"        + actor.getXPos() +
-            "\ny:"        + actor.getYPos()
+        "\nlat:"        + actorLocation.lat() +
+        "\nlon:"        + actorLocation.lon()
     );
   }
 

@@ -4,6 +4,7 @@ import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.Proxy;
 import ch.fhnw.imvs.bricks.core.ProxyGroup;
 import ch.fhnw.imvs.bricks.mock.MockProxy;
+import ch.fhnw.imvs.bricks.mqtt.MqttProxy;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 
 import java.util.ArrayList;
@@ -22,16 +23,16 @@ public class FieldModel {
   private final List<DistanceBrick> sensors;
 
   private final ProxyGroup proxies;
-  private final Proxy mockProxy;
-  private final Proxy proxy;
+  private final Proxy      mockProxy;
+  private final Proxy      mqttProxy;
 
   public FieldModel() {
 
-    proxies = new ProxyGroup();
+    proxies   = new ProxyGroup();
     mockProxy = MockProxy.fromConfig(BASE_URL);
-    proxy = MockProxy.fromConfig(BASE_URL);
+    mqttProxy = MqttProxy.fromConfig(BASE_URL);
 
-    proxies.addProxy(proxy);
+    proxies.addProxy(mqttProxy);
     proxies.addProxy(mockProxy);
 
     actors  = new ArrayList<>();
@@ -62,15 +63,27 @@ public class FieldModel {
     return Collections.unmodifiableList(sensors);
   }
 
-  public ServoBrick addActor() {
-    ServoBrick newBrick = ServoBrick.connect(mockProxy, String.valueOf(actorId++));
+  public ServoBrick addSimulatedActor() {
+    ServoBrick newBrick = ServoBrick.connect(mockProxy, "auto gen " + actorId++);
     actors.add(newBrick);
     return newBrick;
   }
 
-  public DistanceBrick addSensor() {
-    DistanceBrick newBrick = DistanceBrick.connect(mockProxy, String.valueOf(sensorId++));
+  public DistanceBrick addSimulatedSensor() {
+    DistanceBrick newBrick = DistanceBrick.connect(mockProxy, "auto gen " + sensorId++);
     sensors.add(newBrick);
+    return newBrick;
+  }
+
+  public DistanceBrick addMqttSensor(String id) {
+    DistanceBrick newBrick = DistanceBrick.connect(mqttProxy, id);
+    sensors.add(newBrick);
+    return newBrick;
+  }
+
+  public ServoBrick addMqttActor(String id) {
+    ServoBrick newBrick = ServoBrick.connect(mqttProxy, id);
+    actors.add(newBrick);
     return newBrick;
   }
 }

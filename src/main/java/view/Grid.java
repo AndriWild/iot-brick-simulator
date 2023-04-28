@@ -14,7 +14,6 @@ public class Grid extends Pane {
 
   public static final int GAP = 50;
 
-
   private static final double DECIMALS_FACTOR  =  10e4;
 
   public Grid (PresentationModel pm){

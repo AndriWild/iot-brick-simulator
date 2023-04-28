@@ -15,18 +15,19 @@ import static main.java.model.Constants.WINDOW_WIDTH;
 public final class PresentationModel {
 
   private static final PresentationModel INSTANCE = new PresentationModel();
-
-
   private static final String WINDOW_TITLE  = "IoT - Brick Simulator";
 
   private ObjectProperty<Dimension>     windowSize;
   private SimpleStringProperty          windowTitle;
+
   private BooleanProperty               refresh;
   private BooleanProperty               printSnapshotData;
   private FieldModel                    field;
   private ObservableList<DistanceBrick> distanceBricks;
   private ObservableList<ServoBrick>    servoBricks;
   private ObjectProperty<DistanceBrick> mostActiveSensor;
+  private StringProperty                sensorId;
+  private StringProperty                actorId;
 
   private PresentationModel(){
     initializeProperties();
@@ -63,13 +64,31 @@ public final class PresentationModel {
   }
 
   public void addSensor() {
-    DistanceBrick newBrick = field.addSensor();
+    DistanceBrick newBrick = field.addSimulatedSensor();
     distanceBricks.add(newBrick);
   }
 
-  public void addActor() {
-    ServoBrick sb = field.addActor();
+  public void addMqttSensor() {
+    DistanceBrick newBrick = field.addMqttSensor(sensorId.get());
+    distanceBricks.add(newBrick);
+  }
+
+  public void addMqttActor() {
+    DistanceBrick newBrick = field.addMqttSensor(actorId.get());
+    distanceBricks.add(newBrick);
+  }
+
+  public void addSimulatedActor() {
+    ServoBrick sb = field.addSimulatedActor();
     servoBricks.add(sb);
+  }
+
+  public StringProperty sensorIdProperty() {
+    return sensorId;
+  }
+
+  public StringProperty actorIdProperty() {
+    return actorId;
   }
 
   public BooleanProperty printSnapshotDataProperty() {
@@ -95,9 +114,9 @@ public final class PresentationModel {
     refresh           = new SimpleBooleanProperty(false);
     printSnapshotData = new SimpleBooleanProperty(false);
     mostActiveSensor  = new SimpleObjectProperty<>();
+    sensorId          = new SimpleStringProperty("0000-0003");
+    actorId           = new SimpleStringProperty("0000-0000");
     servoBricks       = FXCollections.observableArrayList(field.getActors());
     distanceBricks    = FXCollections.observableArrayList(field.getSensors());
   }
-
-
 }

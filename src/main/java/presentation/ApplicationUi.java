@@ -2,7 +2,8 @@ package main.java.presentation;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import main.java.view.Controls;
+import javafx.stage.Stage;
+import main.java.view.Modal;
 import main.java.view.Field;
 import main.java.view.Grid;
 
@@ -18,19 +19,19 @@ public class ApplicationUi extends Pane {
 
   private Grid     grid;
   private Field    field;
-  private Controls controls;
+  private Modal controls;
 
-  public ApplicationUi() throws IOException {
-    initializeControls();
+  public ApplicationUi(Stage stage) throws IOException {
+    initializeControls(stage);
     layoutControls();
   }
 
-  private void initializeControls() throws IOException {
+  private void initializeControls(Stage stage) throws IOException {
     drawBackground();
 
     grid     = new Grid(PresentationModel.getInstance());
     field    = new Field();
-    controls = new Controls();
+    controls = new Modal(stage);
   }
 
   private void layoutControls() {
