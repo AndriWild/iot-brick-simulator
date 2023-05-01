@@ -56,7 +56,6 @@ public final class Program {
         int min = Integer.MAX_VALUE;
         int i = 0;
         DistanceBrick result = null;
-        System.out.print("pickMostActiveSensor, [");
         while (i < sensors.length) {
             int d = sensors[i].getDistance();
             System.out.print(d + " ");
@@ -186,7 +185,6 @@ public final class Program {
         while (true) {
             //DistanceBrick sensor = pickNextSensor(sensors); 
             DistanceBrick sensor = pickMostActiveSensor(sensors); 
-            System.out.println("Most active is " + sensor.getID());
             BrickPlacement sensorPlacement = getPlacementOfBrick(placements, sensor);
             for (ServoBrick servo : servos) {
                 BrickPlacement servoPlacement = getPlacementOfBrick(placements, servo);

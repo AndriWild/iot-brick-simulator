@@ -42,16 +42,13 @@ public class Field extends Pane {
   private void initializeControls() {
     PresentationModel pm = PresentationModel.getInstance();
 
-    System.out.println("Field.initializeControls - pm: " + pm.toString());
     BooleanProperty refresh = new SimpleBooleanProperty();
     refresh.bindBidirectional(pm.getRefreshFlag());
-    refresh.addListener( (_1, _2, _3 ) -> {
-      updateUi();
-    });
+    refresh.addListener( (_1, _2, _3 ) -> updateUi());
 
     BooleanProperty printBrickPlacementData = new SimpleBooleanProperty();
     printBrickPlacementData.bind(pm.printSnapshotDataProperty());
-//    printBrickPlacementData.addListener( (_1, _2, _3) -> System.out.println("prinBrick has changed"));
+    printBrickPlacementData.addListener( (_1, _2, _3) -> System.out.println(collectBrickPlacementData()));
 
     ObjectProperty<DistanceBrick> mostActiveSensor = new SimpleObjectProperty<>();
     mostActiveSensor.bind(pm.getMostActiveSensor());
@@ -65,35 +62,35 @@ public class Field extends Pane {
     //drawLegend(pm);
   }
 
-//  private String collectBrickPlacementData() {
-//    StringBuilder sb      = new StringBuilder();
-//    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-//    LocalDateTime now     = LocalDateTime.now();
-//
-//    sb.append("Data Snapshot from:").append(dtf.format(now)).append("\n");
-//    if(!distancePlacements.isEmpty()){
-//      sb.append("Sensors:\n")
-//        .append(placementDataToString(distancePlacements));
-//    }
-//    if(!servoPlacements.isEmpty()){
-//      sb.append("Actors:\n")
-//        .append(placementDataToString(servoPlacements));
-//    }
-//    return sb.toString();
-//  }
-//
-//  private String placementDataToString(List<? extends BrickPlacement> placements) {
-//    StringBuilder sb = new StringBuilder();
-//    placements.forEach(placement -> {
-//      Location brickLocation = Util.toCoordinates(placement.getXPos(), placement.getYPos());
-//      sb.append("id: ")      .append(placement.getBrick().getID());
-//      sb.append(",\tlat: ")  .append(brickLocation.lat());
-//      sb.append(",\tlong: ") .append(brickLocation.lon());
-//      sb.append(",\tangle: ").append(placement.getFaceAngle());
-//      sb.append("\n");
-//    });
-//    return sb.toString();
-//  }
+  private String collectBrickPlacementData() {
+    StringBuilder sb      = new StringBuilder();
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    LocalDateTime now     = LocalDateTime.now();
+
+    sb.append("Data Snapshot from:").append(dtf.format(now)).append("\n");
+    if(!distancePlacements.isEmpty()){
+      sb.append("Sensors:\n")
+        .append(placementDataToString(distancePlacements));
+    }
+    if(!servoPlacements.isEmpty()){
+      sb.append("Actors:\n")
+        .append(placementDataToString(servoPlacements));
+    }
+    return sb.toString();
+  }
+
+  private String placementDataToString(List<? extends BrickPlacement> placements) {
+    StringBuilder sb = new StringBuilder();
+    placements.forEach(placement -> {
+      Location brickLocation = Util.toCoordinates(placement.getXPos(), placement.getYPos());
+      sb.append("id: ")      .append(placement.getBrick().getID());
+      sb.append(",\tlat: ")  .append(brickLocation.lat());
+      sb.append(",\tlong: ") .append(brickLocation.lon());
+      sb.append(",\tangle: ").append(placement.getFaceAngle());
+      sb.append("\n");
+    });
+    return sb.toString();
+  }
 
   private void initializeListeners(PresentationModel pm) {
     pm.getActors().addListener((ListChangeListener<Brick>) c -> {
@@ -120,7 +117,6 @@ public class Field extends Pane {
   }
 
   private void updateMostActiveSensor(DistanceBrick obj) {
-    System.out.println("Field.updateMostActiveSensor");
     Optional<DistancePlacement> optionallyMostActive =
         distancePlacements
             .stream()
@@ -135,7 +131,6 @@ public class Field extends Pane {
   }
 
   private void updateUi() {
-    System.out.println("Field.updateUi " + Thread.currentThread());
     distancePlacements.forEach(this::updateSensorValues);
     if(mostActivePlacement != null) {
       servoPlacements.forEach(servo -> updateServoAngles(servo, mostActivePlacement));

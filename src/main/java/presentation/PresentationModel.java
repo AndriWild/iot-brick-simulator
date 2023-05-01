@@ -2,7 +2,6 @@ package main.java.presentation;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,14 +35,12 @@ public final class PresentationModel {
   }
 
   private void startUpdateLoop() {
-    System.out.println("PresentationModel.startUpdateLoop");
     new Thread(() -> {
       while(true){
         refresh.set(!refresh.get());
 
         DistanceBrick mostActive = field.getMostActive();
         mostActiveSensor.set(mostActive);
-        System.out.println("loop: "+ Thread.currentThread());
       }
     }).start();
   }

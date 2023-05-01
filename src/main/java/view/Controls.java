@@ -69,7 +69,6 @@ public class Controls extends GridPane {
   }
 
   private void initializeControls(Runnable closeCallback) {
-    System.out.println("Controls.initializeControls " + Thread.currentThread());
     PresentationModel pm = PresentationModel.getInstance();
 
     title           = new Text("Add Bricks");

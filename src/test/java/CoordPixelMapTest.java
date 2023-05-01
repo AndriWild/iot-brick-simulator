@@ -1,11 +1,11 @@
 package test.java;
 
 import main.java.model.Location;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
 import static main.java.model.Constants.*;
 import static main.java.util.Util.toCoordinates;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CoordPixelMapTest {
 
@@ -15,32 +15,32 @@ public class CoordPixelMapTest {
   public void testOrigin() {
     Location result = toCoordinates(0, 0);
     Location expected = new Location(BOTTOM_LAT, LEFT_LONG);
-    assertEquals("origin lat", expected.lat(), result.lat(), PRECISION);
-    assertEquals("origin lon", expected.lon(), result.lon(), PRECISION);
+    assertEquals(expected.lat(), result.lat(), PRECISION, "origin lat");
+    assertEquals(expected.lon(), result.lon(), PRECISION, "origin lon");
   }
 
   @Test
   public void testTopRightCorner() {
     Location result = toCoordinates(WINDOW_WIDTH, WINDOW_HEIGHT);
     Location expected = new Location(TOP_LAT, RIGHT_LONG);
-    assertEquals("lat", expected.lat(), result.lat(), PRECISION);
-    assertEquals("lon", expected.lon(), result.lon(), PRECISION);
+    assertEquals(expected.lat(), result.lat(), PRECISION, "lat");
+    assertEquals(expected.lon(), result.lon(), PRECISION, "lon");
   }
 
   @Test
   public void testTopLeftCorner() {
     Location result = toCoordinates(0, WINDOW_HEIGHT);
     Location expected = new Location(TOP_LAT, LEFT_LONG);
-    assertEquals("lat", expected.lat(), result.lat(), PRECISION);
-    assertEquals("lon", expected.lon(), result.lon(), PRECISION);
+    assertEquals(expected.lat(), result.lat(), PRECISION, "lat");
+    assertEquals(expected.lon(), result.lon(), PRECISION, "lon");
   }
 
   @Test
   public void testBottomRightCorner() {
     Location result = toCoordinates(WINDOW_WIDTH, 0);
     Location expected = new Location(BOTTOM_LAT, RIGHT_LONG);
-    assertEquals("lat", expected.lat(), result.lat(), PRECISION);
-    assertEquals("lon", expected.lon(), result.lon(), PRECISION);
+    assertEquals(expected.lat(), result.lat(), PRECISION, "lat");
+    assertEquals(expected.lon(), result.lon(), PRECISION, "lon");
   }
 
   @Test
@@ -50,7 +50,7 @@ public class CoordPixelMapTest {
         BOTTOM_LAT + ((TOP_LAT - BOTTOM_LAT) / 2),
         LEFT_LONG + ((RIGHT_LONG - LEFT_LONG) / 2)
     );
-    assertEquals("lat", expected.lat(), result.lat(), PRECISION);
-    assertEquals("lon", expected.lon(), result.lon(), PRECISION);
+    assertEquals(expected.lat(), result.lat(), PRECISION, "lat");
+    assertEquals(expected.lon(), result.lon(), PRECISION, "lon");
   }
 }

@@ -1,9 +1,9 @@
 package test.java;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
 import static main.java.util.Util.calcAngle;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PositionTest {
 
@@ -12,36 +12,36 @@ public class PositionTest {
   @Test
   public void testTypicalPointsInEachQuadrant() {
 
-    assertEquals("first",   90 - 45, calcAngle( 5.0,  5.0), PRECISION);
-    assertEquals("second", 360 - 45, calcAngle(-5.0,  5.0), PRECISION);
-    assertEquals("third",  180 + 45, calcAngle(-5.0, -5.0), PRECISION);
-    assertEquals("fourth",  90 + 45, calcAngle( 5.0, -5.0), PRECISION);
+    assertEquals( 90 - 45, calcAngle( 5.0,  5.0), PRECISION, "first");
+    assertEquals(360 - 45, calcAngle(-5.0,  5.0), PRECISION, "second");
+    assertEquals(180 + 45, calcAngle(-5.0, -5.0), PRECISION, "third");
+    assertEquals( 90 + 45, calcAngle( 5.0, -5.0), PRECISION, "fourth");
   }
 
   @Test
   public void testShiftedPointsInEachQuadrant() {
-    assertEquals("first",   90 - 75.963, calcAngle( 1.0,  4.0), PRECISION);
-    assertEquals("first",   90 - 51.340, calcAngle( 4.0,  5.0), PRECISION);
-    assertEquals("first",   90 - 38.659, calcAngle( 5.0,  4.0), PRECISION);
+    assertEquals(90 - 75.963, calcAngle( 1.0,  4.0), PRECISION, "first");
+    assertEquals(90 - 51.340, calcAngle( 4.0,  5.0), PRECISION, "first");
+    assertEquals(90 - 38.659, calcAngle( 5.0,  4.0), PRECISION, "first");
 
-    assertEquals("second", 270 + 75.963, calcAngle(-1.0,  4.0), PRECISION);
-    assertEquals("second", 270 + 51.340, calcAngle(-4.0,  5.0), PRECISION);
-    assertEquals("second", 270 + 38.659, calcAngle(-5.0,  4.0), PRECISION);
+    assertEquals(270 + 75.963, calcAngle(-1.0,  4.0), PRECISION, "second");
+    assertEquals(270 + 51.340, calcAngle(-4.0,  5.0), PRECISION, "second");
+    assertEquals(270 + 38.659, calcAngle(-5.0,  4.0), PRECISION, "second");
 
-    assertEquals("third",  270 - 75.963, calcAngle(-1.0, -4.0), PRECISION);
-    assertEquals("third",  270 - 51.340, calcAngle(-4.0, -5.0), PRECISION);
-    assertEquals("third",  270 - 38.659, calcAngle(-5.0, -4.0), PRECISION);
+    assertEquals(270 - 75.963, calcAngle(-1.0, -4.0), PRECISION, "third");
+    assertEquals(270 - 51.340, calcAngle(-4.0, -5.0), PRECISION, "third");
+    assertEquals(270 - 38.659, calcAngle(-5.0, -4.0), PRECISION, "third");
 
-    assertEquals("fourth",  90 + 75.963, calcAngle( 1.0, -4.0), PRECISION);
-    assertEquals("fourth",  90 + 51.340, calcAngle( 4.0, -5.0), PRECISION);
-    assertEquals("fourth",  90 + 38.659, calcAngle( 5.0, -4.0), PRECISION);
+    assertEquals(90 + 75.963, calcAngle( 1.0, -4.0), PRECISION, "fourth");
+    assertEquals(90 + 51.340, calcAngle( 4.0, -5.0), PRECISION, "fourth");
+    assertEquals(90 + 38.659, calcAngle( 5.0, -4.0), PRECISION, "fourth");
   }
 
   @Test
   public void testPointsOnAxis() {
-    assertEquals("north",   0, calcAngle( 0.0,  5.0), PRECISION); // 90
-    assertEquals("south", 180, calcAngle( 0.0, -5.0), PRECISION); // -90
-    assertEquals("east",   90, calcAngle( 5.0,  0.0), PRECISION); // 0
-    assertEquals("west",  270, calcAngle(-5.0,  0.0), PRECISION); // 0
+    assertEquals(  0, calcAngle( 0.0,  5.0), PRECISION, "north"); // 90
+    assertEquals(180, calcAngle( 0.0, -5.0), PRECISION, "south"); // -90
+    assertEquals( 90, calcAngle( 5.0,  0.0), PRECISION, "east"); // 0
+    assertEquals(270, calcAngle(-5.0,  0.0), PRECISION, "west"); // 0
   }
 }
