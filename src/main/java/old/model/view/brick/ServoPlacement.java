@@ -1,4 +1,4 @@
-package main.java.view.brick;
+package main.java.old.model.view.brick;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import javafx.scene.Group;
@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import main.java.presentation.PresentationModel;
+import main.java.old.model.presentation.PresentationModel;
 
 public class ServoPlacement extends BrickPlacement {
 

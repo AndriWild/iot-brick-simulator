@@ -1,4 +1,4 @@
-package main.java.model;
+package main.java.old.model;
 
 public class Constants {
 

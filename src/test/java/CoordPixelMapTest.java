@@ -1,10 +1,10 @@
 package test.java;
 
-import main.java.model.Location;
+import main.java.old.model.Location;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
-import static main.java.model.Constants.*;
+import static main.java.old.model.Constants.*;
 import static main.java.util.Util.toCoordinates;
 
 public class CoordPixelMapTest {

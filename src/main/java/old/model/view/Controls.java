@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.old.model.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,8 +10,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import main.java.model.Constants;
-import main.java.presentation.PresentationModel;
+import main.java.old.model.Constants;
+import main.java.old.model.presentation.PresentationModel;
 
 public class Controls extends GridPane {
 

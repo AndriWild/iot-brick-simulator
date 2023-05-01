@@ -1,11 +1,9 @@
-package main.java.view;
+package main.java.old.model.view;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import main.java.model.Constants;
 
 public class Modal extends Pane {
 

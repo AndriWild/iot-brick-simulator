@@ -1,10 +1,14 @@
-package main.java.presentation;
+package main.java;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import main.java.view.Modal;
-import main.java.view.Field;
+import main.java.controller.GardenController;
+import main.java.model.Garden;
+import main.java.old.model.Constants;
+import main.java.view.GardenGUI;
 import main.java.view.Grid;
 
 import java.io.IOException;
@@ -15,32 +19,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class ApplicationUi extends Pane {
+public class AppStarter extends Application {
 
-  private Grid     grid;
-  private Field    field;
-  private Modal controls;
+  private GardenController controller;
 
-  public ApplicationUi(Stage stage) throws IOException {
-    initializeControls(stage);
-    layoutControls();
+  @Override
+  public void start(Stage primaryStage) throws Exception {
+    Garden gardenModel = new Garden();
+    controller = new GardenController(gardenModel);
+    Pane gui = new GardenGUI(controller);
+    primaryStage.setTitle("IoT Brick Simulator");
+    setupStage(primaryStage, gui);
+    primaryStage.show();
   }
 
-  private void initializeControls(Stage stage) throws IOException {
-    drawBackground();
-
-    grid     = new Grid(PresentationModel.getInstance());
-    field    = new Field();
-    controls = new Modal(stage);
+  @Override
+  public void stop() throws Exception {
+    controller.shutdown();
   }
 
-  private void layoutControls() {
-    this.getChildren().add(grid);
-    this.getChildren().add(field);
-    this.getChildren().add(controls);
+  private void setupStage(Stage primaryStage, Pane gui) throws IOException {
+
+    primaryStage.setWidth (Constants.WINDOW_WIDTH);
+    primaryStage.setHeight(Constants.WINDOW_HEIGHT);
+
+    Pane background = new StackPane(gui, new Grid());
+    drawBackground(background);
+
+    Scene scene = new Scene(background);
+    primaryStage.setScene(scene);
   }
 
-  private void drawBackground() throws IOException {
+  private void drawBackground(Pane background) throws IOException {
     // https://map.geo.admin.ch/?lang=de&topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&catalogNodes=1392,1430&layers=ch.swisstopo.images-swissimage-dop10.metadata,ch.swisstopo.swissimage-product,KML%7C%7Chttps:%2F%2Fpublic.geo.admin.ch%2Fapi%2Fkml%2Ffiles%2FLAyAU_uYTCGngB4wfIo6tQ&E=2612657.47&N=1261467.03&zoom=11&layers_timestamp=,current,
     // images around 	2'612'660.5, 1'261'504.3
     //                                                                                                                             (lat),  (long)
@@ -105,6 +115,10 @@ public class ApplicationUi extends Pane {
                 BackgroundSize.DEFAULT
             )).toList();
 
-    this.setBackground(new Background(bgImages.toArray(new BackgroundImage[0])));
+    background.setBackground(new Background(bgImages.toArray(new BackgroundImage[0])));
+  }
+
+  public static void main(String[] args) {
+    launch(args);
   }
 }

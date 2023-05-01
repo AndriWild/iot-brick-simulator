@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.old.model.view;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.Brick;
@@ -14,16 +14,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import main.java.model.Location;
-import main.java.presentation.PresentationModel;
+import main.java.old.model.Location;
+import main.java.old.model.presentation.PresentationModel;
 import main.java.util.Util;
-import main.java.view.brick.BrickPlacement;
-import main.java.view.brick.BrickShape;
-import main.java.view.brick.DistancePlacement;
-import main.java.view.brick.ServoPlacement;
+import main.java.old.model.view.brick.BrickShape;
+import main.java.old.model.view.brick.DistancePlacement;
+import main.java.old.model.view.brick.ServoPlacement;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

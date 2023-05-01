@@ -1,4 +1,4 @@
-package main.java.view.brick;
+package main.java.old.model.view.brick;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;

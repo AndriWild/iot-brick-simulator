@@ -1,4 +1,4 @@
-package main.java.view.brick;
+package main.java.old.model.view.brick;
 
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import javafx.scene.Group;
@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
-import main.java.presentation.PresentationModel;
+import main.java.old.model.presentation.PresentationModel;
 
 public class DistancePlacement extends BrickPlacement {
 

@@ -1,4 +1,4 @@
-package main.java.view.brick;
+package main.java.old.model.view.brick;
 
 import ch.fhnw.imvs.bricks.core.Brick;
 import javafx.scene.Cursor;

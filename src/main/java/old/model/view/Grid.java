@@ -1,10 +1,9 @@
-package main.java.view;
+package main.java.old.model.view;
 
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import main.java.old.model.Constants;
 import main.java.old.model.presentation.PresentationModel;
 
 import java.awt.*;
@@ -17,24 +16,25 @@ public class Grid extends Pane {
 
   private static final double DECIMALS_FACTOR  =  10e4;
 
-  public Grid(){
-    drawGrid();
+  public Grid (PresentationModel pm){
+    int windowHeight = PresentationModel.getInstance().getWindowSize().height;
+    drawGrid(pm.getWindowSize(), windowHeight);
   }
 
-  private void drawGrid(){
-    double start = 0, end = Constants.WINDOW_WIDTH;
-    int nofLines = WINDOW_HEIGHT / GAP;
+  private void drawGrid(Dimension dimension, int windowHeight){
+    double start = 0, end = dimension.width;
+    int nofLines = windowHeight / GAP;
     double coordinateCapLon = (RIGHT_LONG - LEFT_LONG) / nofLines;
     double coordinateCapLat = (TOP_LAT - BOTTOM_LAT)   / nofLines;
 
 
     for (int i = 1; i <= nofLines; i++) {
-      Line horizontalLine = new Line(start, WINDOW_HEIGHT- (i * GAP), end, WINDOW_HEIGHT- (i * GAP));
+      Line horizontalLine = new Line(start, windowHeight - (i * GAP), end, windowHeight - (i * GAP));
       Line verticalLine   = new Line(i * GAP, start, i * GAP, end);
       horizontalLine.setStrokeWidth(0.2);
       verticalLine  .setStrokeWidth(0.2);
 
-      drawVerticalLine(coordinateCapLon, i, verticalLine);
+      drawVerticalLine(windowHeight, coordinateCapLon, i, verticalLine);
       drawHorizontalLine(coordinateCapLat, i, horizontalLine);
     }
   }
@@ -52,10 +52,10 @@ public class Grid extends Pane {
     );
   }
 
-  private void drawVerticalLine(double coordinateCap, int i, Line verticalLine) {
+  private void drawVerticalLine(int windowHeight, double coordinateCap, int i, Line verticalLine) {
     Text label = new Text(
         verticalLine.getStartX() - 15,
-        WINDOW_HEIGHT - 20,
+        windowHeight - 20,
         String.valueOf(Math.round((LEFT_LONG + coordinateCap * i) * DECIMALS_FACTOR) / DECIMALS_FACTOR)
     );
     label.setRotate(-90);

@@ -1,17 +1,16 @@
-package main.java.presentation;
+package main.java.old.model.presentation;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.java.model.FieldModel;
+import main.java.old.model.FieldModel;
 
 import java.awt.*;
 
-import static main.java.model.Constants.WINDOW_HEIGHT;
-import static main.java.model.Constants.WINDOW_WIDTH;
+import static main.java.old.model.Constants.WINDOW_HEIGHT;
+import static main.java.old.model.Constants.WINDOW_WIDTH;
 
 public final class PresentationModel {
 

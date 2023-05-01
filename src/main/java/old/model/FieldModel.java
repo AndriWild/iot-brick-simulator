@@ -1,10 +1,9 @@
-package main.java.model;
+package main.java.old.model;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.Proxy;
 import ch.fhnw.imvs.bricks.core.ProxyGroup;
 import ch.fhnw.imvs.bricks.mock.MockProxy;
-import ch.fhnw.imvs.bricks.mqtt.MqttProxy;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static main.java.model.Constants.BASE_URL;
+import static main.java.old.model.Constants.BASE_URL;
 
 public class FieldModel {
 
