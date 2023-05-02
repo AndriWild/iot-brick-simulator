@@ -43,7 +43,7 @@ public class AppStarter extends Application {
     primaryStage.setWidth (Constants.WINDOW_WIDTH);
     primaryStage.setHeight(Constants.WINDOW_HEIGHT);
 
-    Pane background = new StackPane(gui, new Grid());
+    Pane background = new StackPane(new Grid(), gui);
     drawBackground(background);
 
     Scene scene = new Scene(background);

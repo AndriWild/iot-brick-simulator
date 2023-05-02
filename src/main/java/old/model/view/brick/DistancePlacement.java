@@ -6,16 +6,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
+import main.java.model.DistanceBrickData;
 import main.java.old.model.presentation.PresentationModel;
 
 public class DistancePlacement extends BrickPlacement {
 
-  private final DistanceBrick brick;
+  private final DistanceBrickData brick;
   private       Group         distanceShape;
   private       Text          label;
   private       BrickShape    brickIcon;
 
-  public DistancePlacement(DistanceBrick brick, double longitude, double latitude, double angle) {
+  public DistancePlacement(DistanceBrickData brick, double longitude, double latitude, double angle) {
     super(longitude, latitude, angle);
     this.brick = brick;
     initializeControls();
@@ -77,7 +78,7 @@ public class DistancePlacement extends BrickPlacement {
   }
 
   @Override
-  public DistanceBrick getBrick() {
+  public DistanceBrickData getBrick() {
     return brick;
   }
 }

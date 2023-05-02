@@ -7,17 +7,18 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import main.java.model.DistanceBrickData;
 import main.java.old.model.presentation.PresentationModel;
 
 public class ServoPlacement extends BrickPlacement {
 
-  private final ServoBrick brick;
+  private final DistanceBrickData brick;
   private Group  servoShape;
   private Text   label;
   private Rotate mostActiveSensorAngle;
   private Rotate frontViewAngle;
 
-  public ServoPlacement(ServoBrick brick, double longitude, double latitude, double faceAngle) {
+  public ServoPlacement(DistanceBrickData brick, double longitude, double latitude, double faceAngle) {
     super(longitude, latitude, faceAngle);
     this.brick = brick;
 
@@ -79,9 +80,9 @@ public class ServoPlacement extends BrickPlacement {
     return mostActiveSensorAngle.getAngle();
   }
 
-  public void adjustServoPosition(int newPosition){
-   this.brick.setPosition(newPosition);
-  }
+//  public void adjustServoPosition(int newPosition){
+//   this.brick.setPosition(newPosition);
+//  }
 
   public void setFrontViewAngle(double angle) {
     frontViewAngle.setAngle(angle);
@@ -98,7 +99,7 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   @Override
-  public ServoBrick getBrick() {
+  public DistanceBrickData getBrick() {
     return brick;
   }
 }

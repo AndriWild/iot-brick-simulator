@@ -3,6 +3,7 @@ package main.java.old.model.view.brick;
 import ch.fhnw.imvs.bricks.core.Brick;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import main.java.model.DistanceBrickData;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -28,12 +29,14 @@ public abstract class BrickPlacement extends Group {
       BrickPlacement bp = (BrickPlacement) (event.getSource());
       bp.toFront();
     });
+
     this.setOnMouseDragged(event -> {
 
       double offsetX = event.getSceneX() - orgSceneX.get();
       double offsetY = event.getSceneY() - orgSceneY.get();
       BrickPlacement bp = (BrickPlacement) (event.getSource());
       bp.setLayoutX(bp.getLayoutX() + offsetX);
+
       bp.setLayoutY(bp.getLayoutY() + offsetY);
       orgSceneX.set(event.getSceneX());
       orgSceneY.set(event.getSceneY());
@@ -42,7 +45,7 @@ public abstract class BrickPlacement extends Group {
     });
   }
 
-  public abstract Brick getBrick();
+  public abstract DistanceBrickData getBrick();
 
   public double getXPos() {
     return xPos;
