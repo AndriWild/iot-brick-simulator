@@ -38,7 +38,6 @@ public final class PresentationModel {
     new Thread(() -> {
       while(true){
         refresh.set(!refresh.get());
-
         DistanceBrick mostActive = field.getMostActive();
         mostActiveSensor.set(mostActive);
       }

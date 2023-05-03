@@ -44,15 +44,20 @@ public class Field extends Pane {
 
     BooleanProperty refresh = new SimpleBooleanProperty();
     refresh.bindBidirectional(pm.getRefreshFlag());
-    refresh.addListener( (_1, _2, _3 ) -> updateUi());
+    refresh.addListener( (_1, _2, _3 ) ->
+            Platform.runLater(this::updateUi));
 
     BooleanProperty printBrickPlacementData = new SimpleBooleanProperty();
     printBrickPlacementData.bind(pm.printSnapshotDataProperty());
-    printBrickPlacementData.addListener( (_1, _2, _3) -> System.out.println(collectBrickPlacementData()));
+    printBrickPlacementData.addListener( (_1, _2, _3) ->
+            Platform.runLater(() ->
+              System.out.println(collectBrickPlacementData())
+    ));
 
     ObjectProperty<DistanceBrick> mostActiveSensor = new SimpleObjectProperty<>();
     mostActiveSensor.bind(pm.getMostActiveSensor());
-    mostActiveSensor.addListener((obj, oldValue, newValue) -> updateMostActiveSensor(newValue));
+    mostActiveSensor.addListener((obj, oldValue, newValue) ->
+            Platform.runLater(() -> updateMostActiveSensor(newValue)));
 
     servoPlacements     = new ArrayList<>();
     distancePlacements  = new ArrayList<>();
