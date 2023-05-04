@@ -13,5 +13,4 @@ import java.util.List;
 public class Garden {
   public final ObservableValue<Integer> id = new ObservableValue<>(1);
   public final ObservableValue<List<DistanceBrickData>> bricksList = new ObservableValue<>(Collections.emptyList());
-  public final ObservableValue<Boolean> refresh = new ObservableValue<>(false);
 }
