@@ -28,15 +28,15 @@ public class FieldModel {
 
   private final ProxyGroup proxies;
   private final Proxy      mockProxy;
-//  private final Proxy      mqttProxy;
+  private final Proxy      mqttProxy;
 
   public FieldModel() {
 
     proxies   = new ProxyGroup();
     mockProxy = MockProxy.fromConfig(BASE_URL);
-//    mqttProxy = MqttProxy.fromConfig(BASE_URL);
+    mqttProxy = MqttProxy.fromConfig(BASE_URL);
 
-//    proxies.addProxy(mqttProxy);
+    proxies.addProxy(mqttProxy);
     proxies.addProxy(mockProxy);
 
     actors  = new ArrayList<>();
@@ -54,10 +54,6 @@ public class FieldModel {
     }).start();
   }
 
-  public boolean isRefresh() {
-    return refresh.get();
-  }
-
   public SimpleBooleanProperty refreshProperty() {
     return refresh;
   }
@@ -69,7 +65,6 @@ public class FieldModel {
         .toList()
         .get(0);
   }
-
 
   public List<ServoBrick> getActors() {
     return Collections.unmodifiableList(actors);
@@ -91,15 +86,15 @@ public class FieldModel {
     return newBrick;
   }
 
-//  public DistanceBrick addMqttSensor(String id) {
-//    DistanceBrick newBrick = DistanceBrick.connect(mqttProxy, id);
-//    sensors.add(newBrick);
-//    return newBrick;
-//  }
-//
-//  public ServoBrick addMqttActor(String id) {
-//    ServoBrick newBrick = ServoBrick.connect(mqttProxy, id);
-//    actors.add(newBrick);
-//    return newBrick;
-//  }
+  public DistanceBrick addMqttSensor(String id) {
+    DistanceBrick newBrick = DistanceBrick.connect(mqttProxy, id);
+    sensors.add(newBrick);
+    return newBrick;
+  }
+
+  public ServoBrick addMqttActor(String id) {
+    ServoBrick newBrick = ServoBrick.connect(mqttProxy, id);
+    actors.add(newBrick);
+    return newBrick;
+  }
 }

@@ -33,7 +33,6 @@ public final class PresentationModel {
     initializeProperties();
     refresh.bind(field.refreshProperty());
     refresh.addListener( (_1, _2, _3 ) -> {
-
       DistanceBrick db = field.getMostActiveSensor();
       if(db != null){
         mostActiveSensor.set(db);
@@ -65,16 +64,16 @@ public final class PresentationModel {
     DistanceBrick newBrick = field.addSimulatedSensor();
     distanceBricks.add(newBrick);
   }
-//
-//  public void addMqttSensor() {
-//    DistanceBrick newBrick = field.addMqttSensor(sensorId.get());
-//    distanceBricks.add(newBrick);
-//  }
-//
-//  public void addMqttActor() {
-//    DistanceBrick newBrick = field.addMqttSensor(actorId.get());
-//    distanceBricks.add(newBrick);
-//  }
+
+  public void addMqttSensor() {
+    DistanceBrick newBrick = field.addMqttSensor(sensorId.get());
+    distanceBricks.add(newBrick);
+  }
+
+  public void addMqttActor() {
+    DistanceBrick newBrick = field.addMqttSensor(actorId.get());
+    distanceBricks.add(newBrick);
+  }
 
   public void addSimulatedActor() {
     ServoBrick sb = field.addSimulatedActor();
