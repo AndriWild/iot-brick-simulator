@@ -111,8 +111,8 @@ public class Controls extends GridPane {
 
     addActorButton .setOnAction(e -> pm.addSimulatedActor());
     addSensorButton.setOnAction(e -> pm.addSensor());
-    addMqttSensor  .setOnAction(e -> pm.addMqttSensor());
-    addMqttActor   .setOnAction(e -> pm.addMqttActor());
+//    addMqttSensor  .setOnAction(e -> pm.addMqttSensor());
+//    addMqttActor   .setOnAction(e -> pm.addMqttActor());
     printSnapshot  .setOnAction(e -> pm.printSnapshot());
     closeDialog    .setOnAction(e -> closeCallback.run());
 

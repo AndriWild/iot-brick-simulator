@@ -6,6 +6,8 @@ import ch.fhnw.imvs.bricks.core.ProxyGroup;
 import ch.fhnw.imvs.bricks.mock.MockProxy;
 import ch.fhnw.imvs.bricks.mqtt.MqttProxy;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,38 +24,52 @@ public class FieldModel {
   private final List<ServoBrick>    actors;
   private final List<DistanceBrick> sensors;
 
+  private final SimpleBooleanProperty refresh;
+
   private final ProxyGroup proxies;
   private final Proxy      mockProxy;
-  private final Proxy      mqttProxy;
+//  private final Proxy      mqttProxy;
 
   public FieldModel() {
 
     proxies   = new ProxyGroup();
     mockProxy = MockProxy.fromConfig(BASE_URL);
-    mqttProxy = MqttProxy.fromConfig(BASE_URL);
+//    mqttProxy = MqttProxy.fromConfig(BASE_URL);
 
-    proxies.addProxy(mqttProxy);
+//    proxies.addProxy(mqttProxy);
     proxies.addProxy(mockProxy);
 
     actors  = new ArrayList<>();
     sensors = new ArrayList<>();
+    refresh = new SimpleBooleanProperty(false);
+    updateLoop();
   }
 
-  private DistanceBrick getMostActiveSensor(List<DistanceBrick> bricks){
-    return bricks.stream()
+  private void updateLoop() {
+    new Thread(() -> {
+      while(true){
+        proxies.waitForUpdate();
+        refresh.set(!refresh.get());
+      }
+    }).start();
+  }
+
+  public boolean isRefresh() {
+    return refresh.get();
+  }
+
+  public SimpleBooleanProperty refreshProperty() {
+    return refresh;
+  }
+
+  public DistanceBrick getMostActiveSensor(){
+    if(sensors.isEmpty()) return null;
+    return sensors.stream()
         .sorted(Comparator.comparing(DistanceBrick::getDistance))
         .toList()
         .get(0);
   }
 
-  public DistanceBrick getMostActive() {
-    DistanceBrick mostActiveSensor = null;
-    proxies.waitForUpdate();
-    if(!sensors.isEmpty()) {
-      mostActiveSensor = getMostActiveSensor(sensors);
-    }
-    return mostActiveSensor;
-  }
 
   public List<ServoBrick> getActors() {
     return Collections.unmodifiableList(actors);
@@ -75,15 +91,15 @@ public class FieldModel {
     return newBrick;
   }
 
-  public DistanceBrick addMqttSensor(String id) {
-    DistanceBrick newBrick = DistanceBrick.connect(mqttProxy, id);
-    sensors.add(newBrick);
-    return newBrick;
-  }
-
-  public ServoBrick addMqttActor(String id) {
-    ServoBrick newBrick = ServoBrick.connect(mqttProxy, id);
-    actors.add(newBrick);
-    return newBrick;
-  }
+//  public DistanceBrick addMqttSensor(String id) {
+//    DistanceBrick newBrick = DistanceBrick.connect(mqttProxy, id);
+//    sensors.add(newBrick);
+//    return newBrick;
+//  }
+//
+//  public ServoBrick addMqttActor(String id) {
+//    ServoBrick newBrick = ServoBrick.connect(mqttProxy, id);
+//    actors.add(newBrick);
+//    return newBrick;
+//  }
 }
