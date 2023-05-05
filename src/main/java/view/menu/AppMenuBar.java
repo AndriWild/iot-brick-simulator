@@ -2,10 +2,7 @@ package main.java.view.menu;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import main.java.controller.MenuController;
 
@@ -14,7 +11,8 @@ public class AppMenuBar extends MenuBar {
   private Menu     menu;
   private MenuItem addBrick;
   private MenuItem printBrickData;
-  private MenuItem export;
+  private MenuItem exportConfig;
+  private MenuItem importConfig;
   private MenuItem shutdown;
 
   private final MenuController controller;
@@ -37,7 +35,8 @@ public class AppMenuBar extends MenuBar {
 
     printBrickData.setOnAction(_e -> controller.printBrickData());
 
-    export.setOnAction(_e -> controller.export());
+    exportConfig.setOnAction(_e -> controller.exportConfig());
+    importConfig.setOnAction(_e -> controller.importConfig());
 
     shutdown.setOnAction(_e -> {
       shutdownCallback.run();
@@ -51,7 +50,8 @@ public class AppMenuBar extends MenuBar {
     menu           = new Menu    ("Menu");
     addBrick       = new MenuItem("Add Brick");
     printBrickData = new MenuItem("Print Brick Data");
-    export         = new MenuItem("Export");
+    exportConfig   = new MenuItem("Export");
+    importConfig   = new MenuItem("Import");
     shutdown       = new MenuItem("Close");
   }
 
@@ -60,7 +60,8 @@ public class AppMenuBar extends MenuBar {
     menu.getItems().addAll(
         addBrick,
         printBrickData,
-        export,
+        exportConfig,
+        importConfig,
         separator,
         shutdown
     );

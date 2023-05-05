@@ -11,4 +11,6 @@ public class Constants {
   public static final double RIGHT_LONG =  7.607346;
 
   public static final String BASE_URL = "brick.li/";
+
+  public static final String CSV_PATH = "src/res/";
 }

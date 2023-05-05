@@ -1,0 +1,5 @@
+mock,brick,id,lat,long,faceAngle
+true,ServoBrick,autogen:0,412.0,322.0,0.0
+true,ServoBrick,autogen:1,325.0,633.0,0.0
+true,DistanceBrick,autogen:0,350.0,588.0,-66.0
+true,DistanceBrick,autogen:1,293.0,682.0,118.0

@@ -16,4 +16,5 @@ public class Garden {
   public final ObservableValue<List<ServoBrickData>> actuators  = new ObservableValue<>(Collections.emptyList());
   public final MockProxy mockProxy = MockProxy.fromConfig(Constants.BASE_URL);
   public final MqttProxy mqttProxy = MqttProxy.fromConfig(Constants.BASE_URL);
+  public final ObservableValue<Boolean> isLoading = new ObservableValue<>(false);
 }
