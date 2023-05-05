@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.view.background;
 
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;

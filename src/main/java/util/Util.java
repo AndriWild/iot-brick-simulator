@@ -1,5 +1,6 @@
 package main.java.util;
 
+import main.java.model.brick.BrickData;
 import main.java.old.model.Location;
 import main.java.old.model.view.brick.BrickPlacement;
 
@@ -63,8 +64,8 @@ public class Util {
     throw new IllegalArgumentException("Angle could not be calculated");
   }
 
-  public static int calculateServoPositionFromAngle(BrickPlacement brick, double angle) {
-    double result = angle - brick.getFaceAngle() + 90;
+  public static int calculateServoPositionFromAngle(BrickData brick, double angle) {
+    double result = angle - brick.faceAngle.getValue() + 90;
     if (result < 0) { result += 360.0; }
     return (int) result;
   }

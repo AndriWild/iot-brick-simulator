@@ -4,11 +4,12 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
-public class BrickShape extends Group {
+public class BrickNode extends Group {
 
-  public static final double CENTER_X = BrickShape.WIDTH / 2;
-  public static final double CENTER_Y = BrickShape.HEIGHT / 2;
+  public static final double CENTER_X = BrickNode.WIDTH / 2;
+  public static final double CENTER_Y = BrickNode.HEIGHT / 2;
   public static final double HEIGHT   = 22;
   public static final double WIDTH    = 34;
 
@@ -16,7 +17,8 @@ public class BrickShape extends Group {
   private       Line      frontIndicator;
   private       Rectangle body;
 
-  public BrickShape(Color color){
+
+  public BrickNode(Color color){
     this.color = color;
     initializeControls();
     layoutControls();
@@ -25,6 +27,7 @@ public class BrickShape extends Group {
   public Rectangle getBody() {
     return body;
   }
+
 
   private void layoutControls() {
     this.getChildren().addAll(body, frontIndicator);
@@ -35,7 +38,7 @@ public class BrickShape extends Group {
         CENTER_X,
         0,
         CENTER_X,
-        -BrickShape.HEIGHT / 2
+        -BrickNode.HEIGHT / 2
     );
     body = new Rectangle(WIDTH, HEIGHT);
     body.setArcHeight(5.0);
@@ -43,5 +46,6 @@ public class BrickShape extends Group {
 
     frontIndicator.setFill(Color.BLACK);
     body          .setFill(color);
+
   }
 }

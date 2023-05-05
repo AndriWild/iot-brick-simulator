@@ -1,7 +1,6 @@
 package main.java;
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -14,7 +13,8 @@ import main.java.controller.GardenController;
 import main.java.model.Garden;
 import main.java.old.model.Constants;
 import main.java.view.GardenGUI;
-import main.java.view.Grid;
+import main.java.view.background.Grid;
+import main.java.view.menu.AppMenuBar;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,29 +31,30 @@ public class AppStarter extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     Garden gardenModel = new Garden();
-    controller = new GardenController(gardenModel);
-    Pane gui = new GardenGUI(controller);
+    controller         = new GardenController(gardenModel);
+    Pane gui           = new VBox();
     primaryStage.setTitle("IoT Brick Simulator");
     setupStage(primaryStage, gui);
     primaryStage.show();
   }
 
   @Override
-  public void stop() throws Exception {
+  public void stop() {
     controller.shutdown();
   }
 
   private void setupStage(Stage primaryStage, Pane gui) throws IOException {
-
     primaryStage.setWidth (Constants.WINDOW_WIDTH);
     primaryStage.setHeight(Constants.WINDOW_HEIGHT);
     Pane copyright = new Pane();
     drawCopyright(copyright);
 
-    Pane background = new StackPane(new Grid(), copyright, gui);
+    Pane background = new StackPane(new Grid(), copyright, new GardenGUI(controller));
     drawBackground(background);
 
-    Scene scene = new Scene(background);
+    AppMenuBar menu = new AppMenuBar(controller, primaryStage, this::stop);
+    gui.getChildren().addAll(menu, background);
+    Scene scene = new Scene(gui);
     primaryStage.setScene(scene);
   }
 

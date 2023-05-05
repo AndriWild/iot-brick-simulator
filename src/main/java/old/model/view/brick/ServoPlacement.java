@@ -1,25 +1,23 @@
 package main.java.old.model.view.brick;
 
-import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import main.java.model.DistanceBrickData;
+import main.java.controller.GardenController;
+import main.java.model.brick.ServoBrickData;
 import main.java.old.model.presentation.PresentationModel;
 
 public class ServoPlacement extends BrickPlacement {
 
-  private final DistanceBrickData brick;
+  private final ServoBrickData brick;
   private Group  servoShape;
-  private Text   label;
   private Rotate mostActiveSensorAngle;
   private Rotate frontViewAngle;
 
-  public ServoPlacement(DistanceBrickData brick, double longitude, double latitude, double faceAngle) {
-    super(longitude, latitude, faceAngle);
+  public ServoPlacement(GardenController controller, ServoBrickData brick) {
+    super(controller, brick);
     this.brick = brick;
 
     initializeControls();
@@ -29,47 +27,36 @@ public class ServoPlacement extends BrickPlacement {
   private void initializeControls() {
     int windowHeight = PresentationModel.getInstance().getWindowSize().height;
 
-    System.out.println("ServoPlacement.initializeControls " + Thread.currentThread());
-    Line mostActiveSensorIndicator = new Line(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X, -5);
+    Line mostActiveSensorIndicator = new Line(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X, -5);
     mostActiveSensorAngle = new Rotate();
-    mostActiveSensorAngle.setPivotX(BrickShape.CENTER_X);
-    mostActiveSensorAngle.setPivotY(BrickShape.CENTER_Y);
+    mostActiveSensorAngle.setPivotX(BrickNode.CENTER_X);
+    mostActiveSensorAngle.setPivotY(BrickNode.CENTER_Y);
     mostActiveSensorIndicator.getTransforms().addAll(mostActiveSensorAngle);
     mostActiveSensorIndicator.setStrokeWidth(2);
 
-    Line frontViewIndicator = new Line(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X, 5);
+    Line frontViewIndicator = new Line(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X, 5);
     frontViewAngle = new Rotate();
-    frontViewAngle.setPivotX(BrickShape.CENTER_X);
-    frontViewAngle.setPivotY(BrickShape.CENTER_Y);
+    frontViewAngle.setPivotX(BrickNode.CENTER_X);
+    frontViewAngle.setPivotY(BrickNode.CENTER_Y);
     frontViewIndicator.getTransforms().addAll(frontViewAngle);
     frontViewIndicator.setStrokeWidth(2);
 
-    Circle outerCircle = new Circle(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X - 2);
-    Circle innerCircle = new Circle(BrickShape.CENTER_X, BrickShape.CENTER_Y, BrickShape.CENTER_X - 10);
+    Circle outerCircle = new Circle(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X - 2);
+    Circle innerCircle = new Circle(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X - 10);
     innerCircle.setFill(Color.LIGHTGRAY);
     innerCircle.setStroke(Color.BLACK);
     outerCircle.setFill(Color.GREY);
     outerCircle.setStroke(Color.BLACK);
 
-    BrickShape brickIcon = new BrickShape(Color.BLUE);
+    BrickNode brickIcon = new BrickNode(Color.BLUE);
     servoShape = new Group(brickIcon, outerCircle, mostActiveSensorIndicator, innerCircle, frontViewIndicator);
     servoShape.setLayoutX(xPos);
     servoShape.setLayoutY(windowHeight - yPos);
     servoShape.setRotate(faceAngle);
+  }
 
-    this.setOnScroll( e -> {
-
-      if(e.getDeltaY() > 0){
-        this.faceAngle += 2;
-      }
-      if(e.getDeltaY() < 0) {
-        this.faceAngle -= 2;
-      }
-      servoShape.setRotate(faceAngle);
-    });
-
-    label = new Text();
-    label.relocate(this.xPos + BrickShape.WIDTH + 10, windowHeight - this.yPos - BrickShape.HEIGHT);
+  public void setRotateBrickSymbol(double angel){
+    servoShape.setRotate(angel);
   }
 
   public void setMostActiveSensorAngle(double angle) {
@@ -89,17 +76,11 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   private void layoutControls() {
-    this.setOnMouseEntered(event -> super.getChildren().add(label));
-    this.setOnMouseExited(event -> super.getChildren().remove(label));
     super.getChildren().addAll(servoShape);
   }
 
-  public void setLabel(String label) {
-    this.label.setText(label);
-  }
-
   @Override
-  public DistanceBrickData getBrick() {
+  public  ServoBrickData getBrick() {
     return brick;
   }
 }
