@@ -15,6 +15,8 @@ import main.java.util.Location;
 import main.java.util.Util;
 import main.java.util.mvcbase.ControllerBase;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +30,6 @@ public class GardenController extends ControllerBase<Garden> {
 
   private int actuatorIdCounter = 0;
   private int sensorIdCounter   = 0;
-
 
   public GardenController(Garden model) {
     super(model);
@@ -115,5 +116,35 @@ public class GardenController extends ControllerBase<Garden> {
     ServoBrickData newServo = new ServoBrickData(ServoBrick.connect(proxy, id));
     currentServoBricks.add(newServo);
     updateModel(set(model.actuators, currentServoBricks));
+  }
+
+  public void printBrickData() {
+      StringBuilder sb      = new StringBuilder();
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+      LocalDateTime now     = LocalDateTime.now();
+      List<? extends BrickData> sensors   = model.sensors.getValue();
+      List<? extends BrickData> actuators = model.actuators.getValue();
+
+      sb.append("Data Snapshot from:").append(dtf.format(now)).append("\n");
+      if(!sensors.isEmpty()){
+        sb.append("Sensors:\n")
+            .append(placementDataToString(sensors));
+      }
+      if(!actuators.isEmpty()){
+        sb.append("Actors:\n")
+            .append(placementDataToString(actuators));
+      }
+    System.out.println(sb);
+  }
+  private String placementDataToString(List<? extends BrickData> placements) {
+    StringBuilder sb = new StringBuilder();
+    placements.forEach(brick -> {
+      sb.append("id: ")      .append(brick.getID());
+      sb.append(",\tlat: ")  .append(brick.location.getValue().lat());
+      sb.append(",\tlong: ") .append(brick.location.getValue().lon());
+      sb.append(",\tangle: ").append(brick.faceAngle.getValue());
+      sb.append("\n");
+    });
+    return sb.toString();
   }
 }

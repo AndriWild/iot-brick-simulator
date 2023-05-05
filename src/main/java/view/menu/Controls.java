@@ -23,7 +23,6 @@ public class Controls extends GridPane {
 
   private Button addActuatorButton;
   private Button addSensorButton;
-  private Button printSnapshot;
   private Button addMqttSensor;
   private Button addMqttActuator;
   private Button closeDialog;
@@ -67,7 +66,6 @@ public class Controls extends GridPane {
     add(addMqttActuator,   0, 11, 1, 1);
     add(actuatorId,        1, 11, 1, 1);
     add(separator3,        0, 13, 2, 1);
-    add(printSnapshot,     0, 15, 1, 1);
     add(closeDialog,       0, 17, 1, 1);
   }
 
@@ -86,7 +84,6 @@ public class Controls extends GridPane {
     addSensorButton   = new Button("+ Sensor");
     addMqttSensor     = new Button("+ Mqtt Sensor");
     addMqttActuator   = new Button("+ Mqtt Actor");
-    printSnapshot     = new Button("Print All Bricks");
     closeDialog       = new Button("Close");
 
     sensorId          = new TextField("sensor ID");
@@ -105,7 +102,6 @@ public class Controls extends GridPane {
     addSensorButton  .setPrefWidth(DEFAULT_NODE_WIDTH);
     addMqttActuator  .setPrefWidth(DEFAULT_NODE_WIDTH);
     addMqttSensor    .setPrefWidth(DEFAULT_NODE_WIDTH);
-    printSnapshot    .setPrefWidth(DEFAULT_NODE_WIDTH);
     closeDialog      .setPrefWidth(DEFAULT_NODE_WIDTH);
     mqttUrl          .setPrefWidth(DEFAULT_NODE_WIDTH);
     actuatorId       .setPrefWidth(DEFAULT_NODE_WIDTH);
@@ -115,7 +111,6 @@ public class Controls extends GridPane {
     addMqttActuator  .setOnAction(e -> controller.addActuator(false, actuatorId.getText()));
     addSensorButton  .setOnAction(e -> controller.addSensor  (true, ""));
     addMqttSensor    .setOnAction(e -> controller.addSensor  (false, sensorId.getText()));
-    printSnapshot    .setOnAction(e -> {});
     closeDialog      .setOnAction(e -> closeCallback.run());
   }
 }
