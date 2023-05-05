@@ -60,7 +60,6 @@ public class AppStarter extends Application {
   private void drawCopyright(Pane copyright) {
     int width = 70, height = 18;
     String text = "© swisstopo";
-
     Region background = new Region();
     background.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 255, 0.6),null, null)));
     background.setMinWidth(width);
@@ -69,7 +68,7 @@ public class AppStarter extends Application {
 
     Text textField = new Text(text);
     textField.setFont(Font.font("Tahoma", FontWeight.LIGHT, 10));
-
+    textField.relocate(Constants.WINDOW_WIDTH - width + 5, Constants.WINDOW_HEIGHT - height + 1);
     copyright.getChildren().addAll(background, textField);
   }
 
