@@ -1,11 +1,12 @@
-package main.java.old.model.view.brick;
+package main.java.view.brick;
 
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
 import main.java.controller.GardenController;
 import main.java.model.brick.BrickData;
-import main.java.old.model.Constants;
+import main.java.Constants;
+import main.java.util.Location;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -60,7 +61,11 @@ public abstract class BrickPlacement extends Group {
       BrickPlacement bp = (BrickPlacement) (event.getSource());
       orgSceneX.set(event.getSceneX());
       orgSceneY.set(event.getSceneY());
-      controller.move(bp.getLayoutX() + offsetX, Constants.WINDOW_WIDTH - (bp.getLayoutY() + offsetY), brickData);
+      Location brickLocation = new Location(
+          Constants.WINDOW_WIDTH - (bp.getLayoutY() + offsetY), // mirroring the y-axis
+          bp.getLayoutX() + offsetX
+      );
+      controller.move(brickLocation,brickData);
     });
   }
 

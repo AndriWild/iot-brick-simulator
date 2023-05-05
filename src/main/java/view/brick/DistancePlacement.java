@@ -1,4 +1,4 @@
-package main.java.old.model.view.brick;
+package main.java.view.brick;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -6,7 +6,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import main.java.controller.GardenController;
 import main.java.model.brick.DistanceBrickData;
-import main.java.old.model.presentation.PresentationModel;
 
 public class DistancePlacement extends BrickPlacement {
 
@@ -30,7 +29,6 @@ public class DistancePlacement extends BrickPlacement {
   }
 
   private void initializeControls() {
-    int windowHeight = PresentationModel.getInstance().getWindowSize().height;
     brickIcon = new BrickNode(Color.RED);
 
     Arc viewPort = new Arc(
@@ -45,8 +43,6 @@ public class DistancePlacement extends BrickPlacement {
     viewPort.setFill(Color.grayRgb(100, 0.7));
 
     distanceShape = new Group(viewPort, brickIcon);
-//    distanceShape.setLayoutX(xPos);
-//    distanceShape.setLayoutY(windowHeight - yPos);
     distanceShape.setRotate(faceAngle);
   }
 

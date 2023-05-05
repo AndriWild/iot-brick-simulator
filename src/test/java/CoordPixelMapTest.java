@@ -1,9 +1,9 @@
 package test.java;
 
-import main.java.old.model.Location;
+import main.java.util.Location;
 import org.junit.jupiter.api.Test;
 
-import static main.java.old.model.Constants.*;
+import static main.java.Constants.*;
 import static main.java.util.Util.toCoordinates;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

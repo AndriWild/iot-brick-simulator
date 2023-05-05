@@ -4,12 +4,9 @@ import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import main.java.old.model.Constants;
-import main.java.old.model.presentation.PresentationModel;
+import main.java.Constants;
 
-import java.awt.*;
-
-import static main.java.old.model.Constants.*;
+import static main.java.Constants.*;
 
 public class Grid extends Pane {
 

@@ -11,7 +11,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.controller.GardenController;
 import main.java.model.Garden;
-import main.java.old.model.Constants;
 import main.java.view.GardenGUI;
 import main.java.view.background.Grid;
 import main.java.view.menu.AppMenuBar;

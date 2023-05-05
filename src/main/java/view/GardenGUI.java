@@ -3,14 +3,12 @@ package main.java.view;
 import javafx.scene.layout.Pane;
 import main.java.controller.GardenController;
 import main.java.model.Garden;
-import main.java.model.brick.BrickData;
 import main.java.model.brick.DistanceBrickData;
 import main.java.model.brick.ServoBrickData;
-import main.java.old.model.Constants;
-import main.java.old.model.Location;
-import main.java.old.model.view.brick.BrickPlacement;
-import main.java.old.model.view.brick.DistancePlacement;
-import main.java.old.model.view.brick.ServoPlacement;
+import main.java.Constants;
+import main.java.util.Location;
+import main.java.view.brick.DistancePlacement;
+import main.java.view.brick.ServoPlacement;
 import main.java.util.Util;
 import main.java.util.mvcbase.ViewMixin;
 
@@ -59,34 +57,34 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, GardenControlle
   }
 
   private String getSensorLabelData(DistanceBrickData brick) {
-    Location location = Util.toCoordinates(brick.x.getValue(), Constants.WINDOW_HEIGHT - brick.y.getValue());
+    Location location = Util.toCoordinates(brick.location.getValue().lon(), brick.location.getValue().lat());
     return "id: "          + brick.getID() +
            "\nval: "       + brick.value.getValue() +
-        "\nx: "         + brick.x.getValue() +
-        "\ny: "         + brick.y.getValue() +
+        "\nx: "         + brick.location.getValue().lon() +
+        "\ny: "         + brick.location.getValue().lat() +
 //           "\nx: "         + location.lat() +
 //           "\ny: "         + location.lon() +
            "\nfaceAngle: " + brick.faceAngle.getValue();
   }
 
   private String getActuatorLabelData(ServoBrickData brick) {
-    Location location = Util.toCoordinates(brick.x.getValue(), Constants.WINDOW_HEIGHT - brick.y.getValue());
+    Location location = Util.toCoordinates(brick.location.getValue().lon(), brick.location.getValue().lat());
     return "id: "          + brick.getID() +
            "\nangle: "     + brick.mostActiveAngle.getValue() +
+        "\nx: "         + brick.location.getValue().lon() +
+        "\ny: "         + brick.location.getValue().lat() +
 //           "\nx: "         + location.lat() +
-//           "\nx: "         + location.lon() +
-        "\nx: "         + brick.x.getValue() +
-        "\ny: "         + brick.y.getValue() +
+//           "\ny: "         + location.lon() +
+
            "\nfaceAngle: " + brick.faceAngle.getValue();
   }
 
   private void addSensorListeners(DistanceBrickData newBrick, DistancePlacement dp) {
-    onChangeOf(newBrick.x).execute((oldValue, newValue) ->
-        dp.setLayoutX(newValue));
 
-    onChangeOf(newBrick.y).execute((oldValue, newValue) -> {
-          dp.setLayoutY(Constants.WINDOW_WIDTH - newValue);
-        });
+    onChangeOf(newBrick.location).execute((oldValue, newValue) -> {
+      dp.setLayoutY(Constants.WINDOW_WIDTH - newValue.lat());
+      dp.setLayoutX(newValue.lon());
+    });
 
     onChangeOf(newBrick.faceAngle).execute((oldValue, newValue) ->
         dp.setRotateBrickSymbol(newValue));
@@ -99,12 +97,10 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, GardenControlle
   }
 
   private void addActuatorListeners(ServoBrickData newBrick, ServoPlacement dp) {
-    onChangeOf(newBrick.x).execute((oldValue, newValue) ->
-        dp.setLayoutX(newValue));
-
-    onChangeOf(newBrick.y).execute((oldValue, newValue) ->
-        dp.setLayoutY(Constants.WINDOW_WIDTH - newValue));
-
+    onChangeOf(newBrick.location).execute((oldValue, newValue) -> {
+      dp.setLayoutY(Constants.WINDOW_WIDTH - newValue.lat());
+      dp.setLayoutX(newValue.lon());
+    });
     onChangeOf(newBrick.faceAngle).execute((oldValue, newValue) ->
         dp.setRotateBrickSymbol(newValue));
 

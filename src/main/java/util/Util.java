@@ -1,10 +1,8 @@
 package main.java.util;
 
 import main.java.model.brick.BrickData;
-import main.java.old.model.Location;
-import main.java.old.model.view.brick.BrickPlacement;
 
-import static main.java.old.model.Constants.*;
+import static main.java.Constants.*;
 
 public class Util {
 

@@ -1,10 +1,9 @@
-package main.java.old.model.view.brick;
+package main.java.view.brick;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class BrickNode extends Group {
 

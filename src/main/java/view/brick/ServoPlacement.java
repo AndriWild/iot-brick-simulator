@@ -1,4 +1,4 @@
-package main.java.old.model.view.brick;
+package main.java.view.brick;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -7,7 +7,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import main.java.controller.GardenController;
 import main.java.model.brick.ServoBrickData;
-import main.java.old.model.presentation.PresentationModel;
 
 public class ServoPlacement extends BrickPlacement {
 
@@ -58,14 +57,6 @@ public class ServoPlacement extends BrickPlacement {
   public void setMostActiveSensorAngle(double angle) {
     mostActiveSensorAngle.setAngle(angle);
   }
-
-  public double getMostActiveSensorAngle() {
-    return mostActiveSensorAngle.getAngle();
-  }
-
-//  public void adjustServoPosition(int newPosition){
-//   this.brick.setPosition(newPosition);
-//  }
 
   public void setFrontViewAngle(double angle) {
     frontViewAngle.setAngle(angle);
