@@ -1,9 +1,14 @@
 package main.java;
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.controller.GardenController;
 import main.java.model.Garden;
@@ -42,12 +47,30 @@ public class AppStarter extends Application {
 
     primaryStage.setWidth (Constants.WINDOW_WIDTH);
     primaryStage.setHeight(Constants.WINDOW_HEIGHT);
+    Pane copyright = new Pane();
+    drawCopyright(copyright);
 
-    Pane background = new StackPane(new Grid(), gui);
+    Pane background = new StackPane(new Grid(), copyright, gui);
     drawBackground(background);
 
     Scene scene = new Scene(background);
     primaryStage.setScene(scene);
+  }
+
+  private void drawCopyright(Pane copyright) {
+    int width = 70, height = 18;
+    String text = "© swisstopo";
+
+    Region background = new Region();
+    background.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 255, 0.6),null, null)));
+    background.setMinWidth(width);
+    background.setMinHeight(height);
+    background.relocate(Constants.WINDOW_WIDTH - width, Constants.WINDOW_HEIGHT - height);
+
+    Text textField = new Text(text);
+    textField.setFont(Font.font("Tahoma", FontWeight.LIGHT, 10));
+
+    copyright.getChildren().addAll(background, textField);
   }
 
   private void drawBackground(Pane background) throws IOException {
