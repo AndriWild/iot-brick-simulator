@@ -4,7 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
-import main.java.controller.GardenController;
+import main.java.controller.BrickController;
 import main.java.model.brick.DistanceBrickData;
 
 public class DistancePlacement extends BrickPlacement {
@@ -13,7 +13,7 @@ public class DistancePlacement extends BrickPlacement {
   private       Group         distanceShape;
   private BrickNode brickIcon;
 
-  public DistancePlacement(GardenController controller, DistanceBrickData brick) {
+  public DistancePlacement(BrickController controller, DistanceBrickData brick) {
     super(controller, brick);
     this.brick = brick;
     initializeControls();

@@ -2,16 +2,13 @@ package main.java.view.menu;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import main.java.controller.GardenController;
 import main.java.Constants;
+import main.java.controller.MenuController;
 
 public class Controls extends GridPane {
 
@@ -37,9 +34,9 @@ public class Controls extends GridPane {
   private Label mqttBricksTitle;
   private Label mqttUrlLabel;
 
-  private GardenController controller;
+  private MenuController controller;
 
-  public Controls(GardenController controller, Runnable closeCallback) {
+  public Controls(MenuController controller, Runnable closeCallback) {
     this.controller = controller;
     setAlignment(Pos.CENTER);
     setHgap(12);

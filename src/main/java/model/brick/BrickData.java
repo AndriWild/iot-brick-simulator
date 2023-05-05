@@ -33,4 +33,12 @@ public abstract class BrickData {
   public String getTimestampIsoUtc() {
     return inner.getTimestampIsoUtc();
   }
+
+  @Override
+  public String toString() {
+    return inner.getID()
+        + ", " + location.getValue().lat()
+        + ", " + location.getValue().lon()
+        + ", " + faceAngle.getValue();
+  }
 }

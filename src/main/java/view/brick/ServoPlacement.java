@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
-import main.java.controller.GardenController;
+import main.java.controller.BrickController;
 import main.java.model.brick.ServoBrickData;
 
 public class ServoPlacement extends BrickPlacement {
@@ -15,7 +15,7 @@ public class ServoPlacement extends BrickPlacement {
   private Rotate mostActiveSensorAngle;
   private Rotate frontViewAngle;
 
-  public ServoPlacement(GardenController controller, ServoBrickData brick) {
+  public ServoPlacement(BrickController controller, ServoBrickData brick) {
     super(controller, brick);
     this.brick = brick;
 

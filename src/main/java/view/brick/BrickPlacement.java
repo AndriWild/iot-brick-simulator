@@ -3,7 +3,7 @@ package main.java.view.brick;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
-import main.java.controller.GardenController;
+import main.java.controller.BrickController;
 import main.java.model.brick.BrickData;
 import main.java.Constants;
 import main.java.util.Location;
@@ -15,10 +15,10 @@ public abstract class BrickPlacement extends Group {
   protected double faceAngle;
 
   private       Text             label;
-  private final GardenController controller;
+  private final BrickController controller;
   private final BrickData        brickData;
 
-  public BrickPlacement(GardenController controller, BrickData brick) {
+  public BrickPlacement(BrickController controller, BrickData brick) {
     super();
     this.controller = controller;
     this.brickData  = brick;

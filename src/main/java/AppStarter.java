@@ -9,7 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.java.controller.GardenController;
+import main.java.controller.BrickController;
 import main.java.controller.MenuController;
 import main.java.model.Garden;
 import main.java.view.GardenGUI;
@@ -26,13 +26,13 @@ import java.util.stream.IntStream;
 
 public class AppStarter extends Application {
 
-  private GardenController controller;
+  private BrickController controller;
   private MenuController   menuController;
 
   @Override
   public void start(Stage primaryStage) throws Exception {
     Garden gardenModel = new Garden();
-    controller         = new GardenController(gardenModel);
+    controller         = new BrickController(gardenModel);
     menuController     = new MenuController(gardenModel);
     BorderPane gui     = new BorderPane();
     primaryStage.setTitle("IoT Brick Simulator");
@@ -55,7 +55,7 @@ public class AppStarter extends Application {
     Pane background = new StackPane(new Grid(), copyright, new GardenGUI(controller));
     drawBackground(background);
 
-    AppMenuBar menu = new AppMenuBar(controller, primaryStage, this::stop);
+    AppMenuBar menu = new AppMenuBar(menuController, primaryStage, this::stop);
     gui.setTop(menu);
     gui.setCenter(background);
     Scene scene = new Scene(gui);

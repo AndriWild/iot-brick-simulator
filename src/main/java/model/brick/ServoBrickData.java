@@ -19,4 +19,10 @@ public class ServoBrickData extends BrickData {
     public void getPosition(int i) {
         inner.setPosition(i);
     }
+
+
+    @Override
+    public String toString() {
+        return "ServoBrick" + ", " + super.toString();
+    }
 }

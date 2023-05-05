@@ -20,4 +20,9 @@ public class DistanceBrickData extends BrickData {
     public int getDistance() {
         return inner.getDistance();
     }
+
+    @Override
+    public String toString() {
+        return "DistanceBrick" + ", " + super.toString();
+    }
 }

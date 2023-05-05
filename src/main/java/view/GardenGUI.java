@@ -1,7 +1,7 @@
 package main.java.view;
 
 import javafx.scene.layout.Pane;
-import main.java.controller.GardenController;
+import main.java.controller.BrickController;
 import main.java.model.Garden;
 import main.java.model.brick.DistanceBrickData;
 import main.java.model.brick.ServoBrickData;
@@ -12,11 +12,11 @@ import main.java.view.brick.ServoPlacement;
 import main.java.util.Util;
 import main.java.util.mvcbase.ViewMixin;
 
-public class GardenGUI extends Pane implements ViewMixin<Garden, GardenController> {
+public class GardenGUI extends Pane implements ViewMixin<Garden, BrickController> {
 
-  private final GardenController controller;
+  private final BrickController controller;
 
-  public GardenGUI(GardenController controller) {
+  public GardenGUI(BrickController controller) {
     init(controller);
     this.controller = controller;
   }
