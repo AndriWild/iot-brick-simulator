@@ -11,6 +11,7 @@ import main.java.model.brick.DistanceBrickData;
 import main.java.model.Garden;
 import main.java.model.brick.ServoBrickData;
 import main.java.old.model.Constants;
+import main.java.old.model.Location;
 import main.java.util.Util;
 import main.java.util.mvcbase.ControllerBase;
 
@@ -68,6 +69,7 @@ public class GardenController extends ControllerBase<Garden> {
   private void updateServoAngles(ServoBrickData servo, DistanceBrickData mostActivePlacement) {
     double dLat  = mostActivePlacement.x.getValue() - servo.x.getValue();
     double dLong = mostActivePlacement.y.getValue() - servo.y.getValue();
+//    System.out.println("dLat: " + dLat + ",  dLong: " + dLong);
     double angle = Util.calcAngle(dLat, dLong);
     int pos      = Util.calculateServoPositionFromAngle(servo, angle);
 //        servo.adjustServoPosition(pos);
@@ -75,9 +77,9 @@ public class GardenController extends ControllerBase<Garden> {
     updateModel(set(servo.viewPortAngle, 180 + angle - 2 * servo.faceAngle.getValue()));
   }
 
-  public void move(double x, double y, BrickData brick){
-    updateModel(set(brick.x, x));
-    updateModel(set(brick.y, y));
+  public void move(Location target, BrickData brick){
+    updateModel(set(brick.x, target.lat()));
+    updateModel(set(brick.y, target.lon()));
   }
 
   public void rotate(double angle, BrickData brick) {

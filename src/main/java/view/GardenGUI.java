@@ -6,9 +6,12 @@ import main.java.model.Garden;
 import main.java.model.brick.BrickData;
 import main.java.model.brick.DistanceBrickData;
 import main.java.model.brick.ServoBrickData;
+import main.java.old.model.Constants;
+import main.java.old.model.Location;
 import main.java.old.model.view.brick.BrickPlacement;
 import main.java.old.model.view.brick.DistancePlacement;
 import main.java.old.model.view.brick.ServoPlacement;
+import main.java.util.Util;
 import main.java.util.mvcbase.ViewMixin;
 
 public class GardenGUI extends Pane implements ViewMixin<Garden, GardenController> {
@@ -36,40 +39,44 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, GardenControlle
   @Override
   public void setupModelToUiBindings(Garden model) {
 
-    onChangeOf(model.sensors).execute((oldValue, newValue) -> {
-      newValue.stream()
-          .filter(brick -> !oldValue.contains(brick))
-          .forEach(newBrick -> {
-            DistancePlacement dp = new DistancePlacement(controller, newBrick);
-            addSensorListeners(newBrick, dp);
-            this.getChildren().add(dp);
-          });
-    });
+    onChangeOf(model.sensors).execute((oldValue, newValue) ->
+        newValue.stream()
+        .filter(brick -> !oldValue.contains(brick))
+        .forEach(newBrick -> {
+          DistancePlacement dp = new DistancePlacement(controller, newBrick);
+          addSensorListeners(newBrick, dp);
+          this.getChildren().add(dp);
+        }));
 
-    onChangeOf(model.actuators).execute((oldValue, newValue) -> {
-      newValue.stream()
-          .filter(brick -> !oldValue.contains(brick))
-          .forEach(newBrick -> {
-            ServoPlacement dp = new ServoPlacement(controller, newBrick);
-            addActuatorListeners(newBrick, dp);
-            this.getChildren().add(dp);
-          });
-    });
+    onChangeOf(model.actuators).execute((oldValue, newValue) ->
+        newValue.stream()
+        .filter(brick -> !oldValue.contains(brick))
+        .forEach(newBrick -> {
+          ServoPlacement dp = new ServoPlacement(controller, newBrick);
+          addActuatorListeners(newBrick, dp);
+          this.getChildren().add(dp);
+        }));
   }
 
   private String getSensorLabelData(DistanceBrickData brick) {
+    Location location = Util.toCoordinates(brick.x.getValue(), Constants.WINDOW_HEIGHT - brick.y.getValue());
     return "id: "          + brick.getID() +
            "\nval: "       + brick.value.getValue() +
-           "\nx: "         + brick.x.getValue() +
-           "\ny: "         + brick.y.getValue() +
+        "\nx: "         + brick.x.getValue() +
+        "\ny: "         + brick.y.getValue() +
+//           "\nx: "         + location.lat() +
+//           "\ny: "         + location.lon() +
            "\nfaceAngle: " + brick.faceAngle.getValue();
   }
 
   private String getActuatorLabelData(ServoBrickData brick) {
+    Location location = Util.toCoordinates(brick.x.getValue(), Constants.WINDOW_HEIGHT - brick.y.getValue());
     return "id: "          + brick.getID() +
            "\nangle: "     + brick.mostActiveAngle.getValue() +
-           "\nx: "         + brick.x.getValue() +
-           "\ny: "         + brick.y.getValue() +
+//           "\nx: "         + location.lat() +
+//           "\nx: "         + location.lon() +
+        "\nx: "         + brick.x.getValue() +
+        "\ny: "         + brick.y.getValue() +
            "\nfaceAngle: " + brick.faceAngle.getValue();
   }
 
@@ -77,8 +84,9 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, GardenControlle
     onChangeOf(newBrick.x).execute((oldValue, newValue) ->
         dp.setLayoutX(newValue));
 
-    onChangeOf(newBrick.y).execute((oldValue, newValue) ->
-        dp.setLayoutY(newValue));
+    onChangeOf(newBrick.y).execute((oldValue, newValue) -> {
+          dp.setLayoutY(Constants.WINDOW_WIDTH - newValue);
+        });
 
     onChangeOf(newBrick.faceAngle).execute((oldValue, newValue) ->
         dp.setRotateBrickSymbol(newValue));
@@ -95,7 +103,7 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, GardenControlle
         dp.setLayoutX(newValue));
 
     onChangeOf(newBrick.y).execute((oldValue, newValue) ->
-        dp.setLayoutY(newValue));
+        dp.setLayoutY(Constants.WINDOW_WIDTH - newValue));
 
     onChangeOf(newBrick.faceAngle).execute((oldValue, newValue) ->
         dp.setRotateBrickSymbol(newValue));

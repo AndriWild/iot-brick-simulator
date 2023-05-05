@@ -25,8 +25,6 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   private void initializeControls() {
-    int windowHeight = PresentationModel.getInstance().getWindowSize().height;
-
     Line mostActiveSensorIndicator = new Line(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X, -5);
     mostActiveSensorAngle = new Rotate();
     mostActiveSensorAngle.setPivotX(BrickNode.CENTER_X);
@@ -50,8 +48,6 @@ public class ServoPlacement extends BrickPlacement {
 
     BrickNode brickIcon = new BrickNode(Color.BLUE);
     servoShape = new Group(brickIcon, outerCircle, mostActiveSensorIndicator, innerCircle, frontViewIndicator);
-    servoShape.setLayoutX(xPos);
-    servoShape.setLayoutY(windowHeight - yPos);
     servoShape.setRotate(faceAngle);
   }
 

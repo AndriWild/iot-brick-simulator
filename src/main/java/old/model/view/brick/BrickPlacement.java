@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class BrickPlacement extends Group {
 
-  protected double yPos, xPos, faceAngle;
+  protected double faceAngle;
 
   private       Text             label;
   private final GardenController controller;
@@ -30,7 +30,7 @@ public abstract class BrickPlacement extends Group {
     addDragNDropSupport();
 
     this.setOnMouseEntered(event -> super.getChildren().add(label));
-    this.setOnMouseExited(event -> super.getChildren().remove(label));
+    this.setOnMouseExited (event -> super.getChildren().remove(label));
 
     this.setOnScroll( e -> {
       int dAngle = 0;
@@ -42,8 +42,8 @@ public abstract class BrickPlacement extends Group {
   }
 
   private void addDragNDropSupport(){
-    AtomicReference<Double> orgSceneX = new AtomicReference<>((double) 0);
-    AtomicReference<Double> orgSceneY = new AtomicReference<>((double) 0);
+    AtomicReference<Double> orgSceneX = new AtomicReference<>(0d);
+    AtomicReference<Double> orgSceneY = new AtomicReference<>(0d);
 
     this.setOnMousePressed(event -> {
 
@@ -60,17 +60,15 @@ public abstract class BrickPlacement extends Group {
       BrickPlacement bp = (BrickPlacement) (event.getSource());
       orgSceneX.set(event.getSceneX());
       orgSceneY.set(event.getSceneY());
-      controller.move(bp.getLayoutX() + offsetX, bp.getLayoutY() + offsetY, brickData);
+      controller.move(bp.getLayoutX() + offsetX, Constants.WINDOW_WIDTH - (bp.getLayoutY() + offsetY), brickData);
     });
   }
 
   private void layoutControls() {
-    label.relocate(this.xPos + BrickNode.WIDTH + 10, Constants.WINDOW_WIDTH - this.yPos - BrickNode.HEIGHT);
+    label.relocate(BrickNode.WIDTH + 5, -BrickNode.HEIGHT + 5);
   }
 
   private void initializeControls() {
-    this.yPos      = 100;
-    this.xPos      = 100;
     this.faceAngle = 0;
     this.setCursor(Cursor.HAND);
     label = new Text();

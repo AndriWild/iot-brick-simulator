@@ -45,8 +45,8 @@ public class DistancePlacement extends BrickPlacement {
     viewPort.setFill(Color.grayRgb(100, 0.7));
 
     distanceShape = new Group(viewPort, brickIcon);
-    distanceShape.setLayoutX(xPos);
-    distanceShape.setLayoutY(windowHeight - yPos);
+//    distanceShape.setLayoutX(xPos);
+//    distanceShape.setLayoutY(windowHeight - yPos);
     distanceShape.setRotate(faceAngle);
   }
 
