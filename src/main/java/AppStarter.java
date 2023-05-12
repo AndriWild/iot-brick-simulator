@@ -26,6 +26,7 @@ import java.util.stream.IntStream;
 
 public class AppStarter extends Application {
 
+  private final String REMOVE_KEY = "SHIFT";
   private BrickController controller;
   private MenuController   menuController;
 
@@ -58,8 +59,24 @@ public class AppStarter extends Application {
     AppMenuBar menu = new AppMenuBar(menuController, primaryStage, this::stop);
     gui.setTop(menu);
     gui.setCenter(background);
+
     Scene scene = new Scene(gui);
+    addKeyListener(scene);
+
     primaryStage.setScene(scene);
+  }
+
+  private void addKeyListener(Scene scene) {
+    scene.setOnKeyPressed(e -> {
+      if(e.getCode().toString().equals(REMOVE_KEY)){
+        controller.toggleRemoveButtonVisible();
+      }
+    });
+//    scene.setOnKeyReleased(e -> {
+//      if(e.getCode().toString().equals(REMOVE_KEY)){
+//        controller.toggleRemoveButtonVisible();
+//      }
+//    });
   }
 
   private void drawCopyright(Pane copyright) {

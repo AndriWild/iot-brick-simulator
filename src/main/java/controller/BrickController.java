@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.ProxyGroup;
 import main.java.model.brick.BrickData;
 import main.java.model.brick.DistanceBrickData;
@@ -9,6 +10,7 @@ import main.java.util.Location;
 import main.java.util.Util;
 import main.java.util.mvcbase.ControllerBase;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -71,5 +73,21 @@ public class BrickController extends ControllerBase<Garden> {
 
   public void rotate(double angle, BrickData brick) {
     updateModel(set(brick.faceAngle, angle));
+  }
+
+  public void toggleRemoveButtonVisible(){
+    updateModel(toggle(model.removeButtonVisible));
+  }
+
+  public void removeBrick(DistanceBrickData data) {
+    List<DistanceBrickData> currentServoBricks = new ArrayList<>(model.sensors.getValue());
+    List<DistanceBrickData> modified = currentServoBricks.stream().filter(b -> !b.getID().equals(data.getID())).toList();
+    updateModel(set(model.sensors, modified));
+  }
+
+  public void removeBrick(ServoBrickData data) {
+    List<ServoBrickData> currentServoBricks = new ArrayList<>(model.actuators.getValue());
+    List<ServoBrickData> modified = currentServoBricks.stream().filter(b -> !b.getID().equals(data.getID())).toList();
+    updateModel(set(model.actuators, modified));
   }
 }

@@ -2,14 +2,17 @@ package main.java.model.brick;
 
 import ch.fhnw.imvs.bricks.core.Brick;
 import main.java.util.Location;
+import main.java.util.Util;
 import main.java.util.mvcbase.ObservableValue;
 
 import java.util.Date;
+import java.util.Objects;
 
 public abstract class BrickData {
 
   public final ObservableValue<Location> location;
-  public final ObservableValue<Double> faceAngle;
+  public final ObservableValue<Double>   faceAngle;
+
   private final Brick inner;
 
   public BrickData(Brick inner){
@@ -32,6 +35,16 @@ public abstract class BrickData {
 
   public String getTimestampIsoUtc() {
     return inner.getTimestampIsoUtc();
+  }
+
+  public String toStringFormatted() {
+    Location coordinates = Util.toCoordinates(location.getValue().lon(), location.getValue().lat());
+    return inner.getID() +
+//        "\nx: "   + brick.location.getValue().lon() +
+//        "\ny: "   + brick.location.getValue().lat() +
+        "\nx:\t"   + coordinates.lat() +
+        "\ny:\t"   + coordinates.lon() +
+        "\nfa:\t"  + faceAngle.getValue();
   }
 
   @Override

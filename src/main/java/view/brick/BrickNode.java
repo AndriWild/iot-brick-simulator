@@ -7,15 +7,20 @@ import javafx.scene.shape.Rectangle;
 
 public class BrickNode extends Group {
 
-  public static final double CENTER_X = BrickNode.WIDTH / 2;
-  public static final double CENTER_Y = BrickNode.HEIGHT / 2;
-  public static final double HEIGHT   = 22;
-  public static final double WIDTH    = 34;
+  public static final double HEIGHT_BRICK  = 22;
+  public static final double WIDTH_BRICK   = 34;
+  public static final double SYMBOL_HEIGHT = 45;
+  public static final double SYMBOL_WIDTH  = 45;
 
-  private final Color     color;
-  private       Line      frontIndicator;
-  private       Rectangle body;
+  public static final double CENTER_X = BrickNode.SYMBOL_WIDTH  / 2;
+  public static final double CENTER_Y = BrickNode.SYMBOL_HEIGHT / 2;
 
+  public static final double BRICK_RADIUS = 5.0;
+
+  private final Color color;
+
+  private Line      frontIndicator;
+  private Rectangle body;
 
   public BrickNode(Color color){
     this.color = color;
@@ -27,7 +32,6 @@ public class BrickNode extends Group {
     return body;
   }
 
-
   private void layoutControls() {
     this.getChildren().addAll(body, frontIndicator);
   }
@@ -35,13 +39,13 @@ public class BrickNode extends Group {
   private void initializeControls() {
     frontIndicator = new Line(
         CENTER_X,
-        0,
+        CENTER_Y,
         CENTER_X,
-        -BrickNode.HEIGHT / 2
+        0
     );
-    body = new Rectangle(WIDTH, HEIGHT);
-    body.setArcHeight(5.0);
-    body.setArcWidth (5.0);
+    body = new Rectangle(CENTER_Y - WIDTH_BRICK / 2, CENTER_X - HEIGHT_BRICK / 2, WIDTH_BRICK, HEIGHT_BRICK);
+    body.setArcHeight(BRICK_RADIUS);
+    body.setArcWidth (BRICK_RADIUS);
 
     frontIndicator.setFill(Color.BLACK);
     body          .setFill(color);

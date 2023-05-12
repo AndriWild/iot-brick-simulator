@@ -22,6 +22,12 @@ public class DistanceBrickData extends BrickData {
     }
 
     @Override
+    public String toStringFormatted() {
+        return super.toStringFormatted()
+            + "\nval:\t" + value.getValue();
+    }
+
+    @Override
     public String toString() {
         return "DistanceBrick" + ", " + super.toString();
     }

@@ -1,12 +1,18 @@
 package main.java.view.brick;
 
 import javafx.scene.Group;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import main.java.controller.BrickController;
 import main.java.model.brick.ServoBrickData;
+
+import static main.java.view.brick.BrickNode.SYMBOL_HEIGHT;
+import static main.java.view.brick.BrickNode.SYMBOL_WIDTH;
 
 public class ServoPlacement extends BrickPlacement {
 
@@ -16,7 +22,7 @@ public class ServoPlacement extends BrickPlacement {
   private Rotate frontViewAngle;
 
   public ServoPlacement(BrickController controller, ServoBrickData brick) {
-    super(controller, brick);
+    super(controller, brick, () -> controller.removeBrick(brick));
     this.brick = brick;
 
     initializeControls();
@@ -24,30 +30,46 @@ public class ServoPlacement extends BrickPlacement {
   }
 
   private void initializeControls() {
-    Line mostActiveSensorIndicator = new Line(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X, -5);
+    final double outerCircleRadius = ((SYMBOL_HEIGHT - BrickNode.HEIGHT_BRICK) / 2) + 3;
+    final double innerCircleRadius = outerCircleRadius - 6;
+
     mostActiveSensorAngle = new Rotate();
-    mostActiveSensorAngle.setPivotX(BrickNode.CENTER_X);
-    mostActiveSensorAngle.setPivotY(BrickNode.CENTER_Y);
-    mostActiveSensorIndicator.getTransforms().addAll(mostActiveSensorAngle);
-    mostActiveSensorIndicator.setStrokeWidth(2);
+    frontViewAngle        = new Rotate();
+    Line mostActiveSensorIndicator = createLine(outerCircleRadius, mostActiveSensorAngle);
+    Line frontViewIndicator        = createLine(innerCircleRadius, frontViewAngle);
 
-    Line frontViewIndicator = new Line(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X, 5);
-    frontViewAngle = new Rotate();
-    frontViewAngle.setPivotX(BrickNode.CENTER_X);
-    frontViewAngle.setPivotY(BrickNode.CENTER_Y);
-    frontViewIndicator.getTransforms().addAll(frontViewAngle);
-    frontViewIndicator.setStrokeWidth(2);
-
-    Circle outerCircle = new Circle(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X - 2);
-    Circle innerCircle = new Circle(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X - 10);
+    Circle outerCircle = new Circle(BrickNode.CENTER_X, BrickNode.CENTER_Y, outerCircleRadius);
+    Circle innerCircle = new Circle(BrickNode.CENTER_X, BrickNode.CENTER_Y, innerCircleRadius);
     innerCircle.setFill(Color.LIGHTGRAY);
-    innerCircle.setStroke(Color.BLACK);
     outerCircle.setFill(Color.GREY);
+    innerCircle.setStroke(Color.BLACK);
     outerCircle.setStroke(Color.BLACK);
 
     BrickNode brickIcon = new BrickNode(Color.BLUE);
-    servoShape = new Group(brickIcon, outerCircle, mostActiveSensorIndicator, innerCircle, frontViewIndicator);
+    Region brickArea    = new Region();
+    brickArea.setMinWidth (SYMBOL_WIDTH);
+    brickArea.setMinHeight(SYMBOL_HEIGHT);
+    BackgroundFill bgFill = new BackgroundFill(Color.TRANSPARENT, null, null);
+    brickArea.setBackground(new Background(bgFill));
+
+    servoShape = new Group(
+        brickArea,
+        brickIcon,
+        outerCircle,
+        mostActiveSensorIndicator,
+        innerCircle,
+        frontViewIndicator
+    );
     servoShape.setRotate(faceAngle);
+  }
+
+  private Line createLine(double radius, Rotate angle) {
+    Line indicator = new Line(BrickNode.CENTER_X, BrickNode.CENTER_Y, BrickNode.CENTER_X, BrickNode.CENTER_Y - radius);
+    angle.setPivotX(BrickNode.CENTER_X);
+    angle.setPivotY(BrickNode.CENTER_Y);
+    indicator.getTransforms().addAll(angle);
+    indicator.setStrokeWidth(2);
+    return indicator;
   }
 
   public void setRotateBrickSymbol(double angel){

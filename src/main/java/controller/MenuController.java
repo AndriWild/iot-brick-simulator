@@ -33,7 +33,7 @@ public class MenuController extends ControllerBase<Garden> {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
-      id = "auto gen: " + sensorIdCounter++;
+      id = Constants.SENSOR_ID_PREFIX + sensorIdCounter++;
       proxy = model.mockProxy;
     }
 
@@ -49,7 +49,7 @@ public class MenuController extends ControllerBase<Garden> {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
-      id = "auto gen: " + actuatorIdCounter++;
+      id = Constants.ACTUATOR_ID_PREFIX +  actuatorIdCounter++;
       proxy = model.mockProxy;
     }
     List<ServoBrickData> currentServoBricks;

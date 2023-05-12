@@ -13,4 +13,7 @@ public class Constants {
   public static final String BASE_URL = "brick.li/";
 
   public static final String CSV_PATH = "src/res/";
+
+  public static final String SENSOR_ID_PREFIX   = "sensor (mock): ";
+  public static final String ACTUATOR_ID_PREFIX = "actuator (mock): ";
 }

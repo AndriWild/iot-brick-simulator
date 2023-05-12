@@ -20,6 +20,11 @@ public class ServoBrickData extends BrickData {
         inner.setPosition(i);
     }
 
+    @Override
+    public String toStringFormatted() {
+        return super.toStringFormatted()
+            + "\nval:\t:" + Math.round(mostActiveAngle.getValue());
+    }
 
     @Override
     public String toString() {

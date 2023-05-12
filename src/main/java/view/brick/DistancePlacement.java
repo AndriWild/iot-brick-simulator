@@ -7,14 +7,17 @@ import javafx.scene.shape.ArcType;
 import main.java.controller.BrickController;
 import main.java.model.brick.DistanceBrickData;
 
+import java.util.Objects;
+
 public class DistancePlacement extends BrickPlacement {
 
   private final DistanceBrickData brick;
-  private       Group         distanceShape;
+
+  private Group     distanceShape;
   private BrickNode brickIcon;
 
   public DistancePlacement(BrickController controller, DistanceBrickData brick) {
-    super(controller, brick);
+    super(controller, brick, () -> controller.removeBrick(brick));
     this.brick = brick;
     initializeControls();
     layoutControls();
@@ -33,7 +36,7 @@ public class DistancePlacement extends BrickPlacement {
 
     Arc viewPort = new Arc(
         BrickNode.CENTER_X,
-        5,
+        15,
         25.0,
         25.0,
         45.0,
@@ -57,5 +60,18 @@ public class DistancePlacement extends BrickPlacement {
   @Override
   public DistanceBrickData getBrick() {
     return brick;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    DistancePlacement that = (DistancePlacement) o;
+    return Objects.equals(brick, that.brick);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(brick);
   }
 }
