@@ -33,7 +33,7 @@ public class BrickNode extends Group {
   }
 
   private void layoutControls() {
-    this.getChildren().addAll(body, frontIndicator);
+    this.getChildren().addAll(frontIndicator ,body);
   }
 
   private void initializeControls() {

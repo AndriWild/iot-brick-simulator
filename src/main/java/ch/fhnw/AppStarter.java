@@ -9,8 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.java.ch.fhnw.controller.BrickController;
-import main.java.ch.fhnw.controller.MenuController;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.model.Garden;
 import main.java.ch.fhnw.util.Constants;
 import main.java.ch.fhnw.view.GardenGUI;
@@ -28,14 +27,12 @@ import java.util.stream.IntStream;
 public class AppStarter extends Application {
 
   private final String REMOVE_KEY = "SHIFT";
-  private BrickController controller;
-  private MenuController   menuController;
+  private ApplicationController controller;
 
   @Override
   public void start(Stage primaryStage) throws Exception {
     Garden gardenModel = new Garden();
-    controller         = new BrickController(gardenModel);
-    menuController     = new MenuController(gardenModel);
+    controller         = new ApplicationController(gardenModel);
     BorderPane gui     = new BorderPane();
     primaryStage.setTitle("IoT Brick Simulator");
     setupStage(primaryStage, gui);
@@ -45,7 +42,6 @@ public class AppStarter extends Application {
   @Override
   public void stop() {
     controller.shutdown();
-    menuController.shutdown();
   }
 
   private void setupStage(Stage primaryStage, BorderPane gui) throws IOException {
@@ -57,27 +53,27 @@ public class AppStarter extends Application {
     Pane background = new StackPane(new Grid(), copyright, new GardenGUI(controller));
     drawBackground(background);
 
-    AppMenuBar menu = new AppMenuBar(menuController, primaryStage, this::stop);
+    AppMenuBar menu = new AppMenuBar(controller, primaryStage, this::stop);
     gui.setTop(menu);
     gui.setCenter(background);
 
     Scene scene = new Scene(gui);
-    addKeyListener(scene);
+    addKeyListener(scene, gui);
 
     primaryStage.setScene(scene);
   }
 
-  private void addKeyListener(Scene scene) {
+  private void addKeyListener(Scene scene, BorderPane gui) {
     scene.setOnKeyPressed(e -> {
       if(e.getCode().toString().equals(REMOVE_KEY)){
         controller.toggleRemoveButtonVisible();
       }
     });
-//    scene.setOnKeyReleased(e -> {
-//      if(e.getCode().toString().equals(REMOVE_KEY)){
-//        controller.toggleRemoveButtonVisible();
-//      }
-//    });
+    scene.setOnKeyReleased(e -> {
+      if(e.getCode().toString().equals(REMOVE_KEY)){
+        controller.toggleRemoveButtonVisible();
+      }
+    });
   }
 
   private void drawCopyright(Pane copyright) {

@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
-import main.java.ch.fhnw.controller.BrickController;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.model.brick.ServoBrickData;
 
 import static main.java.ch.fhnw.view.brick.BrickNode.SYMBOL_HEIGHT;
@@ -21,7 +21,7 @@ public class ServoPlacement extends BrickPlacement {
   private Rotate mostActiveSensorAngle;
   private Rotate frontViewAngle;
 
-  public ServoPlacement(BrickController controller, ServoBrickData brick) {
+  public ServoPlacement(ApplicationController controller, ServoBrickData brick) {
     super(controller, brick, () -> controller.removeBrick(brick));
     this.brick = brick;
 

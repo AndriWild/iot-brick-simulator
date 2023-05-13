@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.controller.BrickController;
 import main.java.ch.fhnw.model.brick.DistanceBrickData;
 
@@ -16,7 +17,7 @@ public class DistancePlacement extends BrickPlacement {
   private Group     distanceShape;
   private BrickNode brickIcon;
 
-  public DistancePlacement(BrickController controller, DistanceBrickData brick) {
+  public DistancePlacement(ApplicationController controller, DistanceBrickData brick) {
     super(controller, brick, () -> controller.removeBrick(brick));
     this.brick = brick;
     initializeControls();

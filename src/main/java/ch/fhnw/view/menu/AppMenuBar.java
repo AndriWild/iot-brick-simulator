@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.controller.MenuController;
 
 public class AppMenuBar extends MenuBar {
@@ -15,9 +16,9 @@ public class AppMenuBar extends MenuBar {
   private MenuItem importConfig;
   private MenuItem shutdown;
 
-  private final MenuController controller;
+  private final ApplicationController controller;
 
-  public AppMenuBar(MenuController controller, Stage stage, Runnable shutdownCallback) {
+  public AppMenuBar(ApplicationController controller, Stage stage, Runnable shutdownCallback) {
     this.controller = controller;
     initializeControls();
     layoutControls();

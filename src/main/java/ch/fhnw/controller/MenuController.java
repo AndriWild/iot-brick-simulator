@@ -30,7 +30,7 @@ public class MenuController extends ControllerBase<Garden> {
     super(model);
   }
 
-  public synchronized DistanceBrickData adDistanceBrick(boolean isSimulated, String id) {
+  public synchronized DistanceBrickData addDistanceBrick(boolean isSimulated, String id) {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
@@ -100,7 +100,6 @@ public class MenuController extends ControllerBase<Garden> {
             String type = s.getID().contains("mock") ? "true" : "false";
             return type.concat(",").concat(s.toString());
           })
-//          .map(s -> s.replace(" ", ""))
           .map(s -> s.concat("\n"))
           .forEach(printWriter::write);
     } catch (FileNotFoundException e) {
@@ -114,7 +113,7 @@ public class MenuController extends ControllerBase<Garden> {
     new Thread(this::importConfigAsync).start();
   }
 
-  public void importConfigAsync() {
+  private void importConfigAsync() {
     try (Stream<String> lines = Files.lines(Paths.get(Constants.CSV_PATH + "test.csv"))) {
       lines
           .skip(1) // header
@@ -128,11 +127,10 @@ public class MenuController extends ControllerBase<Garden> {
   }
 
   private void createBrickFromStringLine(String[] line) {
-    System.out.println(Arrays.toString(line));
     BrickData brick;
     boolean isMock = Boolean.parseBoolean(line[0]);
     if (line[1].contains(DistanceBrick.class.getSimpleName())) {
-      brick = adDistanceBrick(isMock, line[2]);
+      brick = addDistanceBrick(isMock, line[2]);
     } else if (line[1].contains(ServoBrick.class.getSimpleName())) {
       brick = addServoBrick(isMock, line[2]);
     } else {

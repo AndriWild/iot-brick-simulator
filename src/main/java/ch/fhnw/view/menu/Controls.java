@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.util.Constants;
 import main.java.ch.fhnw.controller.MenuController;
 
@@ -34,9 +35,9 @@ public class Controls extends GridPane {
   private Label mqttBricksTitle;
   private Label mqttUrlLabel;
 
-  private MenuController controller;
+  private ApplicationController controller;
 
-  public Controls(MenuController controller, Runnable closeCallback) {
+  public Controls(ApplicationController controller, Runnable closeCallback) {
     this.controller = controller;
     setAlignment(Pos.CENTER);
     setHgap(12);
@@ -106,8 +107,8 @@ public class Controls extends GridPane {
 
     addActuatorButton.setOnAction(e -> controller.addServoBrick(true, ""));
     addMqttActuator  .setOnAction(e -> controller.addServoBrick(false, actuatorId.getText()));
-    addSensorButton  .setOnAction(e -> controller.adDistanceBrick(true, ""));
-    addMqttSensor    .setOnAction(e -> controller.adDistanceBrick(false, sensorId.getText()));
+    addSensorButton  .setOnAction(e -> controller.addDistanceBrick(true, ""));
+    addMqttSensor    .setOnAction(e -> controller.addDistanceBrick(false, sensorId.getText()));
     closeDialog      .setOnAction(e -> closeCallback.run());
   }
 }

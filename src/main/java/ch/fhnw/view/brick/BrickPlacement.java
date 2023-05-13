@@ -8,9 +8,13 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.controller.BrickController;
 import main.java.ch.fhnw.model.brick.BrickData;
 import main.java.ch.fhnw.util.Constants;
@@ -23,13 +27,14 @@ public abstract class BrickPlacement extends Group {
   protected double faceAngle;
 
   private Button removeBtn;
+  protected Group  cross;
   private Text   label;
   private Region labelBackground;
 
-  private final BrickController  controller;
+  private final ApplicationController controller;
   private final BrickData        brickData;
 
-  public BrickPlacement(BrickController controller, BrickData brick, Runnable removeMe) {
+  public BrickPlacement(ApplicationController controller, BrickData brick, Runnable removeMe) {
     super();
     this.controller = controller;
     this.brickData  = brick;
@@ -89,7 +94,7 @@ public abstract class BrickPlacement extends Group {
     label.relocate          (BrickNode.WIDTH_BRICK + gap,          - BrickNode.HEIGHT_BRICK + gap);
     labelBackground.relocate(BrickNode.WIDTH_BRICK + gap - margin, - BrickNode.HEIGHT_BRICK + gap - margin);
 
-    super.getChildren().add(removeBtn);
+    super.getChildren().add(cross);
   }
 
   private void initializeControls(Runnable removeMe) {
@@ -105,11 +110,28 @@ public abstract class BrickPlacement extends Group {
     label = new Text();
     label.setFont(Font.font("SourceCodePro", FontWeight.NORMAL, 12));
 
-    removeBtn = new Button("Del");
-    removeBtn.relocate(-30,-30);
-    removeBtn.setOnAction(e -> {
-      removeMe.run();
+    cross = new Group();
+    Line line1 = createCrossLine(false);
+    Line line2 = createCrossLine(true);
+    cross.getChildren().addAll(line1, line2);
+
+    this.setOnMouseClicked(e -> {
+      if(e.isShiftDown()){
+        removeMe.run();
+      }
     });
+  }
+
+  private Line createCrossLine(boolean isMirrored) {
+    Line line = new Line(0, 0, 40, 40);
+    // style properties
+    line.setStroke       (Color.rgb(255,0,0,0.5));
+    line.setStrokeType   (StrokeType.CENTERED);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
+    line.setStrokeWidth  (10.0);
+
+    if(isMirrored) line.setScaleX(-1.0); // mirroring
+    return line;
   }
 
   public void setLabel(String label) {
@@ -117,8 +139,8 @@ public abstract class BrickPlacement extends Group {
   }
 
   public void setRemoveBtnVisible(boolean isVisible){
-    if(isVisible) removeBtn.toFront();
-    removeBtn.setVisible(isVisible);
+    if(isVisible) cross.toFront();
+    cross.setVisible(isVisible);
   }
 
   public abstract BrickData getBrick();

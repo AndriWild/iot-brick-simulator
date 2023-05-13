@@ -3,6 +3,7 @@ package main.java.ch.fhnw.view;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
+import main.java.ch.fhnw.controller.ApplicationController;
 import main.java.ch.fhnw.util.Constants;
 import main.java.ch.fhnw.controller.BrickController;
 import main.java.ch.fhnw.model.Garden;
@@ -16,12 +17,12 @@ import main.java.ch.fhnw.view.brick.ServoPlacement;
 
 import java.util.List;
 
-public class GardenGUI extends Pane implements ViewMixin<Garden, BrickController> {
+public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationController> {
 
-  private final BrickController controller;
+  private final ApplicationController controller;
   private ProgressIndicator spinner;
 
-  public GardenGUI(BrickController controller) {
+  public GardenGUI(ApplicationController controller) {
     init(controller);
     this.controller = controller;
   }
