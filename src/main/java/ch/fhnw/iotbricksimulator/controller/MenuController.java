@@ -31,7 +31,7 @@ public class MenuController extends ControllerBase<Garden> {
     super(model);
   }
 
-  public synchronized DistanceBrickData addDistanceBrick(boolean isSimulated, String id) {
+  public synchronized DistanceBrickData addDistanceBrick(String id, boolean isSimulated) {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
@@ -47,7 +47,7 @@ public class MenuController extends ControllerBase<Garden> {
     return newBrick;
   }
 
-  public synchronized ServoBrickData addServoBrick(boolean isSimulated, String id) {
+  public synchronized ServoBrickData addServoBrick(String id, boolean isSimulated) {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
@@ -67,9 +67,9 @@ public class MenuController extends ControllerBase<Garden> {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     LocalDateTime now     = LocalDateTime.now();
     sb.append("Data Snapshot from:").append(dtf.format(now)).append("\n");
-    sb.append("Sensors:\n");
+    sb.append("\nSensors:\n");
     sb.append(toStringOfBrickList(model.sensors.getValue()));
-    sb.append("Actuators:\n");
+    sb.append("\nActuators:\n");
     sb.append(toStringOfBrickList(model.actuators.getValue()));
     System.out.println(sb);
   }
@@ -87,7 +87,7 @@ public class MenuController extends ControllerBase<Garden> {
     convertToCSV(
         Stream.concat(
             model.actuators.getValue().stream(),
-            model.sensors.getValue().stream()
+            model.sensors  .getValue().stream()
         ).toList()
     );
    updateModel(set(model.isLoading, false));
@@ -98,8 +98,8 @@ public class MenuController extends ControllerBase<Garden> {
       printWriter.write("mock,brick,id,lat,long,faceAngle\n");
       bricks.stream()
           .map(s -> {
-            String type = s.getID().contains("mock") ? "true" : "false";
-            return type.concat(",").concat(s.toString());
+            boolean type = s.getID().contains("mock");
+            return String.valueOf(type).concat(",").concat(s.toString());
           })
           .map(s -> s.concat("\n"))
           .forEach(printWriter::write);
@@ -128,20 +128,18 @@ public class MenuController extends ControllerBase<Garden> {
   }
 
   private void createBrickFromStringLine(String[] line) {
+    // line content:  1: mock, 2: brick, 3: id, 4: lat, 5: long, 6: faceAngle
     BrickData brick;
     boolean isMock = Boolean.parseBoolean(line[0]);
     if (line[1].contains(DistanceBrick.class.getSimpleName())) {
-      brick = addDistanceBrick(isMock, line[2]);
+      brick = addDistanceBrick(line[2], isMock);
     } else if (line[1].contains(ServoBrick.class.getSimpleName())) {
-      brick = addServoBrick(isMock, line[2]);
+      brick = addServoBrick(line[2], isMock);
     } else {
       throw new IllegalArgumentException("Import CSV: Could not recognize Brick type!");
     }
+    this.awaitCompletion();
 
-    //noinspection StatementWithEmptyBody,SuspiciousMethodCalls
-    while (!model.sensors.getValue().contains(brick) && !model.actuators.getValue().contains(brick)) {
-        // waiting until the brick is in a bricks list
-    }
     updateModel(set(brick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))));
     updateModel(set(brick.faceAngle, Double.parseDouble(line[5])));
   }

@@ -141,7 +141,10 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
   }
 
   private void addSensorListeners(DistancePlacement placement) {
-    onChangeOf(placement.getBrick().value)       .execute((oldVal, currentVal) -> refreshLabel(placement));
+    onChangeOf(placement.getBrick().value).execute((oldVal, currentVal) -> {
+      placement.setActivityValue(currentVal);
+      refreshLabel(placement);
+    });
     onChangeOf(placement.getBrick().isMostActive).execute((oldVal, newVal)     -> placement.setHighlighted(newVal));
   }
 

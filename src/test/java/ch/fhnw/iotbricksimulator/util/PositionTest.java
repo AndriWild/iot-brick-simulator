@@ -1,4 +1,4 @@
-package ch.fhnw.iotbricksimulator;
+package ch.fhnw.iotbricksimulator.util;
 
 import org.junit.jupiter.api.Test;
 

@@ -19,4 +19,9 @@ public class Constants {
 
   public static final String MQTT_SENSOR_PREFIX   = "sensor (mqtt): ";
   public static final String MQTT_ACTUATOR_PREFIX = "actuator (mqtt): ";
+
+  public static final int SPAWN_POSITION_X = 400;
+  public static final int SPAWN_POSITION_Y = 400;
+
+  public static final int MAX_SENSOR_VALUE = 350;
 }

@@ -61,12 +61,12 @@ public class ApplicationController extends ControllerBase<Garden> {
     menuController.exportConfig();
   }
 
-  public void addServoBrick(boolean isSimulated, String id) {
-    menuController.addServoBrick(isSimulated, id);
+  public ServoBrickData addServoBrick(String id, boolean isSimulated) {
+    return menuController.addServoBrick(id, isSimulated);
   }
 
-  public void addDistanceBrick(boolean isSimulated, String id) {
-    menuController.addDistanceBrick(isSimulated, id);
+  public DistanceBrickData addDistanceBrick(String id, boolean isSimulated) {
+    return menuController.addDistanceBrick(id, isSimulated);
   }
 
   public void printAllBrickData() {

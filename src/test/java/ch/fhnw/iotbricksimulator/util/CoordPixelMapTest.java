@@ -1,4 +1,4 @@
-package ch.fhnw.iotbricksimulator;
+package ch.fhnw.iotbricksimulator.util;
 
 import ch.fhnw.iotbricksimulator.util.Location;
 import org.junit.jupiter.api.Test;
