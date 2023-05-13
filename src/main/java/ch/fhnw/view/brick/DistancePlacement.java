@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import main.java.ch.fhnw.controller.ApplicationController;
-import main.java.ch.fhnw.controller.BrickController;
 import main.java.ch.fhnw.model.brick.DistanceBrickData;
 
 import java.util.Objects;

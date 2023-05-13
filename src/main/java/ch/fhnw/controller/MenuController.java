@@ -3,21 +3,22 @@ package main.java.ch.fhnw.controller;
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.Proxy;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
-import main.java.ch.fhnw.util.Constants;
 import main.java.ch.fhnw.model.Garden;
 import main.java.ch.fhnw.model.brick.BrickData;
 import main.java.ch.fhnw.model.brick.DistanceBrickData;
 import main.java.ch.fhnw.model.brick.ServoBrickData;
+import main.java.ch.fhnw.util.Constants;
 import main.java.ch.fhnw.util.Location;
 import main.java.ch.fhnw.util.mvcbase.ControllerBase;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 

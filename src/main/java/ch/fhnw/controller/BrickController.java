@@ -58,7 +58,6 @@ public class BrickController extends ControllerBase<Garden> {
 
     double dLat  = mostActive.lat() - servoLocation.lat();
     double dLong = mostActive.lon() - servoLocation.lon();
-//    System.out.println("dLat: " + dLat + ",  dLong: " + dLong);
     double angle = Util.calcAngle(dLong, dLat);
     int pos      = Util.calculateServoPositionFromAngle(servo, angle);
 //        servo.adjustServoPosition(pos);

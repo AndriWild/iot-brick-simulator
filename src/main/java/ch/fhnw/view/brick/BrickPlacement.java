@@ -15,7 +15,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import main.java.ch.fhnw.controller.ApplicationController;
-import main.java.ch.fhnw.controller.BrickController;
 import main.java.ch.fhnw.model.brick.BrickData;
 import main.java.ch.fhnw.util.Constants;
 import main.java.ch.fhnw.util.Location;
@@ -26,7 +25,6 @@ public abstract class BrickPlacement extends Group {
 
   protected double faceAngle;
 
-  private Button removeBtn;
   protected Group  cross;
   private Text   label;
   private Region labelBackground;
