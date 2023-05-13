@@ -2,7 +2,7 @@ package test.java;
 
 import org.junit.jupiter.api.Test;
 
-import static main.java.util.Util.calcAngle;
+import static main.java.ch.fhnw.util.Util.calcAngle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PositionTest {

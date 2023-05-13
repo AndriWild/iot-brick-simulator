@@ -1,0 +1,5 @@
+mock,brick,id,lat,long,faceAngle
+true,ServoBrick, actuator (mock): 0, 325.0, 438.0, 0.0
+true,ServoBrick, actuator (mock): 1, 531.0, 415.0, 0.0
+true,DistanceBrick, sensor (mock): 0, 398.0, 124.0, 0.0
+true,DistanceBrick, sensor (mock): 1, 647.0, 186.0, 0.0

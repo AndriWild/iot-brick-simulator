@@ -1,10 +1,10 @@
 package test.java;
 
-import main.java.util.Location;
+import main.java.ch.fhnw.util.Location;
 import org.junit.jupiter.api.Test;
 
-import static main.java.Constants.*;
-import static main.java.util.Util.toCoordinates;
+import static main.java.ch.fhnw.util.Constants.*;
+import static main.java.ch.fhnw.util.Util.toCoordinates;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CoordPixelMapTest {
