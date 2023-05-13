@@ -40,31 +40,25 @@ public class DistancePlacement extends BrickPlacement {
   private void initializeControls() {
     brickIcon = new BrickNode(Color.RED);
 
-    Arc viewPort = new Arc(
-        BrickNode.CENTER_X,
-        15,
-        VIEW_PORT_RADIUS,
-        VIEW_PORT_RADIUS,
-        45.0,
-        90
-    );
-    viewPort.setType(ArcType.ROUND);
-    viewPort.setFill(Color.grayRgb(100, 0.7));
-
-    sensorActivity = new Arc(
-        BrickNode.CENTER_X,
-        15,
-        0.0,
-        0.0,
-        45.0,
-        90
-    );
-    sensorActivity.setType(ArcType.ROUND);
-    sensorActivity.setFill(Color.rgb(205, 205, 0, 0.4));
-
+    Arc viewPort   = createViewPortArc(VIEW_PORT_RADIUS, Color.grayRgb(100, 0.7));
+    sensorActivity = createViewPortArc(0.0,              Color.rgb(205, 205, 0, 0.4));
 
     distanceShape = new Group(viewPort, sensorActivity, brickIcon);
     distanceShape.setRotate(faceAngle);
+  }
+
+  private Arc createViewPortArc(double radius, Color color) {
+    Arc arc = new Arc(
+        BrickNode.CENTER_X,
+        15,
+        radius,
+        radius,
+        45.0,
+        90
+    );
+    arc.setType(ArcType.ROUND);
+    arc.setFill(color);
+    return arc;
   }
 
   public void setRotateBrickSymbol(double angel){

@@ -75,7 +75,7 @@ public class MenuController extends ControllerBase<Garden> {
   }
 
   private String toStringOfBrickList(List<? extends BrickData> bricks) {
-          return String.join("\n", bricks.stream().map(BrickData::toString).toList());
+    return String.join("\n", bricks.stream().map(BrickData::toString).toList());
   }
 
   public void exportConfig(){
