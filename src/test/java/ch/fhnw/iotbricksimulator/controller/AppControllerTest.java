@@ -21,14 +21,14 @@ public class AppControllerTest {
     ApplicationController controller = new ApplicationController(model);
 
     //when
-    controller.toggleRemoveButtonVisible();
+    controller.setRemoveButtonVisible(true);
     controller.awaitCompletion();
 
     //then
     assertEquals(!initialState, model.removeButtonVisible.getValue());
 
     //when
-    controller.toggleRemoveButtonVisible();
+    controller.setRemoveButtonVisible(false);
     controller.awaitCompletion();
 
     //then

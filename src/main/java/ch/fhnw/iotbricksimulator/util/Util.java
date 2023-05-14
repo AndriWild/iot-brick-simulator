@@ -2,6 +2,9 @@ package ch.fhnw.iotbricksimulator.util;
 
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static ch.fhnw.iotbricksimulator.util.Constants.*;
 
 public class Util {
@@ -78,6 +81,12 @@ public class Util {
 
     return new Location(roundedLat, roundedLon);
   }
+
+public static String getTimeStamp() {
+  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+  LocalDateTime now     = LocalDateTime.now();
+  return dtf.format(now);
+}
 
   public static int getRandomNumber(int min, int max) {
     return (int) ((Math.random() * (max - min)) + min);

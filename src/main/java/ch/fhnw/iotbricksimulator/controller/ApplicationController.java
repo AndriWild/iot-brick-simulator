@@ -7,6 +7,8 @@ import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
 import ch.fhnw.iotbricksimulator.util.Location;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ControllerBase;
 
+import java.io.File;
+
 public class ApplicationController extends ControllerBase<Garden> {
   private final BrickController brickController;
   private final MenuController menuController;
@@ -40,8 +42,8 @@ public class ApplicationController extends ControllerBase<Garden> {
     brickController.rotate(angle, brickData);
   }
 
-  public void toggleRemoveButtonVisible() {
-    brickController.toggleRemoveButtonVisible();
+  public void setRemoveButtonVisible(boolean state) {
+    brickController.setRemoveButtonVisible(state);
   }
 
   public void removeBrick(DistanceBrickData data) {
@@ -53,14 +55,6 @@ public class ApplicationController extends ControllerBase<Garden> {
   }
 
   // Menu Controller delegation
-  public void importConfig() {
-    menuController.importConfig();
-  }
-
-  public void exportConfig(){
-    menuController.exportConfig();
-  }
-
   public ServoBrickData addServoBrick(String id, boolean isSimulated) {
     return menuController.addServoBrick(id, isSimulated);
   }
@@ -71,5 +65,13 @@ public class ApplicationController extends ControllerBase<Garden> {
 
   public void printAllBrickData() {
     menuController.printAllBrickData();
+  }
+
+  public void importFromFile(File file){
+    menuController.importFromFile(file);
+  }
+
+  public void exportConfigToFile(File file) {
+    menuController.exportConfigToFile(file);
   }
 }

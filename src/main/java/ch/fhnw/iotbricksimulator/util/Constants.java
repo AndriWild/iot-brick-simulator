@@ -1,6 +1,7 @@
 package ch.fhnw.iotbricksimulator.util;
 
 public class Constants {
+  public static final String REMOVE_KEY = "SHIFT";
 
   public static final int WINDOW_HEIGHT = 3 * 256;
   public static final int WINDOW_WIDTH  = 3 * 256;

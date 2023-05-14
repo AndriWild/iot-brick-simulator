@@ -9,16 +9,14 @@ import ch.fhnw.iotbricksimulator.model.brick.DistanceBrickData;
 import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
 import ch.fhnw.iotbricksimulator.util.Constants;
 import ch.fhnw.iotbricksimulator.util.Location;
+import ch.fhnw.iotbricksimulator.util.Util;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ControllerBase;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -64,9 +62,7 @@ public class MenuController extends ControllerBase<Garden> {
 
   public void printAllBrickData() {
     StringBuilder sb      = new StringBuilder();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-    LocalDateTime now     = LocalDateTime.now();
-    sb.append("Data Snapshot from:").append(dtf.format(now)).append("\n");
+    sb.append("Data Snapshot from:").append(Util.getTimeStamp()).append("\n");
     sb.append("\nSensors:\n");
     sb.append(toStringOfBrickList(model.sensors.getValue()));
     sb.append("\nActuators:\n");
@@ -78,53 +74,12 @@ public class MenuController extends ControllerBase<Garden> {
     return String.join("\n", bricks.stream().map(BrickData::toString).toList());
   }
 
-  public void exportConfig(){
-    updateModel(set(model.isLoading, true));
-    new Thread(this::exportConfigAsync).start();
-  }
-
-  public void exportConfigAsync(){
-    convertToCSV(
-        Stream.concat(
-            model.actuators.getValue().stream(),
-            model.sensors  .getValue().stream()
-        ).toList()
-    );
-   updateModel(set(model.isLoading, false));
-  }
-
-  private void convertToCSV(List<? extends BrickData> bricks) {
-    try (PrintWriter printWriter = new PrintWriter(Constants.CSV_PATH + "test.csv")) {
-      printWriter.write("mock,brick,id,lat,long,faceAngle\n");
-      bricks.stream()
-          .map(s -> {
-            boolean type = s.getID().contains("mock");
-            return String.valueOf(type).concat(",").concat(s.toString());
-          })
-          .map(s -> s.concat("\n"))
-          .forEach(printWriter::write);
-    } catch (FileNotFoundException e) {
-      updateModel(set(model.isLoading, false));
-      System.err.println("Create CSV: File could not be created!");
-    }
-  }
-
-  public void importConfig() {
-    updateModel(set(model.isLoading, true));
-    new Thread(this::importConfigAsync).start();
-  }
-
-  private void importConfigAsync() {
-    try (Stream<String> lines = Files.lines(Paths.get(Constants.CSV_PATH + "test.csv"))) {
-      lines
+  private void importConfigFromList(List<String> lines) {
+      lines.stream()
           .skip(1) // header
           .map(line -> line.split(","))
+          .peek(System.out::println)
           .forEach(this::createBrickFromStringLine);
-    } catch (IOException e) {
-      updateModel(set(model.isLoading, false));
-      System.err.println("Read CSV: Could not read csv file!");
-    }
-    updateModel(set(model.isLoading, false));
   }
 
   private void createBrickFromStringLine(String[] line) {
@@ -142,5 +97,49 @@ public class MenuController extends ControllerBase<Garden> {
 
     updateModel(set(brick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))));
     updateModel(set(brick.faceAngle, Double.parseDouble(line[5])));
+  }
+
+  public void importFromFile(File file) {
+    List<String> allLines = new ArrayList<>(Collections.emptyList());
+    try {
+      FileInputStream inputStream = new FileInputStream(file);
+      try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))){
+        String line;
+        while((line = br.readLine()) != null){
+          allLines.add(line);
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+    importConfigFromList(allLines);
+  }
+
+  private void writeToFile(File file, List<? extends BrickData> bricks) {
+    try (PrintWriter printWriter = new PrintWriter(file)) {
+      printWriter.write("mock,brick,id,lat,long,faceAngle\n");
+      bricks.stream()
+          .map(s -> {
+            boolean type = s.getID().contains("mock");
+            return String.valueOf(type).concat(",").concat(s.toString());
+          })
+          .map(s -> s.concat("\n"))
+          .forEach(printWriter::write);
+    } catch (FileNotFoundException e) {
+      updateModel(set(model.isLoading, false));
+      System.err.println("Create CSV: File could not be created!");
+    }
+  }
+
+  public void exportConfigToFile(File file) {
+    writeToFile(file,
+        Stream.concat(
+            model.actuators.getValue().stream(),
+            model.sensors  .getValue().stream()
+        ).toList()
+    );
+    updateModel(set(model.isLoading, false));
   }
 }

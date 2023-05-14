@@ -26,7 +26,6 @@ import java.util.stream.IntStream;
 
 public class AppStarter extends Application {
 
-  private final String REMOVE_KEY = "SHIFT";
   private ApplicationController controller;
 
   @Override
@@ -65,13 +64,13 @@ public class AppStarter extends Application {
 
   private void addKeyListener(Scene scene, BorderPane gui) {
     scene.setOnKeyPressed(e -> {
-      if(e.getCode().toString().equals(REMOVE_KEY)){
-        controller.toggleRemoveButtonVisible();
+      if(e.getCode().toString().equals(Constants.REMOVE_KEY)){
+        controller.setRemoveButtonVisible(true);
       }
     });
     scene.setOnKeyReleased(e -> {
-      if(e.getCode().toString().equals(REMOVE_KEY)){
-        controller.toggleRemoveButtonVisible();
+      if(e.getCode().toString().equals(Constants.REMOVE_KEY)){
+        controller.setRemoveButtonVisible(false);
       }
     });
   }

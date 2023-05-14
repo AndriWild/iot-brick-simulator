@@ -1,10 +1,19 @@
 package ch.fhnw.iotbricksimulator.view.menu;
 
+import ch.fhnw.iotbricksimulator.controller.ApplicationController;
+import ch.fhnw.iotbricksimulator.util.Util;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ch.fhnw.iotbricksimulator.controller.ApplicationController;
+
+import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AppMenuBar extends MenuBar {
 
@@ -35,14 +44,30 @@ public class AppMenuBar extends MenuBar {
 
     printBrickData.setOnAction(_e -> controller.printAllBrickData());
 
-    exportConfig.setOnAction(_e -> controller.exportConfig());
-    importConfig.setOnAction(_e -> controller.importConfig());
+    exportConfig.setOnAction(_e -> {
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.setTitle("Load Brick Config");
+      fileChooser.setInitialFileName(Util.getTimeStamp() + ".csv");
+      fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Brick Config", "csv"));
+      File file = fileChooser.showSaveDialog(stage);
+      if(file != null) {
+        controller.exportConfigToFile(file);
+      }
+    });
 
     shutdown.setOnAction(_e -> {
       shutdownCallback.run();
       stage.close();
       Platform.exit();
       System.exit(0);
+    });
+
+    importConfig.setOnAction(event -> {
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.setTitle("Load Brick Config");
+      fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Brick CSV","*.csv"));
+      File f = fileChooser.showOpenDialog(stage);
+      controller.importFromFile(f);
     });
   }
 

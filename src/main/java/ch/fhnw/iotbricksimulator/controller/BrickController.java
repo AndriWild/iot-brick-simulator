@@ -73,8 +73,8 @@ public class BrickController extends ControllerBase<Garden> {
     updateModel(set(brick.faceAngle, angle));
   }
 
-  public void toggleRemoveButtonVisible(){
-    updateModel(toggle(model.removeButtonVisible));
+  public void setRemoveButtonVisible(boolean state){
+    updateModel(set(model.removeButtonVisible, state));
   }
 
   public void removeBrick(DistanceBrickData data) {
