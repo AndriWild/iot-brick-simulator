@@ -46,14 +46,9 @@ public class ApplicationController extends ControllerBase<Garden> {
     brickController.setRemoveButtonVisible(state);
   }
 
-  public void removeBrick(DistanceBrickData data) {
+  public void removeBrick(BrickData data) {
     brickController.removeBrick(data);
   }
-
-  public void removeBrick(ServoBrickData data) {
-    brickController.removeBrick(data);
-  }
-
   // Menu Controller delegation
   public ServoBrickData addServoBrick(String id, boolean isSimulated) {
     return menuController.addServoBrick(id, isSimulated);

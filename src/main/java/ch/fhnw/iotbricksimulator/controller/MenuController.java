@@ -13,8 +13,6 @@ import ch.fhnw.iotbricksimulator.util.Util;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ControllerBase;
 
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,43 +58,14 @@ public class MenuController extends ControllerBase<Garden> {
     return newServo;
   }
 
-  public void printAllBrickData() {
-    StringBuilder sb      = new StringBuilder();
-    sb.append("Data Snapshot from:").append(Util.getTimeStamp()).append("\n");
-    sb.append("\nSensors:\n");
-    sb.append(toStringOfBrickList(model.sensors.getValue()));
-    sb.append("\nActuators:\n");
-    sb.append(toStringOfBrickList(model.actuators.getValue()));
-    System.out.println(sb);
-  }
-
-  private String toStringOfBrickList(List<? extends BrickData> bricks) {
-    return String.join("\n", bricks.stream().map(BrickData::toString).toList());
-  }
-
-  private void importConfigFromList(List<String> lines) {
-      lines.stream()
-          .skip(1) // header
-          .map(line -> line.split(","))
-          .peek(System.out::println)
-          .forEach(this::createBrickFromStringLine);
-  }
-
-  private void createBrickFromStringLine(String[] line) {
-    // line content:  1: mock, 2: brick, 3: id, 4: lat, 5: long, 6: faceAngle
-    BrickData brick;
-    boolean isMock = Boolean.parseBoolean(line[0]);
-    if (line[1].contains(DistanceBrick.class.getSimpleName())) {
-      brick = addDistanceBrick(line[2], isMock);
-    } else if (line[1].contains(ServoBrick.class.getSimpleName())) {
-      brick = addServoBrick(line[2], isMock);
-    } else {
-      throw new IllegalArgumentException("Import CSV: Could not recognize Brick type!");
-    }
-    this.awaitCompletion();
-
-    updateModel(set(brick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))));
-    updateModel(set(brick.faceAngle, Double.parseDouble(line[5])));
+  public void exportConfigToFile(File file) {
+    writeToFile(file,
+        Stream.concat(
+            model.actuators.getValue().stream(),
+            model.sensors  .getValue().stream()
+        ).toList()
+    );
+    updateModel(set(model.isLoading, false));
   }
 
   public void importFromFile(File file) {
@@ -117,6 +86,44 @@ public class MenuController extends ControllerBase<Garden> {
     importConfigFromList(allLines);
   }
 
+  public void printAllBrickData() {
+    StringBuilder sb      = new StringBuilder();
+    sb.append("Data Snapshot from:").append(Util.getTimeStamp()).append("\n");
+    sb.append("\nSensors:\n");
+    sb.append(toStringOfBrickList(model.sensors.getValue()));
+    sb.append("\nActuators:\n");
+    sb.append(toStringOfBrickList(model.actuators.getValue()));
+    System.out.println(sb);
+  }
+
+  private String toStringOfBrickList(List<? extends BrickData> bricks) {
+    return String.join("\n", bricks.stream().map(BrickData::toString).toList());
+  }
+
+  private void importConfigFromList(List<String> lines) {
+      lines.stream()
+          .skip(1) // header
+          .map(line -> line.split(","))
+          .forEach(this::createBrickFromStringLine);
+  }
+
+  private void createBrickFromStringLine(String[] line) {
+    // line content:  1: mock, 2: brick, 3: id, 4: lat, 5: long, 6: faceAngle
+    BrickData brick;
+    boolean isMock = Boolean.parseBoolean(line[0]);
+    if (line[1].contains(DistanceBrick.class.getSimpleName())) {
+      brick = addDistanceBrick(line[2], isMock);
+    } else if (line[1].contains(ServoBrick.class.getSimpleName())) {
+      brick = addServoBrick(line[2], isMock);
+    } else {
+      throw new IllegalArgumentException("Import CSV: Could not recognize Brick type!");
+    }
+    this.awaitCompletion();
+
+    updateModel(set(brick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))));
+    updateModel(set(brick.faceAngle, Double.parseDouble(line[5])));
+  }
+
   private void writeToFile(File file, List<? extends BrickData> bricks) {
     try (PrintWriter printWriter = new PrintWriter(file)) {
       printWriter.write("mock,brick,id,lat,long,faceAngle\n");
@@ -131,15 +138,5 @@ public class MenuController extends ControllerBase<Garden> {
       updateModel(set(model.isLoading, false));
       System.err.println("Create CSV: File could not be created!");
     }
-  }
-
-  public void exportConfigToFile(File file) {
-    writeToFile(file,
-        Stream.concat(
-            model.actuators.getValue().stream(),
-            model.sensors  .getValue().stream()
-        ).toList()
-    );
-    updateModel(set(model.isLoading, false));
   }
 }

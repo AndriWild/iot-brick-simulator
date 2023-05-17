@@ -1,5 +1,6 @@
 package ch.fhnw.iotbricksimulator.view.brick;
 
+import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 import javafx.scene.Group;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -18,9 +19,9 @@ public class ServoPlacement extends BrickPlacement {
   private Rotate mostActiveSensorAngle;
   private Rotate frontViewAngle;
 
-  public ServoPlacement(ApplicationController controller, ServoBrickData brick) {
+  public ServoPlacement(ApplicationController controller, BrickData brick) {
     super(controller, brick, () -> controller.removeBrick(brick));
-    this.brick = brick;
+    this.brick = (ServoBrickData) brick;
 
     initializeControls();
     layoutControls();

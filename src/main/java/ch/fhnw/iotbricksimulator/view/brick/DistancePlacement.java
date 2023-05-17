@@ -1,6 +1,7 @@
 package ch.fhnw.iotbricksimulator.view.brick;
 
 import ch.fhnw.iotbricksimulator.controller.ApplicationController;
+import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 import ch.fhnw.iotbricksimulator.model.brick.DistanceBrickData;
 import ch.fhnw.iotbricksimulator.util.Constants;
 import javafx.scene.Group;
@@ -20,9 +21,9 @@ public class DistancePlacement extends BrickPlacement {
   private BrickNode brickIcon;
   private Arc       sensorActivity;
 
-  public DistancePlacement(ApplicationController controller, DistanceBrickData brick) {
+  public DistancePlacement(ApplicationController controller, BrickData brick) {
     super(controller, brick, () -> controller.removeBrick(brick));
-    this.brick = brick;
+    this.brick = (DistanceBrickData) brick;
     initializeControls();
     layoutControls();
   }
@@ -69,17 +70,17 @@ public class DistancePlacement extends BrickPlacement {
     super.getChildren().addAll(distanceShape);
   }
 
+  @Override
+  public DistanceBrickData getBrick() {
+    return brick;
+  }
+
   public void setActivityValue(int value) {
     // Example: 25 - (25 / (max_sensor_value)) * current_value
     // sensor value is inverse for distance measurement
     double radius = VIEW_PORT_RADIUS - (VIEW_PORT_RADIUS / Constants.MAX_SENSOR_VALUE) * value;
     sensorActivity.setRadiusX(radius);
     sensorActivity.setRadiusY(radius);
-  }
-
-  @Override
-  public DistanceBrickData getBrick() {
-    return brick;
   }
 
   @Override

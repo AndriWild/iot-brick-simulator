@@ -44,8 +44,6 @@ public class AppStarter extends Application {
   }
 
   private void setupStage(Stage primaryStage, BorderPane gui) throws IOException {
-//    primaryStage.setWidth (Constants.WINDOW_WIDTH);
-//    primaryStage.setHeight(Constants.WINDOW_HEIGHT);
     Pane copyright = new Pane();
     drawCopyright(copyright);
 
@@ -57,12 +55,12 @@ public class AppStarter extends Application {
     gui.setCenter(background);
 
     Scene scene = new Scene(gui);
-    addKeyListener(scene, gui);
+    addKeyListener(scene);
 
     primaryStage.setScene(scene);
   }
 
-  private void addKeyListener(Scene scene, BorderPane gui) {
+  private void addKeyListener(Scene scene) {
     scene.setOnKeyPressed(e -> {
       if(e.getCode().toString().equals(Constants.REMOVE_KEY)){
         controller.setRemoveButtonVisible(true);

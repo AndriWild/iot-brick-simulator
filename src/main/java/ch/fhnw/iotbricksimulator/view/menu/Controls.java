@@ -34,7 +34,7 @@ public class Controls extends GridPane {
   private Label mqttBricksTitle;
   private Label mqttUrlLabel;
 
-  private ApplicationController controller;
+  private final ApplicationController controller;
 
   public Controls(ApplicationController controller, Runnable closeCallback) {
     this.controller = controller;

@@ -1,20 +1,19 @@
 package ch.fhnw.iotbricksimulator.view;
 
-import javafx.application.Platform;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.Pane;
 import ch.fhnw.iotbricksimulator.controller.ApplicationController;
 import ch.fhnw.iotbricksimulator.model.Garden;
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
-import ch.fhnw.iotbricksimulator.model.brick.DistanceBrickData;
-import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
 import ch.fhnw.iotbricksimulator.util.Constants;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ViewMixin;
 import ch.fhnw.iotbricksimulator.view.brick.BrickPlacement;
 import ch.fhnw.iotbricksimulator.view.brick.DistancePlacement;
 import ch.fhnw.iotbricksimulator.view.brick.ServoPlacement;
+import javafx.application.Platform;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.Pane;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationController> {
 
@@ -57,7 +56,8 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
             removePlacement(oldValue, newValue);
           } else {
             if (newValue.isEmpty()) return;
-            addActuatorPlacement(model, oldValue, newValue);
+            ServoPlacement sp = addPlacement(model, oldValue, newValue, (brick) -> new ServoPlacement(controller, brick));
+            addActuatorListeners(sp);
           }
         }
     );
@@ -67,41 +67,28 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
             removePlacement(oldValue, newValue);
           } else {
             if (newValue.isEmpty()) return;
-            addSensorPlacement(model, oldValue, newValue);
+            DistancePlacement dp = addPlacement(model, oldValue, newValue, (brick) -> new DistancePlacement(controller, brick));
+            addSensorListeners(dp);
           }
         }
     );
   }
 
-  private void addSensorPlacement(
+  private <T extends BrickPlacement> T addPlacement(
       Garden model,
-      List<DistanceBrickData> oldValue,
-      List<DistanceBrickData> newValue)
+      List<? extends BrickData> oldValue,
+      List<? extends BrickData> newValue,
+      Function<BrickData, T> ctor)
   {
-    DistancePlacement newBrick = newValue
+    T newBrick = newValue
         .stream()
         .filter(brick -> !oldValue.contains(brick))
-        .map(brick -> new DistancePlacement(controller, brick))
+        .map(ctor)
         .toList()
         .get(0);
 
-    addSensorListeners(newBrick);
     addPlacementToGUI(model, newBrick);
-  }
-
-  private void addActuatorPlacement(
-      Garden model,
-      List<ServoBrickData> oldValue,
-      List<ServoBrickData> newValue) {
-    ServoPlacement newBrick = newValue
-        .stream()
-        .filter(brick -> !oldValue.contains(brick))
-        .map(brick -> new ServoPlacement(controller, brick))
-        .toList()
-        .get(0);
-
-    addActuatorListeners(newBrick);
-    addPlacementToGUI(model, newBrick);
+    return newBrick;
   }
 
   private void addPlacementToGUI(Garden model, BrickPlacement placement) {

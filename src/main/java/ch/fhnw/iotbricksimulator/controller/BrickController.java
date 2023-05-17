@@ -92,4 +92,9 @@ public class BrickController extends ControllerBase<Garden> {
         .toList();
     updateModel(set(model.actuators, modified));
   }
+
+  public void removeBrick(BrickData data) {
+    if(data instanceof DistanceBrickData) removeBrick((DistanceBrickData) data);
+    if(data instanceof ServoBrickData) removeBrick((ServoBrickData) data);
+  }
 }
