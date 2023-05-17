@@ -77,7 +77,12 @@ public class BrickController extends ControllerBase<Garden> {
     updateModel(set(model.removeButtonVisible, state));
   }
 
-  public void removeBrick(DistanceBrickData data) {
+  public void removeBrick(BrickData data) {
+    if(data instanceof DistanceBrickData) removeBrick((DistanceBrickData) data);
+    if(data instanceof ServoBrickData)    removeBrick((ServoBrickData) data);
+  }
+
+  private void removeBrick(DistanceBrickData data) {
     List<DistanceBrickData> modified = new ArrayList<>(model.sensors.getValue())
         .stream()
         .filter(b -> !b.getID().equals(data.getID()))
@@ -85,16 +90,11 @@ public class BrickController extends ControllerBase<Garden> {
     updateModel(set(model.sensors, modified));
   }
 
-  public void removeBrick(ServoBrickData data) {
+  private void removeBrick(ServoBrickData data) {
     List<ServoBrickData> modified = new ArrayList<>(model.actuators.getValue())
         .stream()
         .filter(b -> !b.getID().equals(data.getID()))
         .toList();
     updateModel(set(model.actuators, modified));
-  }
-
-  public void removeBrick(BrickData data) {
-    if(data instanceof DistanceBrickData) removeBrick((DistanceBrickData) data);
-    if(data instanceof ServoBrickData) removeBrick((ServoBrickData) data);
   }
 }

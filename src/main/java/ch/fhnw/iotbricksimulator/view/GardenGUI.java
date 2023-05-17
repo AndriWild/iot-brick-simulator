@@ -56,7 +56,12 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
             removePlacement(oldValue, newValue);
           } else {
             if (newValue.isEmpty()) return;
-            ServoPlacement sp = addPlacement(model, oldValue, newValue, (brick) -> new ServoPlacement(controller, brick));
+            ServoPlacement sp = addPlacement(
+                model,
+                oldValue,
+                newValue,
+                (brick) -> new ServoPlacement(controller, brick)
+            );
             addActuatorListeners(sp);
           }
         }
@@ -67,7 +72,12 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
             removePlacement(oldValue, newValue);
           } else {
             if (newValue.isEmpty()) return;
-            DistancePlacement dp = addPlacement(model, oldValue, newValue, (brick) -> new DistancePlacement(controller, brick));
+            DistancePlacement dp = addPlacement(
+                model,
+                oldValue,
+                newValue,
+                (brick) -> new DistancePlacement(controller, brick)
+            );
             addSensorListeners(dp);
           }
         }
@@ -96,7 +106,7 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
     this.getChildren().add(placement);
   }
 
-  private void removePlacement(List<? extends BrickData> oldValue, List<? extends BrickData> newValue) {
+  private <T extends  BrickData> void removePlacement(List<T> oldValue, List<T> newValue) {
    BrickData removed = oldValue
         .stream()
         .filter(brick -> !newValue.contains(brick))
@@ -132,7 +142,8 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
       placement.setActivityValue(currentVal);
       refreshLabel(placement);
     });
-    onChangeOf(placement.getBrick().isMostActive).execute((oldVal, newVal)     -> placement.setHighlighted(newVal));
+    onChangeOf(placement.getBrick().isMostActive).execute((oldVal, newVal)
+        -> placement.setHighlighted(newVal));
   }
 
   private void addActuatorListeners(ServoPlacement placement) {
@@ -140,7 +151,8 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
       placement.setMostActiveSensorAngle(newVal);
       refreshLabel(placement);
     });
-    onChangeOf(placement.getBrick().viewPortAngle).execute((oldVal, newVal) -> placement.setFrontViewAngle(newVal));
+    onChangeOf(placement.getBrick().viewPortAngle).execute((oldVal, newVal) ->
+        placement.setFrontViewAngle(newVal));
   }
 
   private void refreshLabel(BrickPlacement placement){
