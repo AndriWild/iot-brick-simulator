@@ -50,8 +50,8 @@ public abstract class BrickData {
   @Override
   public String toString() {
     return inner.getID()
-        + ", " + location.getValue().lat()
-        + ", " + location.getValue().lon()
-        + ", " + faceAngle.getValue();
+        + "," + location.getValue().lat()
+        + "," + location.getValue().lon()
+        + "," + faceAngle.getValue();
   }
 }

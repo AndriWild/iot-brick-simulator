@@ -28,6 +28,6 @@ public class DistanceBrickData extends BrickData {
 
     @Override
     public String toString() {
-        return "DistanceBrick" + ", " + super.toString();
+        return "DistanceBrick" + "," + super.toString();
     }
 }

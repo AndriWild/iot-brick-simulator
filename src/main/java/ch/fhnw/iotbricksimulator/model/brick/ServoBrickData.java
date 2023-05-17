@@ -28,6 +28,6 @@ public class ServoBrickData extends BrickData {
 
     @Override
     public String toString() {
-        return "ServoBrick" + ", " + super.toString();
+        return "ServoBrick" + "," + super.toString();
     }
 }

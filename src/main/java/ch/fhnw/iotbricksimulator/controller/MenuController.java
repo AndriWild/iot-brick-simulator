@@ -22,6 +22,7 @@ public class MenuController extends ControllerBase<Garden> {
 
   private int actuatorIdCounter = 0;
   private int sensorIdCounter   = 0;
+  private double spiralValue = 5d;
 
   public MenuController(Garden model) {
     super(model);
@@ -40,6 +41,7 @@ public class MenuController extends ControllerBase<Garden> {
     DistanceBrickData newBrick = new DistanceBrickData(DistanceBrick.connect(proxy, id));
     bs.add(newBrick);
     updateModel(set(model.sensors, bs));
+    updateModel(set(newBrick.location, calcSpawnPosition()));
     return newBrick;
   }
 
@@ -52,10 +54,11 @@ public class MenuController extends ControllerBase<Garden> {
     }
     List<ServoBrickData> currentServoBricks;
     currentServoBricks      = new ArrayList<>(model.actuators.getValue());
-    ServoBrickData newServo = new ServoBrickData(ServoBrick.connect(proxy, id));
-    currentServoBricks.add(newServo);
+    ServoBrickData newBrick = new ServoBrickData(ServoBrick.connect(proxy, id));
+    currentServoBricks.add(newBrick);
     updateModel(set(model.actuators, currentServoBricks));
-    return newServo;
+    updateModel(set(newBrick.location, calcSpawnPosition()));
+    return newBrick;
   }
 
   public void exportConfigToFile(File file) {
@@ -133,10 +136,22 @@ public class MenuController extends ControllerBase<Garden> {
             return String.valueOf(type).concat(",").concat(s.toString());
           })
           .map(s -> s.concat("\n"))
+          .peek(System.out::println)
           .forEach(printWriter::write);
     } catch (FileNotFoundException e) {
       updateModel(set(model.isLoading, false));
       System.err.println("Create CSV: File could not be created!");
     }
+  }
+
+  private Location calcSpawnPosition() {
+    // archimedic spiral formula: x(t) = at cos(t), y(t) = at sin(t)
+    double a = 10;
+    double offset = (double) Constants.WINDOW_HEIGHT / 2;
+    double t = spiralValue;
+    double x = a * t * Math.cos(t);
+    double y = a * t * Math.sin(t);
+    spiralValue += 0.5;
+    return new Location(x + offset, y + offset);
   }
 }
