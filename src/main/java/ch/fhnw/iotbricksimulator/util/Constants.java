@@ -18,8 +18,8 @@ public class Constants {
   public static final String MOCK_SENSOR_PREFIX   = "sensor (mock): ";
   public static final String MOCK_ACTUATOR_PREFIX = "actuator (mock): ";
 
-  public static final String MQTT_SENSOR_PREFIX   = "sensor (mqtt): ";
-  public static final String MQTT_ACTUATOR_PREFIX = "actuator (mqtt): ";
+  public static final String MQTT_SENSOR_PREFIX   = "mqtt: ";
+  public static final String MQTT_ACTUATOR_PREFIX = "mqtt: ";
 
   public static final int SPAWN_POSITION_X = 400;
   public static final int SPAWN_POSITION_Y = 400;

@@ -80,7 +80,7 @@ public class Controls extends GridPane {
     addActuatorButton = new Button("+ Actuator");
     addSensorButton   = new Button("+ Sensor");
     addMqttSensor     = new Button("+ Mqtt Sensor");
-    addMqttActuator   = new Button("+ Mqtt Actor");
+    addMqttActuator   = new Button("+ Mqtt Actuator");
     closeDialog       = new Button("Close");
 
     sensorId          = new TextField("sensor ID");

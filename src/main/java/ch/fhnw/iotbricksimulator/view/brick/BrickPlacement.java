@@ -7,6 +7,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeType;
@@ -25,8 +26,8 @@ public abstract class BrickPlacement extends Group {
   protected double faceAngle;
 
   protected Group  cross;
-  private Text   label;
-  private Region labelBackground;
+  private Text     label;
+  private Region   labelBackground;
 
   private final ApplicationController controller;
   private final BrickData        brickData;
@@ -86,10 +87,11 @@ public abstract class BrickPlacement extends Group {
   }
 
   private void layoutControls() {
-    int margin = 5;
-    int gap    = 12;
-    label.relocate          (BrickNode.WIDTH_BRICK + gap,          - BrickNode.HEIGHT_BRICK + gap);
-    labelBackground.relocate(BrickNode.WIDTH_BRICK + gap - margin, - BrickNode.HEIGHT_BRICK + gap - margin);
+    int padding = 5;
+    int margin    = 15;
+    int marginTop = 15;
+    label.relocate          (BrickNode.WIDTH_BRICK + margin,          - BrickNode.HEIGHT_BRICK + margin + marginTop);
+    labelBackground.relocate(BrickNode.WIDTH_BRICK + margin - padding, - BrickNode.HEIGHT_BRICK + margin+ marginTop - padding);
 
     super.getChildren().add(cross);
   }
@@ -110,9 +112,14 @@ public abstract class BrickPlacement extends Group {
     cross = new Group();
     Line line1 = createCrossLine(false);
     Line line2 = createCrossLine(true);
-    cross.getChildren().addAll(line1, line2);
+    Circle crossCircle = new Circle(4, 4, 8);
+    crossCircle.setStrokeWidth(1);
+    crossCircle.setFill(Color.rgb(255,255,255, 0.6));
+    crossCircle.setStroke(Color.BLACK);
+    cross.getChildren().addAll(crossCircle, line1, line2);
+    cross.relocate(40,-15);
 
-    this.setOnMouseClicked(e -> {
+    cross.setOnMouseClicked(e -> {
       if(e.isShiftDown()){
         removeMe.run();
       }
@@ -120,12 +127,12 @@ public abstract class BrickPlacement extends Group {
   }
 
   private Line createCrossLine(boolean isMirrored) {
-    Line line = new Line(0, 0, 40, 40);
+    Line line = new Line(0, 0, 8, 8);
     // style properties
-    line.setStroke       (Color.rgb(255,0,0,0.5));
+    line.setStroke       (Color.rgb(255,0,0));
     line.setStrokeType   (StrokeType.CENTERED);
     line.setStrokeLineCap(StrokeLineCap.ROUND);
-    line.setStrokeWidth  (10.0);
+    line.setStrokeWidth  (2.0);
 
     if(isMirrored) line.setScaleX(-1.0); // mirroring
     return line;

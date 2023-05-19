@@ -22,10 +22,13 @@ public class MenuController extends ControllerBase<Garden> {
 
   private int actuatorIdCounter = 0;
   private int sensorIdCounter   = 0;
-  private double spiralValue = 5d;
+  private double spiralValue    = 5d;
+
+  private final List<String> mqttIds;
 
   public MenuController(Garden model) {
     super(model);
+    mqttIds = new ArrayList<>();
   }
 
   public synchronized DistanceBrickData addDistanceBrick(String id, boolean isSimulated) {
@@ -34,6 +37,10 @@ public class MenuController extends ControllerBase<Garden> {
     if(isSimulated) {
       id = Constants.MOCK_SENSOR_PREFIX + sensorIdCounter++;
       proxy = model.mockProxy;
+    } else {
+      if(mqttIds.contains(id)){
+        System.err.println("Id has already been taken!");
+      }
     }
 
     List<DistanceBrickData> bs;
@@ -90,12 +97,11 @@ public class MenuController extends ControllerBase<Garden> {
   }
 
   public void printAllBrickData() {
-    StringBuilder sb      = new StringBuilder();
-    sb.append("Data Snapshot from:").append(Util.getTimeStamp()).append("\n");
-    sb.append("\nSensors:\n");
-    sb.append(toStringOfBrickList(model.sensors.getValue()));
-    sb.append("\nActuators:\n");
-    sb.append(toStringOfBrickList(model.actuators.getValue()));
+    String sb = "Data Snapshot from:" + Util.getTimeStamp() + "\n" +
+        "\nSensors:\n" +
+        toStringOfBrickList(model.sensors.getValue()) +
+        "\nActuators:\n" +
+        toStringOfBrickList(model.actuators.getValue());
     System.out.println(sb);
   }
 
