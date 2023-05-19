@@ -1,6 +1,8 @@
 package ch.fhnw.iotbricksimulator.view.brick;
 
+import ch.fhnw.iotbricksimulator.controller.ApplicationController;
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
+import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
 import javafx.scene.Group;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -9,8 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
-import ch.fhnw.iotbricksimulator.controller.ApplicationController;
-import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
 
 public class ServoPlacement extends BrickPlacement {
 
