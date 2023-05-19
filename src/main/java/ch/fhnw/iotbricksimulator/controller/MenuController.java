@@ -4,6 +4,8 @@ import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.core.Proxy;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import ch.fhnw.iotbricksimulator.model.Garden;
+import ch.fhnw.iotbricksimulator.model.Notification.Notification;
+import ch.fhnw.iotbricksimulator.model.Notification.Type;
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 import ch.fhnw.iotbricksimulator.model.brick.DistanceBrickData;
 import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
@@ -12,11 +14,12 @@ import ch.fhnw.iotbricksimulator.util.Location;
 import ch.fhnw.iotbricksimulator.util.Util;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ControllerBase;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 import java.util.stream.Stream;
+
+import static ch.fhnw.iotbricksimulator.util.ConfigIOHandler.readFromFile;
+import static ch.fhnw.iotbricksimulator.util.ConfigIOHandler.writeToFile;
 
 public class MenuController extends ControllerBase<Garden> {
 
@@ -31,7 +34,7 @@ public class MenuController extends ControllerBase<Garden> {
     mqttIds = new ArrayList<>();
   }
 
-  public synchronized DistanceBrickData addDistanceBrick(String id, boolean isSimulated) {
+  public synchronized Optional<DistanceBrickData> addDistanceBrick(String id, boolean isSimulated) {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
@@ -39,8 +42,11 @@ public class MenuController extends ControllerBase<Garden> {
       proxy = model.mockProxy;
     } else {
       if(mqttIds.contains(id)){
-        System.err.println("Id has already been taken!");
+        createNotification(Type.ERROR, "Create MQTT Brick", "Id has already been assigned!");
+        System.err.println("Id has already been assigned!");
+        return Optional.empty();
       }
+      mqttIds.add(id);
     }
 
     List<DistanceBrickData> bs;
@@ -49,10 +55,10 @@ public class MenuController extends ControllerBase<Garden> {
     bs.add(newBrick);
     updateModel(set(model.sensors, bs));
     updateModel(set(newBrick.location, calcSpawnPosition()));
-    return newBrick;
+    return Optional.of(newBrick);
   }
 
-  public synchronized ServoBrickData addServoBrick(String id, boolean isSimulated) {
+  public synchronized Optional<ServoBrickData> addServoBrick(String id, boolean isSimulated) {
     Proxy proxy = model.mqttProxy;
 
     if(isSimulated) {
@@ -65,35 +71,21 @@ public class MenuController extends ControllerBase<Garden> {
     currentServoBricks.add(newBrick);
     updateModel(set(model.actuators, currentServoBricks));
     updateModel(set(newBrick.location, calcSpawnPosition()));
-    return newBrick;
+    return Optional.of(newBrick);
   }
 
-  public void exportConfigToFile(File file) {
-    writeToFile(file,
+  public void exportToFile(File file) {
+    updateModel(set(model.isLoading, true));
+    boolean success = writeToFile(file,
         Stream.concat(
             model.actuators.getValue().stream(),
             model.sensors  .getValue().stream()
         ).toList()
     );
-    updateModel(set(model.isLoading, false));
-  }
-
-  public void importFromFile(File file) {
-    List<String> allLines = new ArrayList<>(Collections.emptyList());
-    try {
-      FileInputStream inputStream = new FileInputStream(file);
-      try(BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))){
-        String line;
-        while((line = br.readLine()) != null){
-          allLines.add(line);
-        }
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
+    if(!success){
+      createNotification(Type.ERROR, "Export config", "Failed to export config!");
     }
-    importConfigFromList(allLines);
+    updateModel(set(model.isLoading, false));
   }
 
   public void printAllBrickData() {
@@ -105,49 +97,65 @@ public class MenuController extends ControllerBase<Garden> {
     System.out.println(sb);
   }
 
+  public void importFromFile(File file){
+    updateModel(set(model.isLoading, true));
+    readFromFile(file).ifPresentOrElse(
+        this::importConfigFromList,
+        () -> createNotification(Type.ERROR, "Load Config", "Failed to read config!")
+    );
+    updateModel(set(model.isLoading, false));
+  }
+
   private String toStringOfBrickList(List<? extends BrickData> bricks) {
     return String.join("\n", bricks.stream().map(BrickData::toString).toList());
   }
 
+  private void createNotification(Type type, String title, String message) {
+    Notification newNotification = new Notification(type, title, message);
+    Deque<Notification> queue    = new ArrayDeque<>(model.notifications.getValue());
+    queue.push(newNotification);
+    updateModel(set(
+        model.notifications,
+        queue
+    ));
+  }
+
   private void importConfigFromList(List<String> lines) {
-      lines.stream()
-          .skip(1) // header
-          .map(line -> line.split(","))
-          .forEach(this::createBrickFromStringLine);
+    lines.stream()
+        .skip(1) // header
+        .map(line -> line.split(","))
+        .forEach(this::createBrickFromStringLine);
   }
 
   private void createBrickFromStringLine(String[] line) {
     // line content:  1: mock, 2: brick, 3: id, 4: lat, 5: long, 6: faceAngle
-    BrickData brick;
+    Optional<? extends BrickData> brick;
     boolean isMock = Boolean.parseBoolean(line[0]);
     if (line[1].contains(DistanceBrick.class.getSimpleName())) {
       brick = addDistanceBrick(line[2], isMock);
     } else if (line[1].contains(ServoBrick.class.getSimpleName())) {
       brick = addServoBrick(line[2], isMock);
     } else {
-      throw new IllegalArgumentException("Import CSV: Could not recognize Brick type!");
+      createNotification(
+          Type.WARNING,
+          "Import CSV",
+          "Could not recognize Brick type!\n" + Arrays.toString(line)
+      );
+      return;
     }
     this.awaitCompletion();
-
-    updateModel(set(brick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))));
-    updateModel(set(brick.faceAngle, Double.parseDouble(line[5])));
-  }
-
-  private void writeToFile(File file, List<? extends BrickData> bricks) {
-    try (PrintWriter printWriter = new PrintWriter(file)) {
-      printWriter.write("mock,brick,id,lat,long,faceAngle\n");
-      bricks.stream()
-          .map(s -> {
-            boolean type = s.getID().contains("mock");
-            return String.valueOf(type).concat(",").concat(s.toString());
-          })
-          .map(s -> s.concat("\n"))
-          .peek(System.out::println)
-          .forEach(printWriter::write);
-    } catch (FileNotFoundException e) {
-      updateModel(set(model.isLoading, false));
-      System.err.println("Create CSV: File could not be created!");
-    }
+    brick.ifPresentOrElse(
+        newBrick ->
+            updateModel(
+                set(newBrick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))),
+                set(newBrick.faceAngle, Double.parseDouble(line[5]))
+            ),
+        () -> createNotification(
+            Type.ERROR,
+            "Create Brick from Config",
+            "Failed to create Brick from CSV Data!"
+        )
+    );
   }
 
   private Location calcSpawnPosition() {

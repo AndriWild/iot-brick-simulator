@@ -2,6 +2,8 @@ package ch.fhnw.iotbricksimulator.view;
 
 import ch.fhnw.iotbricksimulator.controller.ApplicationController;
 import ch.fhnw.iotbricksimulator.model.Garden;
+import ch.fhnw.iotbricksimulator.model.Notification.Notification;
+import ch.fhnw.iotbricksimulator.model.Notification.Type;
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 import ch.fhnw.iotbricksimulator.util.Constants;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ViewMixin;
@@ -9,6 +11,7 @@ import ch.fhnw.iotbricksimulator.view.brick.BrickPlacement;
 import ch.fhnw.iotbricksimulator.view.brick.DistancePlacement;
 import ch.fhnw.iotbricksimulator.view.brick.ServoPlacement;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
 
@@ -49,6 +52,21 @@ public class GardenGUI extends Pane implements ViewMixin<Garden, ApplicationCont
         return;
       }
       this.getChildren().remove(spinner);
+    });
+
+    onChangeOf(model.notifications).execute((oldValue, newValue) -> {
+      if(newValue.isEmpty()) return;
+      Notification notification = newValue.peek();
+      Alert.AlertType alertType;
+      switch(notification.type()){
+        case CONFIRMATION -> alertType = Alert.AlertType.CONFIRMATION;
+        case INFO         -> alertType = Alert.AlertType.INFORMATION;
+        case WARNING      -> alertType = Alert.AlertType.WARNING;
+        default           -> alertType = Alert.AlertType.ERROR;
+      }
+      Alert alert = new Alert(alertType, notification.msg());
+      alert.setTitle(notification.title());
+      alert.showAndWait();
     });
 
     onChangeOf(model.actuators).execute((oldValue, newValue) -> {

@@ -49,7 +49,7 @@ public class AppMenuBar extends MenuBar {
       fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Brick Config", "csv"));
       File file = fileChooser.showSaveDialog(stage);
       if(file != null) {
-        controller.exportConfigToFile(file);
+        controller.exportToFile(file);
       }
     });
 

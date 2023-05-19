@@ -50,12 +50,12 @@ public class ApplicationController extends ControllerBase<Garden> {
     brickController.removeBrick(data);
   }
   // Menu Controller delegation
-  public ServoBrickData addServoBrick(String id, boolean isSimulated) {
-    return menuController.addServoBrick(id, isSimulated);
+  public void addServoBrick(String id, boolean isSimulated) {
+    menuController.addServoBrick(id, isSimulated);
   }
 
-  public DistanceBrickData addDistanceBrick(String id, boolean isSimulated) {
-    return menuController.addDistanceBrick(id, isSimulated);
+  public void addDistanceBrick(String id, boolean isSimulated) {
+    menuController.addDistanceBrick(id, isSimulated);
   }
 
   public void printAllBrickData() {
@@ -66,7 +66,7 @@ public class ApplicationController extends ControllerBase<Garden> {
     menuController.importFromFile(file);
   }
 
-  public void exportConfigToFile(File file) {
-    menuController.exportConfigToFile(file);
+  public void exportToFile(File file) {
+    menuController.exportToFile(file);
   }
 }
