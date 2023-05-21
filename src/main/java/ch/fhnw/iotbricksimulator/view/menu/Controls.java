@@ -104,10 +104,10 @@ public class Controls extends GridPane {
     actuatorId       .setPrefWidth(DEFAULT_NODE_WIDTH);
     sensorId         .setPrefWidth(DEFAULT_NODE_WIDTH);
 
-    addActuatorButton.setOnAction(e -> controller.addServoBrick   ("", true));
-    addSensorButton  .setOnAction(e -> controller.addDistanceBrick("", true));
-    addMqttActuator  .setOnAction(e -> controller.addServoBrick   (actuatorId.getText(), false));
-    addMqttSensor    .setOnAction(e -> controller.addDistanceBrick(sensorId.getText(),   false));
+    addActuatorButton.setOnAction(e -> controller.createMockActuator());
+    addSensorButton  .setOnAction(e -> controller.createMockSensor());
+    addMqttActuator  .setOnAction(e -> controller.createMqttActuator(actuatorId.getText()));
+    addMqttSensor    .setOnAction(e -> controller.createMqttSensor  (sensorId  .getText()));
     closeDialog      .setOnAction(e -> closeCallback.run());
   }
 }

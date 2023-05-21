@@ -15,11 +15,8 @@ public class Constants {
 
   public static final String CSV_PATH = "src/resources/";
 
-  public static final String MOCK_SENSOR_PREFIX   = "sensor (mock): ";
-  public static final String MOCK_ACTUATOR_PREFIX = "actuator (mock): ";
-
-  public static final String MQTT_SENSOR_PREFIX   = "mqtt: ";
-  public static final String MQTT_ACTUATOR_PREFIX = "mqtt: ";
+  public static final String MOCK_ID_PREFIX   = "(mock): ";
+  public static final String MQTT_ID_PREFIX   = "(mqtt): ";
 
   public static final int SPAWN_POSITION_X = 400;
   public static final int SPAWN_POSITION_Y = 400;

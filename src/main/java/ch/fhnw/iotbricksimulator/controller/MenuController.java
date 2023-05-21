@@ -1,7 +1,6 @@
 package ch.fhnw.iotbricksimulator.controller;
 
 import ch.fhnw.imvs.bricks.actuators.ServoBrick;
-import ch.fhnw.imvs.bricks.core.Proxy;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import ch.fhnw.iotbricksimulator.model.Garden;
 import ch.fhnw.iotbricksimulator.model.Notification.Notification;
@@ -23,55 +22,62 @@ import static ch.fhnw.iotbricksimulator.util.ConfigIOHandler.writeToFile;
 
 public class MenuController extends ControllerBase<Garden> {
 
-  private int actuatorIdCounter = 0;
-  private int sensorIdCounter   = 0;
-  private double spiralValue    = 5d;
+  private int mockIdCounter  = 0;
+  private double spiralValue = 5d;
 
-  private final List<String> mqttIds;
+  private final Set<String> mqttIds;
 
   public MenuController(Garden model) {
     super(model);
-    mqttIds = new ArrayList<>();
+    mqttIds = new HashSet<>();
   }
 
-  public synchronized Optional<DistanceBrickData> addDistanceBrick(String id, boolean isSimulated) {
-    Proxy proxy = model.mqttProxy;
+  public synchronized ServoBrickData createMockActuator(){
+    String id = createMockId();
+    ServoBrickData newBrick = new ServoBrickData(ServoBrick.connect(model.mockProxy, id));
+    addActuator(newBrick);
+    return newBrick;
+  }
 
-    if(isSimulated) {
-      id = Constants.MOCK_SENSOR_PREFIX + sensorIdCounter++;
-      proxy = model.mockProxy;
-    } else {
-      if(mqttIds.contains(id)){
-        createNotification(Type.ERROR, "Create MQTT Brick", "Id has already been assigned!");
-        System.err.println("Id has already been assigned!");
-        return Optional.empty();
-      }
-      mqttIds.add(id);
-    }
-
-    List<DistanceBrickData> bs;
-    bs = new ArrayList<>(model.sensors.getValue());
-    DistanceBrickData newBrick = new DistanceBrickData(DistanceBrick.connect(proxy, id));
-    bs.add(newBrick);
-    updateModel(set(model.sensors, bs));
-    updateModel(set(newBrick.location, calcSpawnPosition()));
+  public synchronized DistanceBrickData createMockSensor(){
+    String id = createMockId();
+    DistanceBrickData newBrick = new DistanceBrickData(DistanceBrick.connect(model.mockProxy, id));
+    addSensor(newBrick);
+    return newBrick;
+  }
+  public synchronized Optional<DistanceBrickData> createMqttSensor(String id){
+    if(isMqttIdAssigned(id)) return Optional.empty();
+    DistanceBrickData newBrick = new DistanceBrickData(DistanceBrick.connect(model.mqttProxy, id));
+    addSensor(newBrick);
     return Optional.of(newBrick);
   }
 
-  public synchronized Optional<ServoBrickData> addServoBrick(String id, boolean isSimulated) {
-    Proxy proxy = model.mqttProxy;
-
-    if(isSimulated) {
-      id = Constants.MOCK_ACTUATOR_PREFIX +  actuatorIdCounter++;
-      proxy = model.mockProxy;
-    }
-    List<ServoBrickData> currentServoBricks;
-    currentServoBricks      = new ArrayList<>(model.actuators.getValue());
-    ServoBrickData newBrick = new ServoBrickData(ServoBrick.connect(proxy, id));
-    currentServoBricks.add(newBrick);
-    updateModel(set(model.actuators, currentServoBricks));
-    updateModel(set(newBrick.location, calcSpawnPosition()));
+  public synchronized Optional<ServoBrickData> createMqttActuator(String id){
+    if(isMqttIdAssigned(id)) return Optional.empty();
+    ServoBrickData newBrick = new ServoBrickData(ServoBrick.connect(model.mqttProxy, id));
+    addActuator(newBrick);
     return Optional.of(newBrick);
+  }
+
+
+  private void addSensor(DistanceBrickData brick) {
+    var list = new ArrayList<>(model.sensors.getValue());
+    list.add(brick);
+    updateModel(
+        set(model.sensors, list),
+        set(brick.location, calcSpawnPosition())
+    );
+    this.awaitCompletion();
+  }
+
+  private void addActuator(ServoBrickData brick) {
+    var list = new ArrayList<>(model.actuators.getValue());
+    list.add(brick);
+    updateModel(
+        set(model.actuators, list),
+        set(brick.location, calcSpawnPosition())
+    );
+    this.awaitCompletion();
   }
 
   public void exportToFile(File file) {
@@ -128,26 +134,12 @@ public class MenuController extends ControllerBase<Garden> {
   }
 
   private void createBrickFromStringLine(String[] line) {
-    // line content:  1: mock, 2: brick, 3: id, 4: lat, 5: long, 6: faceAngle
-    Optional<? extends BrickData> brick;
-    boolean isMock = Boolean.parseBoolean(line[0]);
-    if (line[1].contains(DistanceBrick.class.getSimpleName())) {
-      brick = addDistanceBrick(line[2], isMock);
-    } else if (line[1].contains(ServoBrick.class.getSimpleName())) {
-      brick = addServoBrick(line[2], isMock);
-    } else {
-      createNotification(
-          Type.WARNING,
-          "Import CSV",
-          "Could not recognize Brick type!\n" + Arrays.toString(line)
-      );
-      return;
-    }
+    Optional<? extends BrickData> brick = createBrick(line);
     this.awaitCompletion();
     brick.ifPresentOrElse(
         newBrick ->
             updateModel(
-                set(newBrick.location, new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))),
+                set(newBrick.location,  new Location(Double.parseDouble(line[3]), Double.parseDouble(line[4]))),
                 set(newBrick.faceAngle, Double.parseDouble(line[5]))
             ),
         () -> createNotification(
@@ -156,6 +148,40 @@ public class MenuController extends ControllerBase<Garden> {
             "Failed to create Brick from CSV Data!"
         )
     );
+  }
+
+  private Optional<? extends BrickData> createBrick(String[] line) {
+    // line content:  1: mock, 2: brick, 3: id, 4: lat, 5: long, 6: faceAngle
+    Optional<? extends BrickData> brick = Optional.empty();
+    boolean isMock = Boolean.parseBoolean(line[0]);
+    boolean isSensor   = line[1].contains(DistanceBrick.class.getSimpleName());
+    boolean isActuator = line[1].contains(ServoBrick   .class.getSimpleName());
+
+    if(isMock){
+      if(isSensor)   brick = Optional.of(createMockSensor());
+      if(isActuator) brick = Optional.of(createMockActuator());
+    } else {
+      String id = line[2];
+      if(isSensor)   brick = createMqttSensor(id);
+      if(isActuator) brick = createMqttActuator(id);
+    }
+    return brick;
+  }
+
+  private String createMockId() {
+    return Constants.MOCK_ID_PREFIX + mockIdCounter++;
+  }
+
+  private boolean isMqttIdAssigned(String id){
+    if(!mqttIds.add(id)) {
+      createNotification(
+          Type.ERROR,
+          "Create Brick from Config",
+          "Id is already assigned"
+      );
+      return true;
+    }
+    return false;
   }
 
   private Location calcSpawnPosition() {

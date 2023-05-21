@@ -42,7 +42,7 @@ public class AppControllerTest {
     ApplicationController controller = new ApplicationController(model);
 
     //when
-    DistanceBrickData brick = controller.addDistanceBrick("", true);
+    DistanceBrickData brick = controller.createMockSensor();
     controller.awaitCompletion();
 
     //then
@@ -64,7 +64,7 @@ public class AppControllerTest {
     ApplicationController controller = new ApplicationController(model);
 
     //when
-    ServoBrickData brick = controller.addServoBrick("", true);
+    ServoBrickData brick = controller.createMockActuator();
     controller.awaitCompletion();
 
     //then
@@ -84,8 +84,8 @@ public class AppControllerTest {
     //given
     Garden model = new Garden();
     ApplicationController controller = new ApplicationController(model);
-    ServoBrickData    servo    = controller.addServoBrick   ("", true);
-    DistanceBrickData distance = controller.addDistanceBrick("", true);
+    ServoBrickData    servo    = controller.createMockActuator();
+    DistanceBrickData distance = controller.createMockSensor();
 
     double lat = 123.45, lon = 54.321;
     Location target          = new Location(lat, lon);

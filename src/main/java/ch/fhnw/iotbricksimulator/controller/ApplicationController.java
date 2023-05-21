@@ -50,12 +50,17 @@ public class ApplicationController extends ControllerBase<Garden> {
     brickController.removeBrick(data);
   }
   // Menu Controller delegation
-  public void addServoBrick(String id, boolean isSimulated) {
-    menuController.addServoBrick(id, isSimulated);
+  public ServoBrickData createMockActuator() {
+    return menuController.createMockActuator();
   }
-
-  public void addDistanceBrick(String id, boolean isSimulated) {
-    menuController.addDistanceBrick(id, isSimulated);
+  public DistanceBrickData createMockSensor() {
+    return menuController.createMockSensor();
+  }
+  public void createMqttSensor(String id) {
+    menuController.createMqttSensor(id);
+  }
+  public void createMqttActuator(String id) {
+    menuController.createMqttActuator(id);
   }
 
   public void printAllBrickData() {
