@@ -9,10 +9,11 @@ import ch.fhnw.iotbricksimulator.util.Constants;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ObservableValue;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Garden {
-  public final ObservableValue<List<DistanceBrickData>> sensors             = new ObservableValue<>(Collections.emptyList());
-  public final ObservableValue<List<ServoBrickData>>    actuators           = new ObservableValue<>(Collections.emptyList());
+  public final ObservableValue<List<DistanceBrickData>> sensors             = new ObservableValue<>(new CopyOnWriteArrayList<>());
+  public final ObservableValue<List<ServoBrickData>>    actuators           = new ObservableValue<>(new CopyOnWriteArrayList<>());
   public final ObservableValue<Boolean>                 isLoading           = new ObservableValue<>(false);
   public final ObservableValue<Boolean>                 removeButtonVisible = new ObservableValue<>(false);
   public final ObservableValue<Deque<Notification>>     notifications       = new ObservableValue<>(new ArrayDeque<>());

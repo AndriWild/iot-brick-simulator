@@ -3,7 +3,6 @@ package ch.fhnw.iotbricksimulator.view;
 import ch.fhnw.iotbricksimulator.controller.ApplicationController;
 import ch.fhnw.iotbricksimulator.model.Garden;
 import ch.fhnw.iotbricksimulator.model.Notification.Notification;
-import ch.fhnw.iotbricksimulator.model.Notification.Type;
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 import ch.fhnw.iotbricksimulator.util.Constants;
 import ch.fhnw.iotbricksimulator.util.mvcbase.ViewMixin;

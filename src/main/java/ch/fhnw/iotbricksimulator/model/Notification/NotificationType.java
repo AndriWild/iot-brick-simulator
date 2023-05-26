@@ -1,5 +1,5 @@
 package ch.fhnw.iotbricksimulator.model.Notification;
 
-public enum Type {
+public enum NotificationType {
   INFO, WARNING, ERROR, CONFIRMATION
 }

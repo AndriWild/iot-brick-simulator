@@ -4,7 +4,7 @@ import ch.fhnw.imvs.bricks.actuators.ServoBrick;
 import ch.fhnw.imvs.bricks.sensors.DistanceBrick;
 import ch.fhnw.iotbricksimulator.model.Garden;
 import ch.fhnw.iotbricksimulator.model.Notification.Notification;
-import ch.fhnw.iotbricksimulator.model.Notification.Type;
+import ch.fhnw.iotbricksimulator.model.Notification.NotificationType;
 import ch.fhnw.iotbricksimulator.model.brick.BrickData;
 import ch.fhnw.iotbricksimulator.model.brick.DistanceBrickData;
 import ch.fhnw.iotbricksimulator.model.brick.ServoBrickData;
@@ -32,33 +32,33 @@ public class MenuController extends ControllerBase<Garden> {
     mqttIds = new HashSet<>();
   }
 
-  public synchronized ServoBrickData createMockActuator(){
+  public ServoBrickData createMockActuator(){
     String id = createMockId();
     ServoBrickData newBrick = new ServoBrickData(ServoBrick.connect(model.mockProxy, id));
     addActuator(newBrick);
     return newBrick;
   }
 
-  public synchronized DistanceBrickData createMockSensor(){
+  public DistanceBrickData createMockSensor(){
     String id = createMockId();
     DistanceBrickData newBrick = new DistanceBrickData(DistanceBrick.connect(model.mockProxy, id));
     addSensor(newBrick);
     return newBrick;
   }
-  public synchronized Optional<DistanceBrickData> createMqttSensor(String id){
+
+  public Optional<DistanceBrickData> createMqttSensor(String id){
     if(isMqttIdAssigned(id)) return Optional.empty();
     DistanceBrickData newBrick = new DistanceBrickData(DistanceBrick.connect(model.mqttProxy, id));
     addSensor(newBrick);
     return Optional.of(newBrick);
   }
 
-  public synchronized Optional<ServoBrickData> createMqttActuator(String id){
+  public Optional<ServoBrickData> createMqttActuator(String id){
     if(isMqttIdAssigned(id)) return Optional.empty();
     ServoBrickData newBrick = new ServoBrickData(ServoBrick.connect(model.mqttProxy, id));
     addActuator(newBrick);
     return Optional.of(newBrick);
   }
-
 
   private void addSensor(DistanceBrickData brick) {
     var list = new ArrayList<>(model.sensors.getValue());
@@ -89,7 +89,7 @@ public class MenuController extends ControllerBase<Garden> {
         ).toList()
     );
     if(!success){
-      createNotification(Type.ERROR, "Export config", "Failed to export config!");
+      createNotification(NotificationType.ERROR, "Export config", "Failed to export config!");
     }
     updateModel(set(model.isLoading, false));
   }
@@ -103,20 +103,20 @@ public class MenuController extends ControllerBase<Garden> {
     System.out.println(sb);
   }
 
-  public void importFromFile(File file){
-    updateModel(set(model.isLoading, true));
-    readFromFile(file).ifPresentOrElse(
-        this::importConfigFromList,
-        () -> createNotification(Type.ERROR, "Load Config", "Failed to read config!")
-    );
-    updateModel(set(model.isLoading, false));
-  }
-
   private String toStringOfBrickList(List<? extends BrickData> bricks) {
     return String.join("\n", bricks.stream().map(BrickData::toString).toList());
   }
 
-  private void createNotification(Type type, String title, String message) {
+  public void importFromFile(File file){
+    updateModel(set(model.isLoading, true));
+    readFromFile(file).ifPresentOrElse(
+        this::importConfigFromList,
+        () -> createNotification(NotificationType.ERROR, "Load Config", "Failed to read config!")
+    );
+    updateModel(set(model.isLoading, false));
+  }
+
+  private void createNotification(NotificationType type, String title, String message) {
     Notification newNotification = new Notification(type, title, message);
     Deque<Notification> queue    = new ArrayDeque<>(model.notifications.getValue());
     queue.push(newNotification);
@@ -143,7 +143,7 @@ public class MenuController extends ControllerBase<Garden> {
                 set(newBrick.faceAngle, Double.parseDouble(line[5]))
             ),
         () -> createNotification(
-            Type.ERROR,
+            NotificationType.ERROR,
             "Create Brick from Config",
             "Failed to create Brick from CSV Data!"
         )
@@ -175,7 +175,7 @@ public class MenuController extends ControllerBase<Garden> {
   private boolean isMqttIdAssigned(String id){
     if(!mqttIds.add(id)) {
       createNotification(
-          Type.ERROR,
+          NotificationType.ERROR,
           "Create Brick from Config",
           "Id is already assigned"
       );

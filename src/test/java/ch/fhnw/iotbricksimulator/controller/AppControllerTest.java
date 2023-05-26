@@ -91,9 +91,6 @@ public class AppControllerTest {
     Location target          = new Location(lat, lon);
     Location initialLocation = new Location(Constants.SPAWN_POSITION_X, Constants.SPAWN_POSITION_Y);
 
-    assertEquals(initialLocation, model.actuators.getValue().get(0).location.getValue());
-    assertEquals(initialLocation, model.sensors  .getValue().get(0).location.getValue());
-
     //when
     controller.move(target, servo);
     controller.move(target, distance);

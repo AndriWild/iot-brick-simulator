@@ -32,10 +32,11 @@ public class BrickController extends ControllerBase<Garden> {
     new Thread(() -> {
       while(true) {
         proxyGroup.waitForUpdate();
-        model.sensors.getValue().forEach(b -> {
-          updateModel(set(b.value, b.getDistance()));
-          updateModel(set(b.isMostActive, false));
-        });
+        model.sensors.getValue().forEach(brick ->
+            updateModel(
+                set(brick.value, brick.getDistance()),
+                set(brick.isMostActive, false)
+            ));
         updateActorPositions(model.sensors.getValue());
       }
     }).start();

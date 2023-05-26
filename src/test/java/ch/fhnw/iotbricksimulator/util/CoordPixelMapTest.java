@@ -1,6 +1,5 @@
 package ch.fhnw.iotbricksimulator.util;
 
-import ch.fhnw.iotbricksimulator.util.Location;
 import org.junit.jupiter.api.Test;
 
 import static ch.fhnw.iotbricksimulator.util.Constants.*;

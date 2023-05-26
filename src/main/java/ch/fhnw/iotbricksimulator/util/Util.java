@@ -11,22 +11,23 @@ public class Util {
 
 
   /**
-   *     0   45
-   *     | /
+   * 0   45
+   * | /
    * 270 * 90
-   *     |
-   *    180
-   * @param dLat latitude (Breitengrad)
+   * |
+   * 180
+   *
+   * @param dLat  latitude (Breitengrad)
    * @param dLong longitude (Längengrad)
    * @return degree
    */
-  public static double calcAngle(double dLong, double dLat){
+  public static double calcAngle(double dLong, double dLat) {
     double degrees = Math.toDegrees(Math.atan(dLat / dLong));
 
     // on x-axis
-    if(dLat == 0) {
+    if (dLat == 0) {
       // west
-      if(dLong >= 0){
+      if (dLong >= 0) {
         return 90;
       }
       // east
@@ -34,31 +35,31 @@ public class Util {
     }
 
     // on y-axis
-    if(dLong == 0){
+    if (dLong == 0) {
       // north
-      if(dLat >= 0){
+      if (dLat >= 0) {
         return 0;
       }
       return 180;
     }
 
     // first quadrant
-    if (dLat >= 0 && dLong >= 0){
+    if (dLat >= 0 && dLong >= 0) {
       return 90 - degrees;
     }
 
     // second quadrant
-    if(dLat > 0 && dLong < 0){
+    if (dLat > 0 && dLong < 0) {
       return 270 - degrees;
     }
 
     // third quadrant
-    if(dLat < 0 && dLong < 0){
+    if (dLat < 0 && dLong < 0) {
       return 180 + (90 - degrees);
     }
 
     // fourth quadrant
-    if(dLat < 0 && dLong >= 0){
+    if (dLat < 0 && dLong >= 0) {
       return 90 - degrees;
     }
 
@@ -67,7 +68,9 @@ public class Util {
 
   public static int calculateServoPositionFromAngle(BrickData brick, double angle) {
     double result = angle - brick.faceAngle.getValue() + 90;
-    if (result < 0) { result += 360.0; }
+    if (result < 0) {
+      result += 360.0;
+    }
     return (int) result;
   }
 
@@ -82,13 +85,9 @@ public class Util {
     return new Location(roundedLat, roundedLon);
   }
 
-public static String getTimeStamp() {
-  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-  LocalDateTime now     = LocalDateTime.now();
-  return dtf.format(now);
-}
-
-  public static int getRandomNumber(int min, int max) {
-    return (int) ((Math.random() * (max - min)) + min);
+  public static String getTimeStamp() {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    LocalDateTime now = LocalDateTime.now();
+    return dtf.format(now);
   }
 }

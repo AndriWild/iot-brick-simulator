@@ -2,7 +2,6 @@ package ch.fhnw.iotbricksimulator;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -112,19 +111,19 @@ public class AppStarter extends Application {
     // [ 3 4 5 ]
     // [ 6 7 8 ]
 
-    //    https://wms.geo.admin.ch/?&service=WMS&request=GetMap&layers=ch.swisstopo.swissimage&styles=&format=image%2Fjpeg&transparent=false&version=1.1.1&height=256&width=256&srs=EPSG%3A3857&bbox=846692.9623148973,6024690.132409308,846769.3993431824,6024766.569437591
-//    http://gps-cache.de/geocaching/koordinaten-umrechnung.htm
-    //LAT_WGS84 = 2*(ARCTAN(EXP(LAT_MG/6371000))-PI()/4)/PI()*180
-    //LON_WGS84 = LON_MG*180/(6371000*PI())
+    // https://wms.geo.admin.ch/?&service=WMS&request=GetMap&layers=ch.swisstopo.swissimage&styles=&format=image%2Fjpeg&transparent=false&version=1.1.1&height=256&width=256&srs=EPSG%3A3857&bbox=846692.9623148973,6024690.132409308,846769.3993431824,6024766.569437591
+    // http://gps-cache.de/geocaching/koordinaten-umrechnung.htm
+    // LAT_WGS84 = 2*(ARCTAN(EXP(LAT_MG/6371000))-PI()/4)/PI()*180
+    // LON_WGS84 = LON_MG*180/(6371000*PI())
 
-    //    LAT_MG=6371000*LN(TAN(LAT_WGS84+90)/360*PI())
-    //    LON_MG=LON_WGS84*6371000*PI()/180
+    // LAT_MG=6371000*LN(TAN(LAT_WGS84+90)/360*PI())
+    // LON_MG=LON_WGS84*6371000*PI()/180
 
-    List<Image> filesInFolder = Files.walk(Paths.get("src/resources/img/v2/"))
+    List<Image> filesInFolder = Files.walk(Paths.get(Constants.CSV_PATH + "/img/v2/"))
         .filter(Files::isRegularFile)
         .map(Path::toFile)
         .sorted()
-        .map(img -> new Image("src/resources/img/v2/" + img.getName()))
+        .map(img -> new Image(Constants.CSV_PATH + "/img/v2/" + img.getName()))
         .toList();
 
     List<BackgroundPosition> positions = new ArrayList<>();
